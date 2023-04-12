@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-srv-about-deployment
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-srv-about
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-srv-about
+    spec:
+      containers:
+        - name: esthesis-core-srv-about
+          image: esthesisiot/esthesis-core-srv-about:3.0.0-SNAPSHOT
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "128M"
+            limits:
+              cpu: "1"
+              memory: "256M"
+          ports:
+            - containerPort: 8080

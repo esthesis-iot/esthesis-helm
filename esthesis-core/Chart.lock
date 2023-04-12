@@ -1,0 +1,9 @@
+dependencies:
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 14.1.0
+- name: reloader
+  repository: https://stakater.github.io/stakater-charts
+  version: v1.0.22
+digest: sha256:bbae2185fa59be7f3b0248ccfc165789c86110860e8f2afb68657e01ae777312
+generated: "2023-04-10T15:13:35.777223+03:00"

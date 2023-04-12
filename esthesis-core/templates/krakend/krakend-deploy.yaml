@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-krakend-deployment
+  annotations:
+    configmap.reloader.stakater.com/reload: "{{ .Release.Name }}-krakend-cm"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-krakend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-krakend
+    spec:
+      containers:
+        - name: krakend
+          image: devopsfaith/krakend:2.2.1
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          command: [ "/usr/bin/krakend" ]
+          args: [ "run", "-d", "-c", "/etc/krakend/krakend.json", "-p", "8080" ]
+          env:
+            - name: KRAKEND_PORT
+              value: "8080"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/krakend
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-krakend-cm

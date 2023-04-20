@@ -5,5 +5,11 @@ dependencies:
 - name: reloader
   repository: https://stakater.github.io/stakater-charts
   version: v1.0.22
-digest: sha256:bbae2185fa59be7f3b0248ccfc165789c86110860e8f2afb68657e01ae777312
-generated: "2023-04-10T15:13:35.777223+03:00"
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 13.9.4
+- name: apisix
+  repository: https://charts.apiseven.com
+  version: 1.3.1
+digest: sha256:c09b256bf07c5e88be76f0fe6a7da4a149d14f2cafb1d759cb909092c9cb6487
+generated: "2023-04-19T23:24:36.582435+03:00"

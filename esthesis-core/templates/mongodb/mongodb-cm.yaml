@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mongodb-init-cm
+  labels:
+    name: {{ .Release.Name }}-mongodb-init-cm
+data:
+  addColMod.js: |
+    use esthesis
+    db.grantRolesToUser('{{ .Values.esthesis.auth.systemUsername }}', ["dbAdmin"])

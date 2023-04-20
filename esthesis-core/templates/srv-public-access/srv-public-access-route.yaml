@@ -1,0 +1,21 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: srv-public-access-routes
+spec:
+  http:
+    - name: srv-public-access-route
+      match:
+        paths:
+          - /api/public-access
+          - /api/public-access/*
+      backends:
+        - serviceName: {{ .Release.Name }}-srv-public-access-service
+          servicePort: 8080
+      plugins:
+        - name: proxy-rewrite
+          enable: true
+          config:
+              regex_uri:
+                - "/api/public-access/(.*)"
+                - "/api/$1"

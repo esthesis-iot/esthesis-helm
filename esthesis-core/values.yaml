@@ -5,51 +5,29 @@ global:
 esthesis:
   version: "3.0.0-SNAPSHOT"
   auth:
+    adminUsername: esthesis-admin
     adminPassword: esthesis
+    systemUsername: esthesis-system
     systemPassword: esthesis
-
-reloader:
-  enabled: true
-  reloader:
-    watchGlobally: false
-
-keycloak:
-  enabled: true
-  proxy: edge
-  production: true
-  auth:
-    adminUser: esthesis
-    adminPassword: esthesis
-  service:
-    type: ClusterIP
-  ingress:
-    enabled: true
-    hostname: keycloak.esthesis.local
-  postgresql:
-    auth:
-      postgresPassword: esthesis
-      password: esthesis
-  keycloakConfigCli:
-    enabled: true
-    existingConfigmap: esthesis-core-keycloak-config
-    command: ["java", "-jar", "/opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar"]
+    thirdParty:
+      adminUsername: esthesis-admin
+      adminPassword: esthesis
+  ui:
+    ingress:
+      hostname: ui.esthesis.local
 
 apisix:
   enabled: true
-  fullnameOverride: apisix
-  gateway:
-    type: LoadBalancer
-    externalTrafficPolicy: Local
   etcd:
-    fullnameOverride: apisix-etcd
     replicaCount: 1
     auth:
       token:
         type: simple
   admin:
-    cors: false
     credentials:
       admin: esthesis-admin
+      viewer: esthesis-viewer
+    cors: false
     allow:
       ipList:
         - 0.0.0.0/0
@@ -103,22 +81,69 @@ apisix:
     - server-info
   ingress-controller:
     enabled: true
-    fullnameOverride: apisix-ingress-controller
     config:
       logLevel: warn
       apisix:
         adminKey: esthesis-admin
-        serviceFullname: apisix-admin
   dashboard:
     enabled: true
-    fullnameOverride: apisix-dashboard
     config:
       conf:
         etcd:
           endpoints:
-            - apisix-etcd:2379
+            - esthesis-core-etcd:2379
       authentication:
         secret: esthesis
         users:
           - username: esthesis
             password: esthesis
+
+reloader:
+  enabled: true
+  reloader:
+    watchGlobally: false
+
+keycloak:
+  enabled: true
+  proxy: edge
+  production: true
+  auth:
+    adminUser: esthesis
+    adminPassword: esthesis
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    hostname: keycloak.esthesis.local
+    tls: true
+  postgresql:
+    auth:
+      postgresPassword: esthesis
+      password: esthesis
+  readinessProbe:
+    timeoutSeconds: 60
+  keycloakConfigCli:
+    enabled: true
+    existingConfigmap: esthesis-core-keycloak-config
+    command: ["java", "-jar", "/opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar"]
+
+mongodb:
+  auth:
+    rootUser: root
+    rootPassword: root
+    usernames:
+      - esthesis
+    passwords:
+      - esthesis
+    databases:
+      - esthesis
+    replicaSetKey: esthesis
+  arbiter:
+    enabled: false
+  serviceAccount:
+    create: true
+  rbac:
+    create: true
+  initdbScriptsConfigMap:
+  readinessProbe:
+    timeoutSeconds: 30

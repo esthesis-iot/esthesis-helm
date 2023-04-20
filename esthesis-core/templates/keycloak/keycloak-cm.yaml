@@ -166,7 +166,7 @@ data:
         {
           "id": "fd00cbb2-2334-4e3b-a440-2ab9c19a4031",
           "createdTimestamp": 1679304854457,
-          "username": "esthesis-admin",
+          "username": {{ .Values.esthesis.auth.adminUsername | quote }},
           "enabled": true,
           "totp": false,
           "emailVerified": false,
@@ -191,7 +191,7 @@ data:
         {
           "id": "9fa02261-54c5-44b9-a89c-7b0dfcd80cc7",
           "createdTimestamp": 1672843694074,
-          "username": "esthesis-system",
+          "username": {{ .Values.esthesis.auth.systemUsername | quote}},
           "enabled": true,
           "totp": false,
           "emailVerified": false,

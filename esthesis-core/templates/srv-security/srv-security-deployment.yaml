@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-srv-security-deployment
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-srv-security
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-srv-security
+    spec:
+      containers:
+        - name: esthesis-core-srv-security
+          image: esthesisiot/esthesis-core-srv-security:3.0.0-SNAPSHOT
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "128M"
+            limits:
+              cpu: "1"
+              memory: "256M"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: QUARKUS_MONGODB_CONNECTION_STRING
+              value: mongodb://{{ .Release.Name }}-mongodb:27017
+            - name: QUARKUS_MONGODB_CREDENTIALS_USERNAME
+              value: {{ .Values.esthesis.auth.systemUsername }}
+            - name: QUARKUS_MONGODB_CREDENTIALS_PASSWORD
+              value: {{ .Values.esthesis.auth.systemPassword }}

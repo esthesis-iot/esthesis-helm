@@ -2,6 +2,13 @@ global:
   devEnv:
     enabled: false
 
+  oidcDiscoveryUrl: nassos
+  abc: &abc takis
+  def: &def takis
+  releaseName: &releaseName esthesis-core
+  initdbScriptsConfigMap: "esthesis-core-mongodb-init-cm"
+
+
 esthesis:
   version: "3.0.0-SNAPSHOT"
   auth:
@@ -95,8 +102,8 @@ apisix:
       authentication:
         secret: esthesis
         users:
-          - username: esthesis
-            password: esthesis
+          - username: *abc
+            password: *def
 
 reloader:
   enabled: true
@@ -144,6 +151,6 @@ mongodb:
     create: true
   rbac:
     create: true
-  initdbScriptsConfigMap:
+#  initdbScriptsConfigMap:
   readinessProbe:
     timeoutSeconds: 30

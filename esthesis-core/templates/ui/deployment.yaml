@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esthesis-core-ui-deployment
+  annotations:
+    configmap.reloader.stakater.com/reload: "esthesis-core-ui-cm"
+spec:
+  selector:
+    matchLabels:
+      app: esthesis-core-ui
+  template:
+    metadata:
+      labels:
+        app: esthesis-core-ui
+    spec:
+      containers:
+        - name: esthesis-core-ui
+          image: esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/nginx/templates/
+      volumes:
+        - name: config-volume
+          configMap:
+            name: esthesis-core-ui-cm

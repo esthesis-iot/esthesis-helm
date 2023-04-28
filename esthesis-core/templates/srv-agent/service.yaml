@@ -1,0 +1,3 @@
+{{ template "service.api.template" (merge (dict
+  "serviceName" "esthesis-core-srv-agent"
+) .) }}

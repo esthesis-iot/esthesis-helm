@@ -4,7 +4,7 @@ metadata:
   name: srv-security-routes
 spec:
   http:
-    - name: srv-public-access-ingress-route
+    - name: srv-security-route
       match:
         paths:
           - /api/security
@@ -24,7 +24,7 @@ spec:
           config:
             client_id: "esthesis"
             client_secret: ""
-            discovery:
+            discovery: "http://{{ .Release.Name }}-/realms/esthesis/.well-known/openid-configuration"
             scope: "openid profile"
             use_jwks: true
             bearer_only: true

@@ -1,0 +1,12 @@
+{{ template "deployment.api.template" (merge (dict
+  "podName" "esthesis-core-srv-campaign"
+  "podMaxCpu" "1"
+  "podMaxMemory" "256M"
+  "podMongoDb" true3
+  "podOidcClient" true
+  "podJwtVerifier" true
+  "podLogging" true
+  "podProbes" true
+  "podRedis" true
+  "podCamunda" true
+) .) }}

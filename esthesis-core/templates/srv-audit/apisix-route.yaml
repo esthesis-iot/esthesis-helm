@@ -1,0 +1,5 @@
+{{ template "route.api.template" (merge (dict
+  "serviceName" "esthesis-core-srv-audit-service"
+  "servicePath" "audit"
+  "serviceOidc" true
+) .) }}

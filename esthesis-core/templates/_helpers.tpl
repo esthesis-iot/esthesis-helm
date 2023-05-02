@@ -33,10 +33,10 @@ spec:
 apiVersion: apisix.apache.org/v2
 kind: ApisixRoute
 metadata:
-  name: {{ .serviceName }}-routes
+  name: {{ .servicePath }}-routes
 spec:
   http:
-    - name: {{ .serviceName }}-route
+    - name: {{ .servicePath }}-route
       match:
         paths:
           - /api/{{ .servicePath }}
@@ -100,8 +100,29 @@ spec:
               memory: {{ .podMaxMemory | quote }}
           ports:
             - containerPort: 8080
+          {{- if .podProbes }}
+          livenessProbe:
+            httpGet:
+              path: /q/health/live
+              port: 8080
+            failureThreshold: 1
+            periodSeconds: 15
+          startupProbe:
+            httpGet:
+              path: /q/health/started
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 30
+            periodSeconds: 10
+          {{- end }}
           env:
-            {{ if .podMongoDb }}
+            {{- if .extraEnvVars }}
+            {{- range $k, $v := .extraEnvVars }}
+            - name: {{ $k }}
+              value: {{ $v }}
+            {{- end }}
+            {{- end }}
+            {{- if .podMongoDb }}
             - name: QUARKUS_MONGODB_CONNECTION_STRING
               value: {{ .Values.mongoDbUrlCluster }}
             - name: QUARKUS_MONGODB_DATABASE
@@ -113,8 +134,8 @@ spec:
                 secretKeyRef:
                   name: esthesis-core-secret
                   key: mongoDbPassword
-            {{ end }}
-            {{ if .podOidcClient }}
+            {{- end }}
+            {{- if .podOidcClient }}
             - name: QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL
               value: {{ .Values.oidcAuthorityUrlCluster | quote}}
             - name: QUARKUS_OIDC_CLIENT_GRANT_OPTION_PASSWORD_USERNAME
@@ -124,24 +145,24 @@ spec:
                 secretKeyRef:
                   name: esthesis-core-secret
                   key: esthesisSystemPassword
-            {{ end }}
-            {{ if .podJwtVerifier }}
+            {{- end }}
+            {{- if .podJwtVerifier }}
             - name: MP_JWT_VERIFY_PUBLICKEY_LOCATION
               value: {{ .Values.oidcJwtVerifyLocationCluster | quote}}
-            {{ end }}
-            {{ if .podKafka }}
+            {{- end }}
+            {{- if .podKafka }}
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: {{ .Values.kafkaBootstrapServers | quote }}
-            {{ end }}
-            {{ if .podRedis }}
+            {{- end }}
+            {{- if .podRedis }}
             - name: QUARKUS_REDIS_HOSTS
               value: {{ .Values.redisHosts | quote}}
-            {{ end }}
-            {{ if .podCamunda }}
+            {{- end }}
+            {{- if .podCamunda }}
             - name: QUARKUS_ZEEBE_CLIENT_BROKER_GATEWAY_ADDRESS
               value: {{ .Values.camundaGatewayUrlCluster | quote}}
-            {{ end }}
-            {{ if .podLogging }}
+            {{- end }}
+            {{- if .podLogging }}
             - name: QUARKUS_REST_CLIENT_LOGGING
               value: "request-response"
             - name: QUARKUS_REST_CLIENT_BODY_LIMIT
@@ -160,27 +181,5 @@ spec:
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
             - name: QUARKUS_LOG_CATEGORY_IO_QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
-            {{ end }}
-          {{ if .podProbes }}
-          livenessProbe:
-            httpGet:
-              path: /q/health/live
-              port: 8080
-            failureThreshold: 1
-            periodSeconds: 15
-          startupProbe:
-            httpGet:
-              path: /q/health/started
-              port: 8080
-            initialDelaySeconds: 10
-            failureThreshold: 30
-            periodSeconds: 10
-          {{ end }}
+            {{- end }}
 {{- end }}
-
-{{/* Rest clients - PROD*/}}
-{{/*{{- define "rest-client.prod.settings" }}*/}}
-{{/*SettingsSystemResource:*/}}
-{{/*  url: http://esthesis-core-settings-service:8080*/}}
-{{/*  scope: Singleton*/}}
-{{/*{{- end }}*/}}

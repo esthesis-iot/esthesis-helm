@@ -2,7 +2,7 @@
   "podName" "esthesis-core-srv-campaign"
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
-  "podMongoDb" true3
+  "podMongoDb" true
   "podOidcClient" true
   "podJwtVerifier" true
   "podLogging" true

@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-helmfile destroy
+helmfile destroy --skip-deps
 kubectl delete pvc data-apisix-etcd-0
 kubectl delete pvc data-keycloak-postgresql-0
 kubectl delete pvc data-camunda-zeebe-0

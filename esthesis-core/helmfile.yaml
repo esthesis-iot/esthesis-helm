@@ -21,30 +21,37 @@ repositories:
 
 ---
 ##################################################################################################
+# Default values
+##################################################################################################
+helmDefaults:
+  timeout: 1800
+
+---
+##################################################################################################
 # Default state values
 ##################################################################################################
 values:
   ##################################################################################################
   # Dev modes
   ##################################################################################################
-  # Helmfile dev mode, switching all esthesis releases to local charts. Do not change the default
-  # value here, rather set the environment variable HELMFILE_DEV_MODE to true.
+  - devMode: {{ env "DEV_MODE" | default false }}
+  # Helmfile dev mode, switching all esthesis releases to local charts.
   - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default false }}
 
   ##################################################################################################
   # Global values
   ##################################################################################################
   - esthesisVersion: "3.0.0-SNAPSHOT"
-  - timezone: "Europe/Athens"
-  - esthesisLogLevel: "WARN"
+  - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
+  - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
   ##################################################################################################
-  - esthesisAdminUsername: {{ env "ESTHESIS_ADMIN_USERNAME" | default "kostas-admin" }}
-  - esthesisAdminPassword: {{ env "ESTHESIS_ADMIN_PASSWORD" | default "kostas-admin" }}
-  - esthesisSystemUsername: {{ env "ESTHESIS_SYSTEM_USERNAME" | default "kostas-system" }}
-  - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "kostas-system" }}
+  - esthesisAdminUsername: {{ env "ESTHESIS_ADMIN_USERNAME" | default "esthesis-admin" }}
+  - esthesisAdminPassword: {{ env "ESTHESIS_ADMIN_PASSWORD" | default "esthesis-admin" }}
+  - esthesisSystemUsername: {{ env "ESTHESIS_SYSTEM_USERNAME" | default "esthesis-system" }}
+  - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "esthesis-system" }}
 
   ##################################################################################################
   # Chart-specific values.
@@ -54,24 +61,21 @@ values:
   - keycloakIngressHostname: {{ env "KEYCLOAK_INGRESS_HOSTNAME" | default "keycloak.esthesis.local" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
+  - mongoDbUrlCluster: {{ env "MONGODB_URL_CLUSTER" | default "mongodb://mongodb:27017" }}
+  - mongoDbDatabase: {{ env "MONGODB_DATABASE" | default "esthesiscore" }}
+  - mongoDbUsername: {{ env "MONGODB_USERNAME" | default .StateValues.esthesisSystemUsername }}
+  - mongoDbPassword: {{ env "MONGODB_PASSWORD" | default .StateValues.esthesisSystemPassword }}
   # APISIX
   - apisixEnabled: {{ env "APISIX_ENABLED" | default true }}
+  - apisixIngressNamespace: {{ env "APISIX_INGRESS_NAMESPACE" | default "" }}
   # esthesis UI
-  - esthesisUiIngressHostname: {{ env "ESTHESIS_UI_INGRESS_HOSTNAME" | default "ui.esthesis.local" }}
+  - esthesisUiIngressHostname: {{ env "ESTHESIS_UI_INGRESS_HOSTNAME" | default "esthesiscore.esthesis.local" }}
   - esthesisUiLogoutUrl: {{ env "ESTHESIS_UI_LOGOUT_URL" | default "/logout" }}
-  # esthesis API
-  - mongoDbUrlCluster: {{ env "MONGO_DB_URL_CLUSTER" | default "mongodb://mongodb:27017" }}
-  - mongoDbDatabase: {{ env "MONGO_DB_DATABASE" | default "esthesiscore" }}
-  - mongoDbUsername: {{ env "MONGO_DB_USERNAME" | default .StateValues.esthesisSystemUsername }}
-  - mongoDbPassword: {{ env "MONGO_DB_PASSWORD" | default .StateValues.esthesisSystemPassword }}
+  # OIDC
   - oidcAuthorityUrlExternal: {{ env "OIDC_AUTHORITY_URL_EXTERNAL" | default "https://keycloak.esthesis.local/realms/esthesis" }}
   - oidcAuthorityUrlCluster: {{ env "OIDC_AUTHORITY_URL_CLUSTER" | default "http://keycloak/realms/esthesis" }}
   - oidcDiscoveryUrlCluster: {{ env "OIDC_DISCOVERY_URL_CLUSTER" | default "http://keycloak/realms/esthesis/.well-known/openid-configuration" }}
   - oidcJwtVerifyLocationCluster: {{ env "OIDC_JWT_VERIFY_LOCATION_CLUSTER" | default "http://keycloak/realms/esthesis/protocol/openid-connect/certs" }}
-  - kafkaBootstrapServers: {{ env "KAFKA_BOOTSTRAP_SERVERS" | default "kafka:9092" }}
-  - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway:26500" }}
-  - exposeMk8sIngress: {{ env "EXPOSE_MK8S_INGRESS" | default false }}
-  - mk8sIngressNamespace: {{ env "MK8S_INGRESS_NAMESPACE" | default "ingress" }}
   # REDIS
   - redisEnabled: {{ env "REDIS_ENABLED" | default true }}
   - redisHosts: {{ env "REDIS_HOSTS" | default "redis-master:6379/0" }}
@@ -80,13 +84,18 @@ values:
   - rabbitmqErlangCookie: {{ env "RABBITMQ_ERLANG_COOKIE" | default "esthesis" }}
   # Kafka
   - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
+  - kafkaBootstrapServers: {{ env "KAFKA_BOOTSTRAP_SERVERS" | default "kafka:9092" }}
   # Camunda
   - camundaEnabled: {{ env "CAMUNDA_ENABLED" | default true }}
+  - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway:26500" }}
+  # MicroK8s
+  - mk8sExposeIngress: {{ env "MK8S_EXPOSE_INGRESS" | default false }}
+  - mk8sIngressNamespace: {{ env "MK8S_INGRESS_NAMESPACE" | default "ingress" }}
 
+---
 ##################################################################################################
 # Release definitions
 ##################################################################################################
----
 releases:
   - name: esthesis-core
     chart: {{ .StateValues.helmfileDevMode | ternary "./" "esthesis/esthesis-core" | quote }}
@@ -114,7 +123,7 @@ releases:
       - esthesisUiIngressHostname: {{ .StateValues.esthesisUiIngressHostname | quote }}
       - esthesisUiLogoutUrl: {{ .StateValues.esthesisUiLogoutUrl | quote }}
       - kafkaBootstrapServers: {{ .StateValues.kafkaBootstrapServers | quote }}
-      - exposeMk8sIngress: {{ .StateValues.exposeMk8sIngress }}
+      - mk8sExposeIngress: {{ .StateValues.mk8sExposeIngress }}
       - mk8sIngressNamespace: {{ .StateValues.mk8sIngressNamespace | quote }}
       # Keycloak
       - keycloakEnabled: {{ .StateValues.keycloakEnabled }}
@@ -231,6 +240,9 @@ releases:
             apisix:
               adminKey: {{ .StateValues.esthesisSystemPassword }}
               serviceFullname: "apisix-admin"
+            kubernetes:
+              namespaceSelector:
+                - ""
       - dashboard:
           enabled: true # TBC - only for dev
           config:

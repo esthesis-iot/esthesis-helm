@@ -1,5 +1,5 @@
 # Expose the ingress controller to the outside world in MicroK8s.
-{{ if .Values.exposeMk8sIngress }}
+{{ if .Values.mk8sExposeIngress }}
 apiVersion: v1
 kind: Service
 metadata:

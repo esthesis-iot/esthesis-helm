@@ -1,5 +1,5 @@
 apiVersion: v2
-name: esthesis CORE
+name: esthesis-core
 home: https://esthes.is
 sources:
   - https://github.com/esthesis-iot

@@ -1,0 +1,53 @@
+{{- if .Values.devMode }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-loki-config
+type: Opaque
+stringData:
+  promtail.yaml: |-
+    server:
+      log_level: warn
+      http_listen_port: 8080
+    clients:
+      - url: http://grafana-loki-distributor:3100/loki/api/v1/push
+    positions:
+      filename: /run/promtail/positions.yaml
+    scrape_configs:
+      - job_name: gelf
+        gelf:
+          listen_address: "0.0.0.0:12201"
+          use_incoming_timestamp: true
+          labels:
+            job: esthesis-core
+        relabel_configs:
+          - action: replace
+            source_labels:
+              - __gelf_message_host
+            target_label: host
+          - action: replace
+            source_labels:
+              - __gelf_message_level
+            target_label: level
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-loki-gelf
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: "Cluster"
+  loadBalancerSourceRanges: []
+  ports:
+    - name: gelf
+      port: 12201
+      targetPort: 12201
+      protocol: UDP
+  selector:
+    app.kubernetes.io/name: grafana-loki
+    app.kubernetes.io/instance: grafana-loki
+    app.kubernetes.io/component: promtail
+{{- end }}

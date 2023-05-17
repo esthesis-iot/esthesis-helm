@@ -2,4 +2,14 @@
   "serviceName" "esthesis-core-srv-public-access-service"
   "servicePath" "public-access"
   "serviceOidc" false
+  "devMode" .Values.devMode
 ) .) }}
+
+{{ if .Values.devMode }}
+---
+{{ template "upstream.dev.template" (merge (dict
+  "serviceName" "esthesis-core-srv-public-access-service"
+  "servicePort" 59160
+  "devHost" .Values.devHost
+) .) }}
+{{ end }}

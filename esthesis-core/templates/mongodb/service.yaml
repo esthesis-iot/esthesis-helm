@@ -1,0 +1,14 @@
+{{ if and .Values.devMode .Values.mongoDbEnabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: esthesis-mongodb-esthesiscore-svc
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+  type: LoadBalancer
+{{ end }}

@@ -2,4 +2,14 @@
   "serviceName" "esthesis-core-srv-infrastructure-service"
   "servicePath" "infrastructure"
   "serviceOidc" true
+  "devMode" .Values.devMode
 ) .) }}
+
+{{ if .Values.devMode }}
+---
+{{ template "upstream.dev.template" (merge (dict
+  "serviceName" "esthesis-core-srv-infrastructure-service"
+  "servicePort" 59110
+  "devHost" .Values.devHost
+) .) }}
+{{ end }}

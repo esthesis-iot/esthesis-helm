@@ -41,9 +41,14 @@ spec:
         paths:
           - /api/{{ .servicePath }}
           - /api/{{ .servicePath }}/*
+      {{ if .devMode }}
+      upstreams:
+        - name: {{ .serviceName}}-upstream
+      {{ else }}
       backends:
         - serviceName: {{ .serviceName }}
           servicePort: 8080
+      {{ end }}
       plugins:
         - name: proxy-rewrite
           enable: true
@@ -183,3 +188,16 @@ spec:
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
             {{- end }}
 {{- end }}
+
+{{/* APISIX Upstream definition for development */}}
+{{- define "upstream.dev.template" }}
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: {{ .serviceName }}-upstream
+spec:
+  externalNodes:
+    - type: Domain
+      name: {{ .devHost }}
+      port: {{ .servicePort }}
+{{- end}}

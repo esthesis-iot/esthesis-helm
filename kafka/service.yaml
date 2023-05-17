@@ -1,0 +1,17 @@
+{{- if .Values.devMode }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: esthesis-dev-kafka-service
+spec:
+  selector:
+    app.kubernetes.io/component: kafka
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/name: kafka
+  ports:
+    - port: 9092
+      name: plain
+      protocol: TCP
+      targetPort: 9092
+  type: LoadBalancer
+  {{- end }}

@@ -1,0 +1,19 @@
+{{- if .Values.devMode }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-config
+type: Opaque
+stringData:
+  datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        isDefault: false
+        url: http://grafana-loki-gateway:80
+      - name: Tempo
+        type: tempo
+        isDefault: false
+        url: http://grafana-tempo-query-frontend:3200
+{{- end }}

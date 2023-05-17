@@ -1,3 +1,4 @@
+{{ if not .Values.devMode }}
 {{ template "deployment.api.template" (merge (dict
   "podName" "esthesis-core-srv-infrastructure"
   "podMaxCpu" "1"
@@ -9,3 +10,4 @@
   "podKafka" true
   "podOidcClient" true
 ) .) }}
+{{ end }}

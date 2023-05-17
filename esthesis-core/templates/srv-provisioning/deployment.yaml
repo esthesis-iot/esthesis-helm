@@ -1,11 +1,13 @@
+{{ if not .Values.devMode }}
 {{ template "deployment.api.template" (merge (dict
-  "podName" "esthesis-core-srv-provisioning"
+  "podJwtVerifier" true
+  "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
-  "podJwtVerifier" true
   "podMongoDb" true
-  "podLogging" true
-  "podProbes" true
+  "podName" "esthesis-core-srv-provisioning"
   "podOidcClient" true
+  "podProbes" true
   "podRedis" true
 ) .) }}
+{{ end }}

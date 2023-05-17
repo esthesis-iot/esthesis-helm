@@ -1,12 +1,13 @@
+{{ if not .Values.devMode }}
 {{ $redirectUrl := print "https://" .Values.esthesisUiIngressHostname "/callback" }}
 {{ template "deployment.api.template" (merge (dict
-  "podName" "esthesis-core-srv-public-access"
+  "podJwtVerifier" false
+  "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
   "podMongoDb" false
+  "podName" "esthesis-core-srv-public-access"
   "podOidcClient" false
-  "podJwtVerifier" false
-  "podLogging" true
   "podProbes" true
   "extraEnvVars" (dict
     "ESTHESIS_OIDC_AUTHORITY" .Values.oidcAuthorityUrlExternal
@@ -14,3 +15,4 @@
     "ESTHESIS_OIDC_POST_LOGOUT_REDIRECT_URI" .Values.esthesisUiLogoutUrl
   )
 ) .) }}
+{{ end }}

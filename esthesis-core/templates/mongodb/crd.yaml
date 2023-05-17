@@ -1,0 +1,36 @@
+{{ if .Values.mongoDbEnabled }}
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: esthesis-mongodb-{{ .Values.mongoDbDatabase }}
+spec:
+  type: ReplicaSet
+  members: {{ .Values.mongoDbReplicaSets }}
+  {{- if gt (int (toString (.Values.mongoDbArbiters))) 0 }}
+  arbiters: {{ .Values.mongoDbArbiters }}
+  {{- end }}
+  version: "6.0.5"
+  security:
+    authentication:
+      modes: ["SCRAM"]
+  users:
+    - name: {{ .Values.esthesisSystemUsername | quote }}
+      db: {{ .Values.mongoDbDatabase | quote }}
+      passwordSecretRef:
+        name: esthesis-mongodb-{{ .Values.esthesisSystemUsername }}-password
+      roles:
+        - name: dbOwner
+          db: {{ .Values.mongoDbDatabase | quote }}
+      scramCredentialsSecretName: {{ .Values.esthesisSystemUsername }}-password-scram
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongodb-agent
+              readinessProbe:
+                failureThreshold: 90
+                initialDelaySeconds: 30
+{{ end }}

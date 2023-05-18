@@ -10,4 +10,4 @@ helm repo index .
 popd
 
 # Rename Helmfile by suffixing the version and copy it to docs.
-cp helmfile.yaml ../../esthesis-docs/helm/helmfile-$CHART_VERSION.yaml
+cp helmfile.yaml ../../esthesis-docs/helm/helmfile-esthesis-core-deps-$CHART_VERSION.yaml

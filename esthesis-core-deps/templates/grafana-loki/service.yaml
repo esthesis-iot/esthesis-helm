@@ -1,0 +1,20 @@
+{{- if .Values.devMode }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-loki-gelf
+spec:
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: "Cluster"
+  loadBalancerSourceRanges: []
+  ports:
+    - name: gelf
+      port: 12201
+      targetPort: 12201
+      protocol: UDP
+  selector:
+    app.kubernetes.io/name: grafana-loki
+    app.kubernetes.io/instance: grafana-loki
+    app.kubernetes.io/component: promtail
+{{- end }}

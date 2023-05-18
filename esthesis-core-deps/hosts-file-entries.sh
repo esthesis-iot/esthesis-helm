@@ -1,14 +1,9 @@
-# Create hosts file extract.
-echo Add the following entry in your hosts file:
-echo
-
-echo $(kubectl get service mongodb -o=jsonpath='{.status.loadBalancer.ingress[].ip}') mongodb.esthesis.localdev
 echo $(kubectl get service grafana-loki-gelf -o=jsonpath='{.status.loadBalancer.ingress[].ip}') gelf-ingester.esthesis.localdev
 echo $(kubectl get service kafka-0-external -o=jsonpath='{.status.loadBalancer.ingress[].ip}') kafka.esthesis.localdev
 echo $(kubectl get service keycloak -o=jsonpath='{.status.loadBalancer.ingress[].ip}') keycloak.esthesis.localdev
 echo $(kubectl get service apisix-dashboard -o=jsonpath='{.status.loadBalancer.ingress[].ip}') apisix-dashboard.esthesis.localdev
 echo $(kubectl get service redis-master -o=jsonpath='{.status.loadBalancer.ingress[].ip}') redis.esthesis.localdev
-echo $(kubectl get service rabbitmq -o=jsonpath='{.status.loadBalancer.ingress[].ip}') mqtt.esthesis.localdev
+echo $(kubectl get service mosquitto -o=jsonpath='{.status.loadBalancer.ingress[].ip}') mqtt.esthesis.localdev
 echo $(kubectl get service grafana -o=jsonpath='{.status.loadBalancer.ingress[].ip}') grafana.esthesis.localdev
 echo $(kubectl get service grafana-tempo-distributor -o=jsonpath='{.status.loadBalancer.ingress[].ip}') otel-ingester.esthesis.localdev
 echo $(kubectl get service camunda-zeebe-gateway -o=jsonpath='{.status.loadBalancer.ingress[].ip}') camunda-zeebe-gateway.esthesis.localdev

@@ -1,0 +1,14 @@
+{{- if .Values.mosquittoEnabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+{{- end }}

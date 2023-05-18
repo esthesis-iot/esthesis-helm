@@ -1,0 +1,19 @@
+{{- if .Values.mosquittoEnabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 1883
+      name: mqtt
+    - port: 8883
+      name: mqtts
+    - port: 9001
+      name: ws
+  selector:
+    app: mosquitto
+{{- end }}

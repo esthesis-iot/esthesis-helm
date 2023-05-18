@@ -67,9 +67,6 @@ values:
   - apisixEnabled: {{ env "APISIX_ENABLED" | default true }}
   # REDIS
   - redisEnabled: {{ env "REDIS_ENABLED" | default true }}
-  # RabbitMQ
-  - rabbitmqEnabled: {{ env "RABBITMQ_ENABLED" | default true }}
-  - rabbitmqErlangCookie: {{ env "RABBITMQ_ERLANG_COOKIE" | default "esthesis" }}
   # Kafka
   - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
   # Camunda
@@ -77,6 +74,8 @@ values:
   # MicroK8s
   - mk8sExposeIngress: {{ env "MK8S_EXPOSE_INGRESS" | default false }}
   - mk8sIngressNamespace: {{ env "MK8S_INGRESS_NAMESPACE" | default "ingress" }}
+  # Mosquitto
+  - mosquittoEnabled: {{ env "MOSQUITTO_ENABLED" | default true }}
 
 ---
 ##################################################################################################
@@ -99,6 +98,9 @@ releases:
       # MicroK8s
       - mk8sExposeIngress: {{ .StateValues.mk8sExposeIngress }}
       - mk8sIngressNamespace: {{ .StateValues.mk8sIngressNamespace | quote }}
+
+      # Mosquitto
+      - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
 
   - name: reloader
     chart: "reloader/reloader"
@@ -173,29 +175,6 @@ releases:
           service:
             type: LoadBalancer
       {{- end }}
-
-  - name: rabbitmq
-    chart: "bitnami/rabbitmq"
-    version: "11.14.5"
-    installed: {{ .StateValues.rabbitmqEnabled }}
-    values:
-      - auth:
-          username: {{ .StateValues.esthesisSystemUsername }}
-          password: {{ .StateValues.esthesisSystemPassword }}
-          erlangCookie: {{ .StateValues.rabbitmqErlangCookie }}
-      - extraPlugins: "rabbitmq_mqtt"
-      - service:
-          {{- if .StateValues.devMode }}
-          type: LoadBalancer
-          {{- end }}
-          extraPorts:
-            - name: mqtt
-              port: 1883
-              protocol: TCP
-              targetPort: 1883
-      - extraConfiguration: |-
-          mqtt.default_user = {{ .StateValues.esthesisSystemUsername }}
-          mqtt.default_pass = {{ .StateValues.esthesisSystemPassword }}
 
   - name: kafka
     chart: "bitnami/kafka"

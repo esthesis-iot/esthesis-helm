@@ -1,0 +1,11 @@
+{{- if .Values.mosquittoEnabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-config
+data:
+  mosquitto.conf: |
+    listener 1883 0.0.0.0
+    allow_anonymous true
+    password_file /mosquitto/config/password.txt
+{{- end }}

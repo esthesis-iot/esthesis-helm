@@ -8,5 +8,8 @@
   "podName" "esthesis-core-srv-security"
   "podOidcClient" true
   "podProbes" true
+  "extraEnvVars" (dict
+    "ESTHESIS_SECURITY_ADMIN_USERNAME" .Values.esthesisAdminUsername
+  )
 ) .) }}
 {{ end }}

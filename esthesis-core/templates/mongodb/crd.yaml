@@ -17,11 +17,11 @@ spec:
     - name: {{ .Values.esthesisSystemUsername | quote }}
       db: {{ .Values.mongoDbDatabase | quote }}
       passwordSecretRef:
-        name: esthesis-mongodb-{{ .Values.esthesisSystemUsername }}-password
+        name: "esthesis-mongodb-{{ .Values.esthesisSystemUsername }}-password"
       roles:
         - name: dbOwner
           db: {{ .Values.mongoDbDatabase | quote }}
-      scramCredentialsSecretName: {{ .Values.esthesisSystemUsername }}-password-scram
+      scramCredentialsSecretName: "{{ .Values.esthesisSystemUsername }}-password-scram"
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
   statefulSet:

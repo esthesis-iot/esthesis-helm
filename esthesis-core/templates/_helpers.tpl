@@ -144,7 +144,7 @@ spec:
             - name: QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL
               value: {{ .Values.oidcAuthorityUrlCluster | quote}}
             - name: QUARKUS_OIDC_CLIENT_GRANT_OPTION_PASSWORD_USERNAME
-              value: {{ .Values.esthesisSystemUsername }}
+              value: {{ .Values.esthesisSystemUsername | quote }}
             - name: QUARKUS_OIDC_CLIENT_GRANT_OPTION_PASSWORD_PASSWORD
               valueFrom:
                 secretKeyRef:

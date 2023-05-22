@@ -4,13 +4,11 @@ kubectl delete pvc data-apisix-etcd-0
 kubectl delete pvc data-camunda-zeebe-0
 kubectl delete pvc data-kafka-0
 kubectl delete pvc data-keycloak-postgresql-0
-kubectl delete pvc data-rabbitmq-0
 kubectl delete pvc elasticsearch-master-elasticsearch-master-0
 kubectl delete pvc redis-data-redis-master-0
 kubectl delete crd apisixclusterconfigs.apisix.apache.org apisixconsumers.apisix.apache.org apisixpluginconfigs.apisix.apache.org apisixroutes.apisix.apache.org apisixtlses.apisix.apache.org apisixupstreams.apisix.apache.org
 kubectl delete secret esthesis-mongodb-esthesis-system-password
 kubectl delete pvc data-grafana-loki-ingester-0
 kubectl delete pvc data-grafana-loki-querier-0
-kubectl delete pvc data-volume-esthesis-mongodb-esthesiscore-0
-kubectl delete pvc logs-volume-esthesis-mongodb-esthesiscore-0
 kubectl delete pvc data-grafana-tempo-ingester-0
+kubectl delete svc mongodb

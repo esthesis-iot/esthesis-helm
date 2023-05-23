@@ -8,6 +8,7 @@
   "podName" "esthesis-core-srv-security"
   "podOidcClient" true
   "podProbes" true
+  "timezone" .Values.timezone
   "extraEnvVars" (dict
     "ESTHESIS_SECURITY_ADMIN_USERNAME" .Values.esthesisAdminUsername
   )

@@ -9,6 +9,7 @@
   "podName" "esthesis-core-srv-public-access"
   "podOidcClient" false
   "podProbes" true
+  "timezone" .Values.timezone
   "extraEnvVars" (dict
     "ESTHESIS_OIDC_AUTHORITY" .Values.oidcAuthorityUrlExternal
     "ESTHESIS_OIDC_REDIRECT_URL" $redirectUrl

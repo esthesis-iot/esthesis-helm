@@ -122,7 +122,7 @@ spec:
           {{- end }}
           env:
             - name: "TZ"
-              value: "Europe/Athens"
+              value: {{ .timezone | quote}}
             {{- if .extraEnvVars }}
             {{- range $k, $v := .extraEnvVars }}
             - name: {{ $k }}

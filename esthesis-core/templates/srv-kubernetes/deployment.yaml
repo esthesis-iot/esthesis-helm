@@ -7,5 +7,6 @@
   "podMongoDb" true
   "podName" "esthesis-core-srv-kubernetes"
   "podProbes" true
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

@@ -70,6 +70,7 @@ releases:
     values:
       - devMode: {{ .StateValues.devMode }}
       - devHost: {{ .StateValues.devHost | quote }}
+      - timezone: {{ .StateValues.timezone | quote }}
       - quarkus:
           log:
             min-level: "TRACE"

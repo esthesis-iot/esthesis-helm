@@ -8,5 +8,6 @@
   "podOidcClient" true
   "podProbes" true
   "podRedis" true
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

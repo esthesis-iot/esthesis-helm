@@ -8,5 +8,6 @@
   "podMongoDb" true
   "podName" "esthesis-core-srv-crypto"
   "podProbes" true
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

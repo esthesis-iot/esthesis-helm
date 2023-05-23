@@ -9,5 +9,6 @@
   "podProbes" true
   "podKafka" true
   "podOidcClient" true
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

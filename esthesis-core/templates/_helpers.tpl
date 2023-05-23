@@ -121,6 +121,8 @@ spec:
             periodSeconds: 10
           {{- end }}
           env:
+            - name: "TZ"
+              value: "Europe/Athens"
             {{- if .extraEnvVars }}
             {{- range $k, $v := .extraEnvVars }}
             - name: {{ $k }}

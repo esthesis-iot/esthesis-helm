@@ -92,6 +92,9 @@ spec:
       labels:
         app: {{ .podName }}
     spec:
+      {{- if .serviceAccount }}
+      serviceAccountName: {{ .serviceAccount }}
+      {{- end }}
       containers:
         - name: {{ .podName }}
           image: esthesisiot/{{ .podName }}:3.0.0-SNAPSHOT

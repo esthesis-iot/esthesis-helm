@@ -82,6 +82,9 @@ values:
   - mosquittoEnabled: {{ env "MOSQUITTO_ENABLED" | default true }}
   # Grafana
   - grafanaIngressHostname: {{ env "GRAFANA_INGRESS_HOSTNAME" | default "grafana.esthesis.localdev" }}
+  # InfluxDB
+  - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
+  - influxDbIngressHostname: {{ env "INFLUXDB_INGRESS_HOSTNAME" | default "influxdb-ui.esthesis.localdev" }}
 
 ---
 ##################################################################################################
@@ -306,3 +309,29 @@ releases:
             otlp:
               http: true  # Needed by APISIX
               grpc: true  # Needed by Quarkus
+
+  - name: influxdb
+    chart: bitnami/influxdb
+    version: 5.6.1
+    installed: {{ .StateValues.influxDbEnabled }}
+    values:
+      - auth:
+          createUserToken: true
+          admin:
+            username: {{ .StateValues.esthesisSystemUsername }}
+            password: {{ .StateValues.esthesisSystemPassword }}
+            token: {{ .StateValues.esthesisSystemPassword }}
+          user:
+            org: esthesis
+            bucket: esthesis
+            username: {{ .StateValues.esthesisSystemUsername | quote }}
+            password: {{ .StateValues.esthesisSystemPassword | quote }}
+      {{- if .StateValues.devMode }}
+      - influxdb:
+          service:
+            type: LoadBalancer
+      - ingress:
+          enabled: true
+          hostname: {{ .StateValues.influxDbIngressHostname | quote }}
+          path: /
+      {{- end }}

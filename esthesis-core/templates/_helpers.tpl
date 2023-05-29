@@ -105,7 +105,7 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "0.25"
+              cpu: "0.20"
               memory: "128M"
             limits:
               cpu: {{ .podMaxCpu | quote }}

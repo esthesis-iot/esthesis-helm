@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: esthesis-core-ui
-          {{- if .registry }}
-          image: {{ .registry }}/esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
+          {{- if .esthesisRegistry }}
+          image: {{ .esthesisRegistry }}/esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
           {{- else }}
           image: esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
           {{- end }}

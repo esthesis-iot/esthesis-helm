@@ -9,5 +9,6 @@
   "podProbes" true
   "timezone" .Values.timezone
   "serviceAccount" "esthesis-core-srv-kubernetes"
+  "registry" .Values.esthesisRegistry
 ) .) }}
 {{ end }}

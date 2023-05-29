@@ -97,7 +97,11 @@ spec:
       {{- end }}
       containers:
         - name: {{ .podName }}
+          {{- if .registry }}
+          image: {{ .registry }}/esthesisiot/{{ .podName }}:3.0.0-SNAPSHOT
+          {{- else }}
           image: esthesisiot/{{ .podName }}:3.0.0-SNAPSHOT
+          {{- end }}
           imagePullPolicy: Always
           resources:
             requests:

@@ -35,6 +35,7 @@ values:
   - esthesisAdminPassword: {{ env "ESTHESIS_ADMIN_PASSWORD" | default "esthesis-admin" }}
   - esthesisSystemUsername: {{ env "ESTHESIS_SYSTEM_USERNAME" | default "esthesis-system" }}
   - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "esthesis-system" }}
+  - esthesisRegistry: {{ env "ESTHESIS_REGISTRY" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   - mongoDbUrlCluster: {{ env "MONGODB_URL_CLUSTER" | default "mongodb://esthesis-mongodb-esthesiscore-svc:27017" }}
@@ -71,6 +72,7 @@ releases:
       - devMode: {{ .StateValues.devMode }}
       - devHost: {{ .StateValues.devHost | quote }}
       - timezone: {{ .StateValues.timezone | quote }}
+      - esthesisRegistry: {{ .StateValues.esthesisRegistry | quote }}
       - quarkus:
           log:
             min-level: "TRACE"

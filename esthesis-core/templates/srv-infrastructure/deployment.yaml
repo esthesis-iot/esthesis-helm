@@ -10,5 +10,6 @@
   "podKafka" true
   "podOidcClient" true
   "timezone" .Values.timezone
+  "registry" .Values.esthesisRegistry
 ) .) }}
 {{ end }}

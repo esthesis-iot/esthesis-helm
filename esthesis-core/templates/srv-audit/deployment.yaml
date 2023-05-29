@@ -9,5 +9,6 @@
   "podOidcClient" true
   "podProbes" true
   "timezone" .Values.timezone
+  "registry" .Values.esthesisRegistry
 ) .) }}
 {{ end }}

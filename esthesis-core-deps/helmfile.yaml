@@ -31,6 +31,8 @@ repositories:
     url: https://charts.apiseven.com
   - name: camunda
     url: https://helm.camunda.io
+  - name: twuni
+    url: https://helm.twun.io
 
 ---
 ##################################################################################################
@@ -50,6 +52,7 @@ values:
   - esthesisVersion: "3.0.0-SNAPSHOT"
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisApiIngressHostname: {{ env "ESTHESIS_API_INGRESS_HOSTNAME" | default "apisix-gateway.esthesis.localdev" }}
+  - esthesisSingleNode: {{ env "ESTHESIS_SINGLE_NODE" | default false }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -85,6 +88,8 @@ values:
   # InfluxDB
   - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
   - influxDbIngressHostname: {{ env "INFLUXDB_INGRESS_HOSTNAME" | default "influxdb-ui.esthesis.localdev" }}
+  # Docker Registry
+  - dockerRegistryIngressHostname: {{ env "DOCKER_REGISTRY_INGRESS_HOSTNAME" | default "registry.esthesis.localdev" }}
 
 ---
 ##################################################################################################
@@ -135,7 +140,7 @@ releases:
       - logs:
           errorLogLevel: "debug"
       - etcd:
-          {{- if .StateValues.devMode }}
+          {{- if or .StateValues.devMode .StateValues.esthesisSingleNode }}
           replicaCount: 1
           {{- end }}
           auth:
@@ -231,7 +236,7 @@ releases:
 #            password: {{ .StateValues.esthesisSystemPassword | quote }}
       - web-modeler:
           enabled: false
-      {{- if .StateValues.devMode }}
+      {{- if or .StateValues.devMode .StateValues.esthesisSingleNode }}
       - elasticsearch:
           replicas: 1
           minimumMasterNodes: 1
@@ -263,6 +268,7 @@ releases:
       - keycloakConfigCli:
           enabled: true
           existingConfigmap: esthesis-core-keycloak-config
+          backoffLimit: 30
           command: "[\"java\", \"-jar\", \"/opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar\"]"
       - ingress:
           enabled: true

@@ -11,6 +11,7 @@ echo "Updating hosts file with new entries:"
 sudo sed -i '' '/###ESTHESIS-START###/,/###ESTHESIS-END###/d' $HOSTS_FILE
 echo "###ESTHESIS-START###" | sudo tee -a $HOSTS_FILE
 echo "$INGRESS_ENTRIES" | sudo tee -a $HOSTS_FILE
+echo "$INGRESS_IP docker-registry" | sudo tee -a $HOSTS_FILE
 echo "$(kubectl get service grafana-loki-gelf -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" gelf-ingester.esthesis.localdev | sudo tee -a $HOSTS_FILE
 echo "$(kubectl get service kafka-0-external -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" kafka.esthesis.localdev | sudo tee -a $HOSTS_FILE
 echo "$(kubectl get service redis-master -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" redis.esthesis.localdev | sudo tee -a $HOSTS_FILE

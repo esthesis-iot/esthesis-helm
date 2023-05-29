@@ -9,5 +9,6 @@
   "podName" "esthesis-core-srv-tag"
   "podProbes" true
   "timezone" .Values.timezone
+  "registry" .Values.esthesisRegistry
 ) .) }}
 {{ end }}

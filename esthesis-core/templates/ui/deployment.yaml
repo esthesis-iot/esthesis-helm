@@ -13,11 +13,12 @@ spec:
     metadata:
       labels:
         app: esthesis-core-ui
+        kostas: takis
     spec:
       containers:
         - name: esthesis-core-ui
-          {{- if .esthesisRegistry }}
-          image: {{ .esthesisRegistry }}/esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
+          {{- if .Values.esthesisRegistry }}
+          image: {{ .Values.esthesisRegistry }}/esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
           {{- else }}
           image: esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
           {{- end }}

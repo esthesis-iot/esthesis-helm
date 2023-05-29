@@ -16,7 +16,11 @@ spec:
     spec:
       containers:
         - name: esthesis-core-ui
+          {{- if .registry }}
+          image: {{ .registry }}/esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
+          {{- else }}
           image: esthesisiot/esthesis-core-ui:3.0.0-SNAPSHOT
+          {{- end }}
           ports:
             - containerPort: 8080
           imagePullPolicy: Always

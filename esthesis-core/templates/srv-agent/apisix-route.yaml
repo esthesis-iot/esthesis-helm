@@ -1,7 +1,7 @@
 {{ template "route.api.template" (merge (dict
   "serviceName" "esthesis-core-srv-agent-service"
   "servicePath" "agent"
-  "serviceOidc" true
+  "serviceOidc" false
   "devMode" .Values.devMode
 ) .) }}
 

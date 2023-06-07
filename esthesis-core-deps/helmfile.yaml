@@ -147,6 +147,7 @@ releases:
             token:
               type: "simple"
       - gateway:
+          type: LoadBalancer
           ingress:
             enabled: true
             hosts:

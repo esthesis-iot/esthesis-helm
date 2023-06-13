@@ -30,9 +30,6 @@ spec:
             - name: mosquitto-config
               mountPath: /mosquitto/config/mosquitto.conf
               subPath: mosquitto.conf
-            - name: mosquitto-password
-              mountPath: /mosquitto/config/password.txt
-              subPath: password.txt
       volumes:
         - name: mosquitto-persistent-storage
           persistentVolumeClaim:
@@ -40,7 +37,4 @@ spec:
         - name: mosquitto-config
           configMap:
             name: mosquitto-config
-        - name: mosquitto-password
-          secret:
-            secretName: mosquitto-password
 {{- end}}

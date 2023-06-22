@@ -83,6 +83,11 @@ values:
   - mk8sIngressNamespace: {{ env "MK8S_INGRESS_NAMESPACE" | default "ingress" }}
   # Mosquitto
   - mosquittoEnabled: {{ env "MOSQUITTO_ENABLED" | default true }}
+  - mosquittoMutualTls: {{ env "MOSQUITTO_MUTUAL_TLS" | default false }}
+  - mosquittoSuperuser: {{ env "MOSQUITTO_SUPERUSER"}}
+  - mosquittoCaCert: {{ env "MOSQUITTO_CA_CERT" }}
+  - mosquittoServerCert: {{ env "MOSQUITTO_SERVER_CERT" }}
+  - mosquittoServerKey: {{ env "MOSQUITTO_SERVER_KEY" }}
   # Grafana
   - grafanaIngressHostname: {{ env "GRAFANA_INGRESS_HOSTNAME" | default "grafana.esthesis.localdev" }}
   # InfluxDB
@@ -115,6 +120,11 @@ releases:
 
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
+      - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
+      - mosquittoSuperuser: {{ .StateValues.mosquittoSuperuser }}
+      - mosquittoCaCert: {{ .StateValues.mosquittoCaCert }}
+      - mosquittoServerCert: {{ .StateValues.mosquittoServerCert }}
+      - mosquittoServerKey: {{ .StateValues.mosquittoServerKey }}
 
   - name: reloader
     chart: "reloader/reloader"

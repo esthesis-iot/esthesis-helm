@@ -10,8 +10,8 @@ stringData:
     pattern write esthesis/ping/%u
     pattern write esthesis/telemetry/%u
     pattern write esthesis/metadata/%u
-    pattern read esthesis/control/request/%u
-    pattern write esthesis/control/reply/%u
+    pattern read esthesis/command/request/%u
+    pattern write esthesis/command/reply/%u
     user {{ .Values.mosquittoSuperuser }}
     topic esthesis/#
 data:

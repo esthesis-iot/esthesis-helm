@@ -20,5 +20,4 @@ echo "$(kubectl get service grafana-tempo-distributor -o=jsonpath='{.status.load
 echo "$(kubectl get service camunda-zeebe-gateway -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" camunda-zeebe-gateway.esthesis.localdev | sudo tee -a $HOSTS_FILE
 echo "$(kubectl get service mongodb -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" mongodb.esthesis.localdev | sudo tee -a $HOSTS_FILE
 echo "$(kubectl get service influxdb -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" influxdb.esthesis.localdev | sudo tee -a $HOSTS_FILE
-echo "$(kubectl get service apisix-gateway -o=jsonpath='{.status.loadBalancer.ingress[].ip}' || echo 127.0.0.1)" apisisx-gateway.esthesis.localdev | sudo tee -a $HOSTS_FILE
 echo "###ESTHESIS-END###" | sudo tee -a $HOSTS_FILE

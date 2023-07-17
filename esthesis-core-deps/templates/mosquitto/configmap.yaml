@@ -5,7 +5,18 @@ metadata:
   name: mosquitto-config
 data:
   mosquitto.conf: |
+  {{- if .Values.mosquittoMutualTls }}
+    port 8883
+    cafile /mosquitto/secret/ca.crt
+    certfile /mosquitto/secret/server.crt
+    keyfile /mosquitto/secret/server.key
+    allow_anonymous false
+    require_certificate true
+    use_identity_as_username true
+    acl_file /mosquitto/secret/aclfile.conf
+  {{- else }}
     listener 1883 0.0.0.0
     allow_anonymous true
-    password_file /mosquitto/config/password.txt
+  {{- end }}
+
 {{- end }}

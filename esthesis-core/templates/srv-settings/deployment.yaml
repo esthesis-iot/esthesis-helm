@@ -8,6 +8,7 @@
   "podName" "esthesis-core-srv-settings"
   "podOidcClient" true
   "podProbes" true
+  "podKafka" true
   "podRedis" true
   "timezone" .Values.timezone
   "registry" .Values.esthesisRegistry

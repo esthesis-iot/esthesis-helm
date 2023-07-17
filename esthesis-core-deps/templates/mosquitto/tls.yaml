@@ -1,0 +1,24 @@
+{{- if .Values.mosquittoMutualTls }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mosquitto-acl
+type: Opaque
+stringData:
+  aclfile.conf: |-
+    pattern write $SYS/broker/connection/%c/state
+    pattern write esthesis/ping/%u
+    pattern write esthesis/telemetry/%u
+    pattern write esthesis/metadata/%u
+    pattern read esthesis/command/request/%u
+    pattern write esthesis/command/reply/%u
+    user {{ .Values.mosquittoSuperuser }}
+    topic esthesis/#
+data:
+  ca.crt: |-
+    {{ .Values.mosquittoCaCert }}
+  server.crt: |-
+    {{ .Values.mosquittoServerCert }}
+  server.key: |-
+    {{ .Values.mosquittoServerKey }}
+{{- end}}

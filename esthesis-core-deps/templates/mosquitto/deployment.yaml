@@ -24,15 +24,30 @@ spec:
               name: mqtts
             - containerPort: 9001
               name: ws
+          startupProbe:
+            tcpSocket:
+              {{- if .Values.mosquittoMutualTls }}
+              port: 8883
+              {{- else }}
+              port: 1883
+              {{- end }}
+          livenessProbe:
+            tcpSocket:
+              {{- if .Values.mosquittoMutualTls }}
+              port: 8883
+              {{- else }}
+              port: 1883
+              {{- end }}
           volumeMounts:
             - name: mosquitto-persistent-storage
               mountPath: /mosquitto/data
             - name: mosquitto-config
               mountPath: /mosquitto/config/mosquitto.conf
               subPath: mosquitto.conf
-            - name: mosquitto-password
-              mountPath: /mosquitto/config/password.txt
-              subPath: password.txt
+            {{- if .Values.mosquittoMutualTls }}
+            - name: mosquitto-acl
+              mountPath: /mosquitto/secret
+            {{- end}}
       volumes:
         - name: mosquitto-persistent-storage
           persistentVolumeClaim:
@@ -40,7 +55,18 @@ spec:
         - name: mosquitto-config
           configMap:
             name: mosquitto-config
-        - name: mosquitto-password
+        {{- if .Values.mosquittoMutualTls }}
+        - name: mosquitto-acl
           secret:
-            secretName: mosquitto-password
+            secretName: mosquitto-acl
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: server.crt
+                path: server.crt
+              - key: server.key
+                path: server.key
+              - key: aclfile.conf
+                path: aclfile.conf
+        {{- end }}
 {{- end}}

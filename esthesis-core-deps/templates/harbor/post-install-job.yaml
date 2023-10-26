@@ -1,0 +1,22 @@
+{{- if .Values.devMode }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: harbor-setup
+  annotations:
+    "helm.sh/hook": "post-upgrade"
+spec:
+  ttlSecondsAfterFinished: 10
+  template:
+    metadata:
+      name: harbor-setup
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: post-install-job
+          image: "alpine/curl:8.4.0"
+          command: ["sh", "-c"]
+          args:
+            - |
+              RESOURCE_URL="http://harbor-core/api/v2.0/projects"; TIMEOUT=300; SECONDARY_URL="http://harbor-core/api/v2.0/projects"; start_time=$(date +%s); while true; do current_time=$(date +%s); elapsed_time=$((current_time - start_time)); if curl --silent --fail "$RESOURCE_URL" -o /dev/null; then curl -X "POST" "$SECONDARY_URL" -u "admin:{{ .Values.esthesisSystemPassword }}" -H "accept: application/json" -H "X-Resource-Name-In-Location: false" -H "Content-Type: application/json" -d '{ "project_name": "esthesisiot", "metadata": { "public": "true" } }' && echo "Resource is available, secondary curl operation completed." && break; fi; [ "$elapsed_time" -ge "$TIMEOUT" ] && echo "Error: Resource not available within the timeout of $TIMEOUT seconds." && exit 1; sleep 5; done
+{{- end }}

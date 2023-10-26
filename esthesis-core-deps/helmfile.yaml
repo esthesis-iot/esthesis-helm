@@ -1,4 +1,3 @@
----
 ##################################################################################################
 # Environments definitions
 ##################################################################################################
@@ -33,6 +32,8 @@ repositories:
     url: https://helm.camunda.io
   - name: twuni
     url: https://helm.twun.io
+  - name: harbor
+    url: https://helm.goharbor.io
 
 ---
 ##################################################################################################
@@ -93,8 +94,8 @@ values:
   # InfluxDB
   - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
   - influxDbIngressHostname: {{ env "INFLUXDB_INGRESS_HOSTNAME" | default "influxdb-ui.esthesis.localdev" }}
-  # Docker Registry
-  - dockerRegistryIngressHostname: {{ env "DOCKER_REGISTRY_INGRESS_HOSTNAME" | default "registry.esthesis.localdev" }}
+  # Harbor
+  - harborIngressHostname:  {{ env "HARBOR_INGRESS_HOSTNAME" | default "registry.esthesis.localdev" }}
 
 ---
 ##################################################################################################
@@ -110,14 +111,11 @@ releases:
       - esthesisAdminPassword: {{ .StateValues.esthesisAdminPassword | quote }}
       - esthesisSystemUsername: {{ .StateValues.esthesisSystemUsername | quote }}
       - esthesisSystemPassword: {{ .StateValues.esthesisSystemPassword | quote }}
-
       # Keycloak
       - keycloakEnabled: {{ .StateValues.keycloakEnabled }}
-
       # MicroK8s
       - mk8sExposeIngress: {{ .StateValues.mk8sExposeIngress }}
       - mk8sIngressNamespace: {{ .StateValues.mk8sIngressNamespace | quote }}
-
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
       - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
@@ -130,6 +128,22 @@ releases:
     chart: "reloader/reloader"
     version: "v1.0.22"
     installed: {{ .StateValues.devMode }}
+
+  - name: harbor
+    chart: "harbor/harbor"
+    version: "1.13.0"
+    installed: {{ .StateValues.devMode }}
+    values:
+      - harborAdminPassword: {{ .StateValues.esthesisSystemPassword }}
+      - externalURL: "http://{{ .StateValues.harborIngressHostname }}"
+      - expose:
+          tls:
+            enabled: false
+          ingress:
+            hosts:
+              core: {{ .StateValues.harborIngressHostname | quote }}
+      - trivy:
+          enabled: false
 
   - name: mongodb
     chart: mongodb/community-operator

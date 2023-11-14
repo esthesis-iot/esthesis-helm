@@ -48,7 +48,7 @@ values:
   ##################################################################################################
   # Global values
   ##################################################################################################
-  - esthesisVersion: 3.0.2-SNAPSHOT
+  - esthesisVersion: 3.0.2
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisApiIngressHostname: {{ env "ESTHESIS_API_INGRESS_HOSTNAME" | default "apisix-gateway.esthesis.localdev" }}
   - esthesisSingleNode: {{ env "ESTHESIS_SINGLE_NODE" | default false }}

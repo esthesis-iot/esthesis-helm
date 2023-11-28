@@ -13,7 +13,6 @@ spec:
     metadata:
       labels:
         app: esthesis-core-ui
-        kostas: takis
     spec:
       containers:
         - name: esthesis-core-ui

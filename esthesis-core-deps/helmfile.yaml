@@ -150,13 +150,13 @@ releases:
           auth:
             token:
               type: "simple"
-      - gateway:
-          ingress:
-            enabled: true
-            hosts:
-              - host: {{ .StateValues.esthesisApiIngressHostname }}
-                paths:
-                  - /api
+#      - gateway:
+#          ingress:
+#            enabled: true
+#            hosts:
+#              - host: {{ .StateValues.esthesisApiIngressHostname }}
+#                paths:
+#                  - /api
       - admin:
           credentials:
             admin: {{ .StateValues.esthesisSystemPassword }}
@@ -176,12 +176,6 @@ releases:
                 - ""
       - dashboard:
           enabled: {{ .StateValues.devMode }}
-          ingress:
-            enabled: true
-            hosts:
-              - host: apisix-dashboard.esthesis.localdev
-                paths:
-                  - /
           config:
             authentication:
               secret: {{ .StateValues.esthesisSystemPassword }}
@@ -197,24 +191,32 @@ releases:
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
-      {{- if .StateValues.devMode }}
-      - master:
-          service:
-            type: LoadBalancer
-      {{- end }}
 
   - name: kafka
     chart: "bitnami/kafka"
-    version: "22.1.1"
+#    version: "22.1.1"
+    version: "26.4.2"
     installed: {{ .StateValues.kafkaEnabled }}
     {{- if .StateValues.devMode }}
     values:
+      - listeners:
+          securityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT,EXTERNAL:PLAINTEXT"
+      - controller:
+          replicaCount: 1
       - externalAccess:
           enabled: true
-          autoDiscovery:
-            enabled: true
-          service:
-            type: LoadBalancer
+          controller:
+            service:
+              type: ClusterIP
+              ports:
+                external: 9095
+              domain: "kafka.esthesis"
+          broker:
+            service:
+              type: ClusterIP
+              ports:
+                external: 9095
+              domain: "kafka.esthesis"
       - serviceAccount:
           create: true
       - rbac:
@@ -249,8 +251,6 @@ releases:
           replicationFactor: 1
       - zeebe-gateway:
           replicas: 1
-          service:
-            type: LoadBalancer
       {{- end }}
 
   - name: keycloak
@@ -274,10 +274,12 @@ releases:
           existingConfigmap: esthesis-core-keycloak-config
           backoffLimit: 30
           command: "[\"java\", \"-jar\", \"/opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar\"]"
+      {{- if not .StateValues.devMode }}
       - ingress:
           enabled: true
           hostname: {{ .StateValues.keycloakIngressHostname | quote }}
           path: /
+      {{- end }}
 
   - name: grafana-loki
     chart: "bitnami/grafana-loki"
@@ -298,19 +300,12 @@ releases:
           password: {{ .StateValues.esthesisSystemPassword | quote }}
       - datasources:
           secretName: grafana-config
-      - ingress:
-          enabled: true
-          hostname: {{ .StateValues.grafanaIngressHostname | quote }}
-          path: /
 
   - name: grafana-tempo
     chart: "bitnami/grafana-tempo"
     version: "2.2.2"
     installed: {{ .StateValues.devMode }}
     values:
-      - distributor:
-          service:
-            type: LoadBalancer
       - tempo:
           traces:
             jaeger:
@@ -336,12 +331,3 @@ releases:
             bucket: esthesis
             username: {{ .StateValues.esthesisSystemUsername | quote }}
             password: {{ .StateValues.esthesisSystemPassword | quote }}
-      {{- if .StateValues.devMode }}
-      - influxdb:
-          service:
-            type: LoadBalancer
-      - ingress:
-          enabled: true
-          hostname: {{ .StateValues.influxDbIngressHostname | quote }}
-          path: /
-      {{- end }}

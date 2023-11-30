@@ -4,9 +4,9 @@ kind: Service
 metadata:
   name: grafana-loki-gelf
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   sessionAffinity: None
-  externalTrafficPolicy: "Cluster"
+{{/*  externalTrafficPolicy: Local*/}}
   loadBalancerSourceRanges: []
   ports:
     - name: gelf

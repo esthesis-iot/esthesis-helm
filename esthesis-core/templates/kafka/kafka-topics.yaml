@@ -1,0 +1,50 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-command-reply
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: 3
+  replicas: 2
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-telemetry
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: 3
+  replicas: 2
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-metadata
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: 3
+  replicas: 2
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-app
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: 3
+  replicas: 2
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-ping
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: 3
+  replicas: 2

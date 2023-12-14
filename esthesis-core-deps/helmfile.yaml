@@ -32,6 +32,8 @@ repositories:
     url: https://helm.camunda.io
   - name: twuni
     url: https://helm.twun.io
+  - name: strimzi
+    url: https://strimzi.io/charts/
 
 ---
 ##################################################################################################
@@ -192,37 +194,12 @@ releases:
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
 
-  - name: kafka
-    chart: "bitnami/kafka"
-#    version: "22.1.1"
-    version: "26.4.2"
+  - name: strimzi
+    chart: "strimzi/strimzi-kafka-operator"
+    version: "0.38.0"
     installed: {{ .StateValues.kafkaEnabled }}
-    {{- if .StateValues.devMode }}
     values:
-      - listeners:
-          securityProtocolMap: "CLIENT:SASL_PLAINTEXT,INTERNAL:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT,EXTERNAL:PLAINTEXT"
-      - controller:
-          replicaCount: 1
-      - externalAccess:
-          enabled: true
-          controller:
-            service:
-              type: ClusterIP
-              ports:
-                external: 9095
-              domain: "kafka.esthesis"
-          broker:
-            service:
-              type: ClusterIP
-              ports:
-                external: 9095
-              domain: "kafka.esthesis"
-      - serviceAccount:
-          create: true
-      - rbac:
-          create: true
-      - deleteTopicEnable: true
-    {{- end }}
+      - watchAnyNamespace: false
 
   - name: camunda
     chart: "camunda/camunda-platform"
@@ -283,7 +260,7 @@ releases:
 
   - name: grafana-loki
     chart: "bitnami/grafana-loki"
-    version: "2.8.1"
+    version: "2.11.16"
     installed: {{ .StateValues.devMode }}
     values:
       - promtail:
@@ -292,7 +269,7 @@ releases:
 
   - name: grafana
     chart: "bitnami/grafana"
-    version: "8.4.2"
+    version: "9.6.3"
     installed: {{ .StateValues.devMode }}
     values:
       - admin:
@@ -303,7 +280,7 @@ releases:
 
   - name: grafana-tempo
     chart: "bitnami/grafana-tempo"
-    version: "2.2.2"
+    version: "2.5.7"
     installed: {{ .StateValues.devMode }}
     values:
       - tempo:
@@ -312,8 +289,8 @@ releases:
               grpc: false
               thriftHttp: false
             otlp:
-              http: true  # Needed by APISIX
-              grpc: true  # Needed by Quarkus
+              http: true  # Needed by APISIX (port 55681)
+              grpc: true  # Needed by Quarkus (port 4317)
 
   - name: influxdb
     chart: bitnami/influxdb

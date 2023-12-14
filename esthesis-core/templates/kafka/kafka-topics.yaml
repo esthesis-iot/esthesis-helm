@@ -49,4 +49,14 @@ metadata:
 spec:
   partitions: {{ .Values.kafkaTopicPartitions }}
   replicas: {{ .Values.kafkaTopicReplicas }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: esthesis-command-request
+  labels:
+    strimzi.io/cluster: {{ .Release.Name }}-kafka
+spec:
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
 {{ end }}

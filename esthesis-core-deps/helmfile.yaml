@@ -30,12 +30,12 @@ repositories:
     url: https://charts.apiseven.com
   - name: camunda
     url: https://helm.camunda.io
-  - name: twuni
-    url: https://helm.twun.io
   - name: strimzi
     url: https://strimzi.io/charts/
   - name: kafka-ui
     url: https://provectus.github.io/kafka-ui-charts
+  - name: joxit
+    url: https://helm.joxit.dev
 
 ---
 ##################################################################################################
@@ -320,3 +320,13 @@ releases:
             bucket: esthesis
             username: {{ .StateValues.esthesisSystemUsername | quote }}
             password: {{ .StateValues.esthesisSystemPassword | quote }}
+
+  - name: docker-registry-ui
+    chart: joxit/docker-registry-ui
+    version: "1.1.3"
+    installed: {{ .StateValues.devMode }}
+    values:
+      - ui:
+          dockerRegistryUrl: "http://registry.container-registry:5000"
+          proxy: true
+          deleteImages: true

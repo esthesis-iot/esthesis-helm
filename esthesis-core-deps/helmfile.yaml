@@ -34,6 +34,8 @@ repositories:
     url: https://helm.twun.io
   - name: strimzi
     url: https://strimzi.io/charts/
+  - name: kafka-ui
+    url: https://provectus.github.io/kafka-ui-charts
 
 ---
 ##################################################################################################
@@ -152,13 +154,6 @@ releases:
           auth:
             token:
               type: "simple"
-#      - gateway:
-#          ingress:
-#            enabled: true
-#            hosts:
-#              - host: {{ .StateValues.esthesisApiIngressHostname }}
-#                paths:
-#                  - /api
       - admin:
           credentials:
             admin: {{ .StateValues.esthesisSystemPassword }}
@@ -200,6 +195,23 @@ releases:
     installed: {{ .StateValues.kafkaEnabled }}
     values:
       - watchAnyNamespace: false
+
+  - name: kafka-ui
+    chart: "kafka-ui/kafka-ui"
+    version: "0.7.5"
+    installed: {{ and .StateValues.kafkaEnabled .StateValues.devMode }}
+    values:
+      - yamlApplicationConfig:
+          kafka:
+            clusters:
+              - name: kafka
+                bootstrapServers: esthesis-core-kafka-kafka-bootstrap:9092
+      - auth:
+          type: disabled
+      - management:
+          health:
+            ldap:
+              enabled: false
 
   - name: camunda
     chart: "camunda/camunda-platform"

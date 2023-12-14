@@ -1,3 +1,4 @@
+{{ if .Values.kafkaEnabled }}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
@@ -6,8 +7,8 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka
 spec:
-  partitions: 3
-  replicas: 2
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
@@ -16,8 +17,8 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka
 spec:
-  partitions: 3
-  replicas: 2
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
@@ -26,8 +27,8 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka
 spec:
-  partitions: 3
-  replicas: 2
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
@@ -36,8 +37,8 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka
 spec:
-  partitions: 3
-  replicas: 2
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
@@ -46,5 +47,6 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka
 spec:
-  partitions: 3
-  replicas: 2
+  partitions: {{ .Values.kafkaTopicPartitions }}
+  replicas: {{ .Values.kafkaTopicReplicas }}
+{{ end }}

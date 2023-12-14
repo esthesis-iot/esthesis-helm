@@ -7,13 +7,17 @@ environments:
       - devMode: false
       - devHost: ""
       - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default false }}
+      - kafkaTopicReplicas: {{ env "KAFKA_TOPIC_REPLICAS" | default 2 }}
+      - kafkaTopicPartitions: {{ env "KAFKA_TOPIC_PARTITIONS" | default 3 }}
   dev:
     values:
       - devMode: true
       - devHost: {{ env "DEV_HOST" }}
       - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default true }}
-      - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway.esthesis.localdev:26500" }}
+      - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway.esthesis:26500" }}
       - kafkaReplicas: {{ env "KAFKA_REPLICAS" | default 1 }}
+      - kafkaTopicReplicas: {{ env "KAFKA_TOPIC_REPLICAS" | default 1 }}
+      - kafkaTopicPartitions: {{ env "KAFKA_TOPIC_PARTITIONS" | default 3 }}
 
 ---
 ##################################################################################################
@@ -57,6 +61,8 @@ values:
   - redisHosts: {{ env "REDIS_HOSTS" | default "redis.esthesis.localdev:6379"}}
   # RabbitMQ
   - rabbitmqErlangCookie: {{ env "RABBITMQ_ERLANG_COOKIE" | default .StateValues.esthesisSystemUsername }}
+  # Kafka
+  - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
 
 ---
 ##################################################################################################
@@ -113,4 +119,8 @@ releases:
       - camundaGatewayUrlCluster: {{ .StateValues.camundaGatewayUrlCluster | quote }}
       # Kafka
       - kafkaReplicas: {{ .StateValues.kafkaReplicas }}
+      - kafkaEnabled: {{ .StateValues.kafkaEnabled }}
+      - kafkaTopicReplicas: {{ .StateValues.kafkaTopicReplicas }}
+      - kafkaTopicPartitions: {{ .StateValues.kafkaTopicPartitions }}
+
 

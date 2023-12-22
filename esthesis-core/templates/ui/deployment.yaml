@@ -17,9 +17,9 @@ spec:
       containers:
         - name: esthesis-core-ui
           {{- if .Values.esthesisRegistry }}
-          image: {{ .Values.esthesisRegistry }}/esthesisiot/esthesis-core-ui: 3.0.2
+          image: {{ .Values.esthesisRegistry }}/esthesisiot/esthesis-core-ui: 3.0.3
           {{- else }}
-          image: esthesisiot/esthesis-core-ui: 3.0.2
+          image: esthesisiot/esthesis-core-ui: 3.0.3
           {{- end }}
           ports:
             - containerPort: 8080

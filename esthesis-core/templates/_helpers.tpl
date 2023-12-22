@@ -98,9 +98,9 @@ spec:
       containers:
         - name: {{ .podName }}
           {{- if .registry }}
-          image: {{ .registry }}/esthesisiot/{{ .podName }}: 3.0.3
+          image: {{ .registry }}/esthesisiot/{{ .podName }}: 3.0.4-SNAPSHOT
           {{- else }}
-          image: esthesisiot/{{ .podName }}: 3.0.3
+          image: esthesisiot/{{ .podName }}: 3.0.4-SNAPSHOT
           {{- end }}
           imagePullPolicy: Always
           resources:

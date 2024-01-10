@@ -5,11 +5,9 @@ environments:
   default:
     values:
       - devMode: false
-      - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default false }}
   dev:
     values:
       - devMode: true
-      - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default true }}
       - mk8sExposeIngress: true
 
 ---
@@ -54,7 +52,6 @@ values:
   ##################################################################################################
   - esthesisVersion: 3.0.4-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
-  - esthesisApiIngressHostname: {{ env "ESTHESIS_API_INGRESS_HOSTNAME" | default "apisix-gateway.esthesis.localdev" }}
   - esthesisSingleNode: {{ env "ESTHESIS_SINGLE_NODE" | default false }}
 
   ##################################################################################################
@@ -71,6 +68,8 @@ values:
   # Keycloak
   - keycloakEnabled: {{ env "KEYCLOAK_ENABLED" | default true }}
   - keycloakIngressHostname: {{ env "KEYCLOAK_INGRESS_HOSTNAME" | default "keycloak.esthesis.localdev" }}
+  - keycloakCertManagerClusterIssuer: {{ env "KEYCLOAK_CERT_MANAGER_CLUSTER_ISSUER" | default "" }}
+  - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" | default "" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   # APISIX
@@ -87,10 +86,11 @@ values:
   # Mosquitto
   - mosquittoEnabled: {{ env "MOSQUITTO_ENABLED" | default true }}
   - mosquittoMutualTls: {{ env "MOSQUITTO_MUTUAL_TLS" | default false }}
-  - mosquittoSuperuser: {{ env "MOSQUITTO_SUPERUSER" }}
+  - mosquittoSuperuser: {{ env "MOSQUITTO_SUPERUSER" | default "esthesis" }}
   - mosquittoCaCert: {{ env "MOSQUITTO_CA_CERT" }}
   - mosquittoServerCert: {{ env "MOSQUITTO_SERVER_CERT" }}
   - mosquittoServerKey: {{ env "MOSQUITTO_SERVER_KEY" }}
+  - mosquittoServiceType: {{ env "MOSQUITTO_SERVICE_TYPE" | default "ClusterIP" }}
   # Grafana
   - grafanaIngressHostname: {{ env "GRAFANA_INGRESS_HOSTNAME" | default "grafana.esthesis.localdev" }}
   # InfluxDB
@@ -104,7 +104,7 @@ values:
 releases:
   - name: esthesis-core-deps
     version: {{ .StateValues.esthesisVersion | quote }}
-    chart: {{ .StateValues.helmfileDevMode | ternary "./" "esthesis/esthesis-core-deps" | quote }}
+    chart: "./"
     values:
       - devMode: {{ .StateValues.devMode }}
       - esthesisAdminUsername: {{ .StateValues.esthesisAdminUsername | quote }}
@@ -123,6 +123,7 @@ releases:
       - mosquittoCaCert: {{ .StateValues.mosquittoCaCert }}
       - mosquittoServerCert: {{ .StateValues.mosquittoServerCert }}
       - mosquittoServerKey: {{ .StateValues.mosquittoServerKey }}
+      - mosquittoServiceType: {{ .StateValues.mosquittoServiceType }}
 
   - name: reloader
     chart: "reloader/reloader"
@@ -131,7 +132,7 @@ releases:
 
   - name: mongodb
     chart: mongodb/community-operator
-    version: "0.7.9"
+    version: "0.9.0"
     installed: {{ .StateValues.mongoDbEnabled }}
 
   - name: apisix
@@ -170,7 +171,7 @@ releases:
               serviceFullname: "apisix-admin"
             kubernetes:
               namespaceSelector:
-                - ""
+                - kubernetes.io/metadata.name={{ .Namespace }}
       - dashboard:
           enabled: {{ .StateValues.devMode }}
           config:
@@ -247,27 +248,43 @@ releases:
     version: "15.1.1"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
-      - proxy: "edge"
+      - proxy: edge
       - production: true
       - auth:
           adminUser: {{ .StateValues.esthesisSystemUsername | quote }}
           adminPassword: {{ .StateValues.esthesisSystemPassword | quote }}
       - postgresql:
           auth:
-            postgresPassword: {{ .StateValues.esthesisSystemPassword }}
-            password: {{ .StateValues.esthesisSystemPassword }}
+            postgresPassword: {{ .StateValues.esthesisSystemPassword | quote }}
+            password: {{ .StateValues.esthesisSystemPassword |quote }}
       - readinessProbe:
           timeoutSeconds: 60
       - keycloakConfigCli:
           enabled: true
           existingConfigmap: esthesis-core-keycloak-config
           backoffLimit: 30
-          command: "[\"java\", \"-jar\", \"/opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar\"]"
+          extraEnvVars:
+            - name: LOGGING_LEVEL_ROOT
+              value: TRACE
+            - name: LOGGING_LEVEL_REALMCONFIG
+              value: TRACE
+          cleanupAfterFinished:
+            enabled: true
       {{- if not .StateValues.devMode }}
       - ingress:
           enabled: true
           hostname: {{ .StateValues.keycloakIngressHostname | quote }}
           path: /
+          {{- if .StateValues.keycloakCertManagerClusterIssuer }}
+          tls: true
+          annotations:
+            cert-manager.io/cluster-issuer: {{ .StateValues.keycloakCertManagerClusterIssuer | quote }}
+          {{- end }}
+          {{- if .StateValues.keycloakCertManagerIssuer }}
+          tls: true
+          annotations:
+            cert-manager.io/issuer: {{ .StateValues.keycloakCertManagerIssuer | quote }}
+          {{- end }}
       {{- end }}
 
   - name: grafana-loki

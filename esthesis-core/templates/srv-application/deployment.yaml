@@ -1,14 +1,14 @@
 {{ if not .Values.devMode }}
 {{ template "deployment.api.template" (merge (dict
+  "podJwtVerifier" true
   "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
   "podMongoDb" true
   "podName" "esthesis-core-srv-application"
-  "podOidcClient" true
   "podProbes" true
   "podRedis" true
-  "timezone" .Values.timezone
   "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

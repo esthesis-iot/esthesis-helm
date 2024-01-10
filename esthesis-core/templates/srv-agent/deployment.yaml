@@ -3,12 +3,11 @@
   "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
-  "podMongoDb" false
   "podName" "esthesis-core-srv-agent"
   "podOidcClient" true
   "podProbes" true
   "podRedis" true
-  "timezone" .Values.timezone
   "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

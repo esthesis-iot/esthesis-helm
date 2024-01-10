@@ -7,9 +7,8 @@
   "podMaxMemory" "256M"
   "podMongoDb" true
   "podName" "esthesis-core-srv-command"
-  "podOidcClient" true
   "podProbes" true
-  "timezone" .Values.timezone
   "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

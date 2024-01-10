@@ -6,10 +6,9 @@
   "podMaxMemory" "256M"
   "podMongoDb" true
   "podName" "esthesis-core-srv-security"
-  "podOidcClient" true
   "podProbes" true
-  "timezone" .Values.timezone
   "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
   "extraEnvVars" (dict
     "ESTHESIS_SECURITY_ADMIN_USERNAME" .Values.esthesisAdminUsername
   )

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: mosquitto
 spec:
-  type: ClusterIP
+  type: {{ .Values.mosquittoServiceType }}
   ports:
     - port: 1883
       name: mqtt

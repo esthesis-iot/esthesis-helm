@@ -98,9 +98,9 @@ spec:
       containers:
         - name: {{ .podName }}
           {{- if .registry }}
-          image: {{ .registry }}/esthesisiot/{{ .podName }}: 3.0.4-SNAPSHOT
+          image: "{{ .registry }}/esthesisiot/{{ .podName }}:3.0.4-SNAPSHOT"
           {{- else }}
-          image: esthesisiot/{{ .podName }}: 3.0.4-SNAPSHOT
+          image: "esthesisiot/{{ .podName }}:3.0.4-SNAPSHOT"
           {{- end }}
           imagePullPolicy: Always
           resources:
@@ -118,12 +118,12 @@ spec:
               path: /q/health/live
               port: 8080
             failureThreshold: 1
-            periodSeconds: 15
+            periodSeconds: 30
           startupProbe:
             httpGet:
               path: /q/health/started
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 45
             failureThreshold: 30
             periodSeconds: 10
           {{- end }}
@@ -152,9 +152,9 @@ spec:
             {{- if .podOidcClient }}
             - name: QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL
               value: {{ .Values.oidcAuthorityUrlCluster | quote}}
-            - name: QUARKUS_OIDC_CLIENT_GRANT_OPTION_PASSWORD_USERNAME
+            - name: OIDC_CLIENT_USERNAME
               value: {{ .Values.esthesisSystemUsername | quote }}
-            - name: QUARKUS_OIDC_CLIENT_GRANT_OPTION_PASSWORD_PASSWORD
+            - name: OIDC_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: esthesis-core-secret
@@ -171,6 +171,11 @@ spec:
             {{- if .podRedis }}
             - name: QUARKUS_REDIS_HOSTS
               value: {{ .Values.redisHosts | quote}}
+            - name: QUARKUS_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: esthesis-core-secret
+                  key: esthesisSystemPassword
             {{- end }}
             {{- if .podCamunda }}
             - name: QUARKUS_ZEEBE_CLIENT_BROKER_GATEWAY_ADDRESS

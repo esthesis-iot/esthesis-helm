@@ -5,19 +5,19 @@ environments:
   default:
     values:
       - devMode: false
-      - devHost: ""
-      - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default false }}
+      - kafkaReplicas: {{ env "KAFKA_REPLICAS" | default 3 }}
       - kafkaTopicReplicas: {{ env "KAFKA_TOPIC_REPLICAS" | default 2 }}
       - kafkaTopicPartitions: {{ env "KAFKA_TOPIC_PARTITIONS" | default 3 }}
   dev:
     values:
       - devMode: true
       - devHost: {{ env "DEV_HOST" }}
-      - helmfileDevMode: {{ env "HELMFILE_DEV_MODE" | default true }}
       - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway.esthesis:26500" }}
       - kafkaReplicas: {{ env "KAFKA_REPLICAS" | default 1 }}
       - kafkaTopicReplicas: {{ env "KAFKA_TOPIC_REPLICAS" | default 1 }}
       - kafkaTopicPartitions: {{ env "KAFKA_TOPIC_PARTITIONS" | default 3 }}
+#      - redisHosts: {{ env "REDIS_HOSTS" | default "redis://redis.esthesis:6379"}}
+      - kafkaBootstrapServers: {{ env "KAFKA_BOOTSTRAP_SERVERS" | default "kafka.esthesis:9094" }}
 
 ---
 ##################################################################################################
@@ -31,6 +31,7 @@ helmDefaults:
 # Default state values
 ##################################################################################################
 values:
+  - devHost: ""
   - esthesisVersion: 3.0.4-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}
@@ -38,7 +39,7 @@ values:
   - esthesisAdminPassword: {{ env "ESTHESIS_ADMIN_PASSWORD" | default "esthesis-admin" }}
   - esthesisSystemUsername: {{ env "ESTHESIS_SYSTEM_USERNAME" | default "esthesis-system" }}
   - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "esthesis-system" }}
-  - esthesisRegistry: {{ env "ESTHESIS_REGISTRY" }}
+  - esthesisRegistry: {{ env "ESTHESIS_REGISTRY_URL" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   - mongoDbUrlCluster: {{ env "MONGODB_URL_CLUSTER" | default "mongodb://esthesis-mongodb-esthesiscore-svc:27017" }}
@@ -50,6 +51,8 @@ values:
   # esthesis UI
   - esthesisUiIngressHostname: {{ env "ESTHESIS_UI_INGRESS_HOSTNAME" | default "esthesis-core.esthesis.localdev" }}
   - esthesisUiLogoutUrl: {{ env "ESTHESIS_UI_LOGOUT_URL" | default "/logout" }}
+  - esthesisUiCertManagerClusterIssuer: {{ env "ESTHESIS_UI_CERT_MANAGER_CLUSTER_ISSUER" | default "" }}
+  - esthesisUiCertManagerIssuer: {{ env "ESTHESIS_UI_CERT_MANAGER_ISSUER" | default "" }}
   # OIDC
   - oidcAuthorityUrlExternal: {{ env "OIDC_AUTHORITY_URL_EXTERNAL" | default "https://keycloak.esthesis.localdev/realms/esthesis" }}
   - oidcAuthorityUrlCluster: {{ env "OIDC_AUTHORITY_URL_CLUSTER" | default "http://keycloak/realms/esthesis" }}
@@ -58,11 +61,12 @@ values:
   # Camunda
   - camundaGatewayUrlCluster: {{ env "CAMUNDA_GATEWAY_URL_CLUSTER" | default "camunda-zeebe-gateway:26500" }}
   # Redis
-  - redisHosts: {{ env "REDIS_HOSTS" | default "redis.esthesis.localdev:6379"}}
+  - redisHosts: {{ env "REDIS_HOSTS" | default "redis://redis-headless:6379"}}
   # RabbitMQ
   - rabbitmqErlangCookie: {{ env "RABBITMQ_ERLANG_COOKIE" | default .StateValues.esthesisSystemUsername }}
   # Kafka
   - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
+  - kafkaBootstrapServers: {{ env "KAFKA_BOOTSTRAP_SERVERS" | default "esthesis-core-kafka-kafka-bootstrap:9092" }}
 
 ---
 ##################################################################################################
@@ -70,7 +74,7 @@ values:
 ##################################################################################################
 releases:
   - name: esthesis-core
-    chart: {{ .StateValues.helmfileDevMode | ternary "./" "esthesis/esthesis-core" | quote }}
+    chart: "./"
     version: {{ .StateValues.esthesisVersion | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
@@ -122,5 +126,9 @@ releases:
       - kafkaEnabled: {{ .StateValues.kafkaEnabled }}
       - kafkaTopicReplicas: {{ .StateValues.kafkaTopicReplicas }}
       - kafkaTopicPartitions: {{ .StateValues.kafkaTopicPartitions }}
+      - kafkaBootstrapServers: {{ .StateValues.kafkaBootstrapServers | quote }}
+      # Cert Manager
+      - esthesisUiCertManagerClusterIssuer: {{ .StateValues.esthesisUiCertManagerClusterIssuer | quote }}
+      - esthesisUiCertManagerIssuer: {{ .StateValues.esthesisUiCertManagerIssuer | quote }}
 
 

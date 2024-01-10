@@ -1,15 +1,15 @@
 {{ template "route.api.template" (merge (dict
-  "serviceName" "esthesis-core-srv-agent-service"
-  "servicePath" "agent"
-  "serviceOidc" false
   "devMode" .Values.devMode
+  "serviceName" "esthesis-core-srv-agent-service"
+  "serviceOidc" false
+  "servicePath" "agent"
 ) .) }}
 
 {{ if .Values.devMode }}
 ---
 {{ template "upstream.dev.template" (merge (dict
+  "devHost" .Values.devHost
   "serviceName" "esthesis-core-srv-agent-service"
   "servicePort" 59070
-  "devHost" .Values.devHost
 ) .) }}
 {{ end }}

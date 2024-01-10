@@ -1,15 +1,15 @@
 {{ if not .Values.devMode }}
 {{ template "deployment.api.template" (merge (dict
-  "podName" "esthesis-core-srv-infrastructure"
+  "podJwtVerifier" true
+  "podKafka" true
+  "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
-  "podJwtVerifier" true
   "podMongoDb" true
-  "podLogging" true
-  "podProbes" true
-  "podKafka" true
+  "podName" "esthesis-core-srv-infrastructure"
   "podOidcClient" true
-  "timezone" .Values.timezone
+  "podProbes" true
   "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
 ) .) }}
 {{ end }}

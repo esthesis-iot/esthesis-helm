@@ -8,7 +8,7 @@ environments:
   dev:
     values:
       - devMode: true
-      - mk8sExposeIngress: true
+      - keycloakIngressName: "keycloak.esthesis"
 
 ---
 ##################################################################################################
@@ -22,14 +22,8 @@ repositories:
     oci: true
   - name: reloader
     url: https://stakater.github.io/stakater-charts
-  - name: mongodb
-    url: https://mongodb.github.io/helm-charts
-  - name: apisix
-    url: https://charts.apiseven.com
   - name: camunda
     url: https://helm.camunda.io
-  - name: strimzi
-    url: https://strimzi.io/charts/
   - name: kafka-ui
     url: https://provectus.github.io/kafka-ui-charts
   - name: joxit
@@ -67,22 +61,19 @@ values:
   ##################################################################################################
   # Keycloak
   - keycloakEnabled: {{ env "KEYCLOAK_ENABLED" | default true }}
-  - keycloakIngressHostname: {{ env "KEYCLOAK_INGRESS_HOSTNAME" | default "keycloak.esthesis.localdev" }}
-  - keycloakCertManagerClusterIssuer: {{ env "KEYCLOAK_CERT_MANAGER_CLUSTER_ISSUER" | default "" }}
-  - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" | default "" }}
+  - keycloakIngressName: {{ env "KEYCLOAK_INGRESS_NAME" }}
+  - keycloakCertManagerClusterIssuer: {{ env "KEYCLOAK_CERT_MANAGER_CLUSTER_ISSUER" }}
+  - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
-  # APISIX
-  - apisixEnabled: {{ env "APISIX_ENABLED" | default true }}
   # REDIS
   - redisEnabled: {{ env "REDIS_ENABLED" | default true }}
   # Kafka
   - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
+  - kafkaTopicReplicas: {{ env "KAFKA_TOPIC_REPLICAS" | default 3 }}
+  - kafkaTopicPartitions: {{ env "KAFKA_TOPIC_PARTITIONS" | default 3 }}
   # Camunda
   - camundaEnabled: {{ env "CAMUNDA_ENABLED" | default true }}
-  # MicroK8s
-  - mk8sExposeIngress: {{ env "MK8S_EXPOSE_INGRESS" | default false }}
-  - mk8sIngressNamespace: {{ env "MK8S_INGRESS_NAMESPACE" | default "ingress" }}
   # Mosquitto
   - mosquittoEnabled: {{ env "MOSQUITTO_ENABLED" | default true }}
   - mosquittoMutualTls: {{ env "MOSQUITTO_MUTUAL_TLS" | default false }}
@@ -91,11 +82,8 @@ values:
   - mosquittoServerCert: {{ env "MOSQUITTO_SERVER_CERT" }}
   - mosquittoServerKey: {{ env "MOSQUITTO_SERVER_KEY" }}
   - mosquittoServiceType: {{ env "MOSQUITTO_SERVICE_TYPE" | default "ClusterIP" }}
-  # Grafana
-  - grafanaIngressHostname: {{ env "GRAFANA_INGRESS_HOSTNAME" | default "grafana.esthesis.localdev" }}
   # InfluxDB
   - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
-  - influxDbIngressHostname: {{ env "INFLUXDB_INGRESS_HOSTNAME" | default "influxdb-ui.esthesis.localdev" }}
 
 ---
 ##################################################################################################
@@ -113,9 +101,6 @@ releases:
       - esthesisSystemPassword: {{ .StateValues.esthesisSystemPassword | quote }}
       # Keycloak
       - keycloakEnabled: {{ .StateValues.keycloakEnabled }}
-      # MicroK8s
-      - mk8sExposeIngress: {{ .StateValues.mk8sExposeIngress }}
-      - mk8sIngressNamespace: {{ .StateValues.mk8sIngressNamespace | quote }}
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
       - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
@@ -130,59 +115,8 @@ releases:
     version: "v1.0.22"
     installed: {{ .StateValues.devMode }}
 
-  - name: mongodb
-    chart: mongodb/community-operator
-    version: "0.9.0"
-    installed: {{ .StateValues.mongoDbEnabled }}
-
-  - name: apisix
-    chart: apisix/apisix
-    version: "1.3.1"
-    installed: {{ .StateValues.apisixEnabled }}
-    values:
-      - apisix:
-          timezone: {{ .StateValues.timezone }}
-      - plugins:
-          - proxy-rewrite
-          - openid-connect
-          - opentelemetry
-      - logs:
-          errorLogLevel: "debug"
-      - etcd:
-          {{- if or .StateValues.devMode .StateValues.esthesisSingleNode }}
-          replicaCount: 1
-          {{- end }}
-          auth:
-            token:
-              type: "simple"
-      - admin:
-          credentials:
-            admin: {{ .StateValues.esthesisSystemPassword }}
-          cors: false
-          allow:
-            ipList:
-              - "0.0.0.0/0"
-      - ingress-controller:
-          enabled: true
-          config:
-            logLevel: "warn"
-            apisix:
-              adminKey: {{ .StateValues.esthesisSystemPassword }}
-              serviceFullname: "apisix-admin"
-            kubernetes:
-              namespaceSelector:
-                - kubernetes.io/metadata.name={{ .Namespace }}
-      - dashboard:
-          enabled: {{ .StateValues.devMode }}
-          config:
-            authentication:
-              secret: {{ .StateValues.esthesisSystemPassword }}
-              users:
-                - username: {{ .StateValues.esthesisSystemUsername | quote }}
-                  password: {{ .StateValues.esthesisSystemPassword | quote }}
-
   - name: redis
-    chart: "bitnami/redis"
+    chart: bitnami/redis
     version: "17.3.7"
     installed: {{ .StateValues.redisEnabled }}
     values:
@@ -190,12 +124,57 @@ releases:
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
 
-  - name: strimzi
-    chart: "strimzi/strimzi-kafka-operator"
-    version: "0.38.0"
+  - name: mongodb
+    chart: bitnami/mongodb
+    version: "14.5.0"
+    installed: {{ .StateValues.mongoDbEnabled }}
+    values:
+      - architecture: replicaset
+      - auth:
+          replicaSetKey: {{ .StateValues.esthesisSystemPassword }}
+          usernames:
+            - {{ .StateValues.esthesisSystemUsername | quote }}
+          passwords:
+            - {{ .StateValues.esthesisSystemPassword | quote }}
+          databases:
+            - "esthesiscore"
+      - initdbScripts:
+          init-db.js: |
+            use esthesiscore
+            db.grantRolesToUser('{{ .StateValues.esthesisSystemUsername }}', ["dbAdmin"])
+
+  - name: kafka
+    chart: bitnami/kafka
+    version: "26.6.2"
     installed: {{ .StateValues.kafkaEnabled }}
     values:
-      - watchAnyNamespace: false
+      - sasl:
+          client:
+            users:
+              - {{ .StateValues.esthesisSystemUsername | quote }}
+            passwords:
+              - {{ .StateValues.esthesisSystemPassword | quote }}
+      - provisioning:
+          enabled: true
+          topics:
+            - name: esthesis-command-reply
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-telemetry
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-metadata
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-app
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-ping
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-command-request
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
 
   - name: kafka-ui
     chart: "kafka-ui/kafka-ui"
@@ -206,7 +185,7 @@ releases:
           kafka:
             clusters:
               - name: kafka
-                bootstrapServers: esthesis-core-kafka-kafka-bootstrap:9092
+                bootstrapServers: kafka.{{ .Namespace }}.svc.cluster.local:9092
       - auth:
           type: disabled
       - management:
@@ -227,9 +206,6 @@ releases:
           enabled: false
       - identity:
           enabled: false
-      #          firstUser:
-      #            username: {{ .StateValues.esthesisSystemUsername | quote }}
-      #            password: {{ .StateValues.esthesisSystemPassword | quote }}
       - web-modeler:
           enabled: false
       {{- if or .StateValues.devMode .StateValues.esthesisSingleNode }}
@@ -244,7 +220,7 @@ releases:
       {{- end }}
 
   - name: keycloak
-    chart: "bitnami/keycloak"
+    chart: bitnami/keycloak
     version: "15.1.1"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
@@ -273,7 +249,7 @@ releases:
       {{- if not .StateValues.devMode }}
       - ingress:
           enabled: true
-          hostname: {{ .StateValues.keycloakIngressHostname | quote }}
+          hostname: {{ .StateValues.keycloakIngressName | quote }}
           path: /
           {{- if .StateValues.keycloakCertManagerClusterIssuer }}
           tls: true
@@ -288,7 +264,7 @@ releases:
       {{- end }}
 
   - name: grafana-loki
-    chart: "bitnami/grafana-loki"
+    chart: bitnami/grafana-loki
     version: "2.11.16"
     installed: {{ .StateValues.devMode }}
     values:
@@ -297,7 +273,7 @@ releases:
           existingSecret: "grafana-loki-config"
 
   - name: grafana
-    chart: "bitnami/grafana"
+    chart: bitnami/grafana
     version: "9.6.3"
     installed: {{ .StateValues.devMode }}
     values:
@@ -308,7 +284,7 @@ releases:
           secretName: grafana-config
 
   - name: grafana-tempo
-    chart: "bitnami/grafana-tempo"
+    chart: bitnami/grafana-tempo
     version: "2.5.7"
     installed: {{ .StateValues.devMode }}
     values:
@@ -318,7 +294,6 @@ releases:
               grpc: false
               thriftHttp: false
             otlp:
-              http: true  # Needed by APISIX (port 55681)
               grpc: true  # Needed by Quarkus (port 4317)
 
   - name: influxdb

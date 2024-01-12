@@ -1,0 +1,146 @@
+{{- if not .Values.devMode }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: esthesis-services-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/rewrite-target: "/api/$1"
+    {{- if .Values.esthesisUiCertManagerClusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.esthesisUiCertManagerClusterIssuer | quote }}
+    {{- end }}
+    {{- if .Values.esthesisUiCertManagerIssuer }}
+    cert-manager.io/issuer: {{ .Values.esthesisUiCertManagerIssuer | quote }}
+    {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.esthesisIngressName }}
+      http:
+        paths:
+          - path: "/api/about(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-about-service
+                port:
+                  number: 8080
+          - path: "/api/agent(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-agent-service
+                port:
+                  number: 8080
+          - path: "/api/application(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-application-service
+                port:
+                  number: 8080
+          - path: "/api/audit(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-audit-service
+                port:
+                  number: 8080
+          - path: "/api/campaign(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-campaign-service
+                port:
+                  number: 8080
+          - path: "/api/command(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-command-service
+                port:
+                  number: 8080
+          - path: "/api/crypto(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-crypto-service
+                port:
+                  number: 8080
+          - path: "/api/dataflow(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-dataflow-service
+                port:
+                  number: 8080
+          - path: "/api/device(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-device-service
+                port:
+                  number: 8080
+          - path: "/api/dt(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-dt-service
+                port:
+                  number: 8080
+          - path: "/api/infrastructure(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-infrastructure-service
+                port:
+                  number: 8080
+          - path: "/api/kubernetes(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-kubernetes-service
+                port:
+                  number: 8080
+          - path: "/api/provisioning(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-provisioning-service
+                port:
+                  number: 8080
+          - path: "/api/public-access(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-public-access-service
+                port:
+                  number: 8080
+          - path: "/api/security(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-security-service
+                port:
+                  number: 8080
+          - path: "/api/settings(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-settings-service
+                port:
+                  number: 8080
+          - path: "/api/tag(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-tag-service
+                port:
+                  number: 8080
+  {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer }}
+  tls:
+    - hosts:
+        - {{ .Values.esthesisIngressName }}
+      secretName: esthesis-services-ingress-tls
+  {{- end }}
+  {{- end }}

@@ -167,6 +167,12 @@ spec:
             {{- if .podKafka }}
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: {{ .Values.kafkaBootstrapServers | quote }}
+            - name: KAFKA_SECURITY_PROTOCOL
+              value: SASL_PLAINTEXT
+            - name: KAFKA_SASL_MECHANISM
+              value: SCRAM-SHA-512
+            - name: KAFKA_SASL_JAAS_CONFIG
+              value: org.apache.kafka.common.security.scram.ScramLoginModule required username={{ .Values.esthesisSystemUsername }} password={{ .Values.esthesisSystemPassword }};
             {{- end }}
             {{- if .podRedis }}
             - name: QUARKUS_REDIS_HOSTS

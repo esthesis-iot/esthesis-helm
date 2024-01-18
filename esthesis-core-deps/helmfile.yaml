@@ -146,17 +146,6 @@ releases:
       - replicaCount: 1
       {{- end }}
 
-  - name: mariadb
-    chart: bitnami/mariadb
-    version: "15.1.2"
-    installed: {{ .StateValues.mongoDbEnabled }}
-    values:
-      - auth:
-          rootPassword: {{ .StateValues.esthesisSystemPassword }}
-          username: {{ .StateValues.esthesisSystemUsername | quote }}
-          password: {{ .StateValues.esthesisSystemPassword | quote }}
-          database: "esthesiscore"
-
   - name: kafka
     chart: bitnami/kafka
     version: "26.6.2"

@@ -17,7 +17,6 @@ environments:
   dev:
     values:
       - devMode: true
-      - devHost: {{ env "DEV_HOST" }}
       - camundaGatewayUrlCluster: camunda-zeebe-gateway.esthesis:26500
       - kafkaBootstrapServers: kafka.esthesis:9094
       - oidcAuthorityUrlExternal: https://keycloak.esthesis/realms/esthesis
@@ -25,6 +24,8 @@ environments:
       - oidcDiscoveryUrlCluster: http://keycloak.esthesis/realms/esthesis/.well-known/openid-configuration
       - oidcJwtVerifyLocationCluster: http://keycloak.esthesis/realms/esthesis/protocol/openid-connect/certs
       - redisHosts: redis://redis.esthesis:6379
+      - esthesisIngressName: "esthesis-ingress"
+      - mongoDbUrlCluster: mongodb://mongodb-headless.esthesis:27017
 
 ---
 ##################################################################################################
@@ -38,7 +39,6 @@ helmDefaults:
 # Default state values
 ##################################################################################################
 values:
-  - devHost: ""
   - esthesisVersion: 3.0.5-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}
@@ -71,7 +71,6 @@ releases:
     version: {{ .StateValues.esthesisVersion | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
-      - devHost: {{ .StateValues.devHost | quote }}
       - timezone: {{ .StateValues.timezone | quote }}
       - esthesisRegistry: {{ .StateValues.esthesisRegistry | quote }}
       - quarkus:

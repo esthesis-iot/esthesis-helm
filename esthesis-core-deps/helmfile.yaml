@@ -46,7 +46,6 @@ values:
   ##################################################################################################
   - esthesisVersion: 3.0.5-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
-  - esthesisSingleNode: {{ env "ESTHESIS_SINGLE_NODE" | default false }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -126,12 +125,13 @@ releases:
 
   - name: mongodb
     chart: bitnami/mongodb
-    version: "14.5.0"
+    version: "14.5.1"
     installed: {{ .StateValues.mongoDbEnabled }}
     values:
       - architecture: replicaset
       - auth:
-          replicaSetKey: {{ .StateValues.esthesisSystemPassword }}
+          rootPassword: {{ .StateValues.esthesisSystemPassword }}
+          replicaSetKey: {{ .StateValues.esthesisSystemPassword | b64enc | quote}}
           usernames:
             - {{ .StateValues.esthesisSystemUsername | quote }}
           passwords:
@@ -142,12 +142,19 @@ releases:
           init-db.js: |
             use esthesiscore
             db.grantRolesToUser('{{ .StateValues.esthesisSystemUsername }}', ["dbAdmin"])
+       {{- if .StateValues.devMode }}
+      - replicaCount: 1
+      {{- end }}
 
   - name: kafka
     chart: bitnami/kafka
     version: "26.6.2"
     installed: {{ .StateValues.kafkaEnabled }}
     values:
+      {{- if .StateValues.devMode }}
+      - controller:
+          replicaCount: 1
+      {{- end }}
       - sasl:
           client:
             users:
@@ -159,22 +166,46 @@ releases:
           topics:
             - name: esthesis-command-reply
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
             - name: esthesis-telemetry
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
             - name: esthesis-metadata
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
             - name: esthesis-app
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
             - name: esthesis-ping
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
             - name: esthesis-command-request
               partitions: {{ .StateValues.kafkaTopicPartitions }}
+              {{- if .StateValues.devMode }}
+              replicationFactor: 1
+              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+              {{- end }}
 
   - name: kafka-ui
     chart: "kafka-ui/kafka-ui"
@@ -185,9 +216,11 @@ releases:
           kafka:
             clusters:
               - name: kafka
-                bootstrapServers: kafka.{{ .Namespace }}.svc.cluster.local:9092
-      - auth:
-          type: disabled
+                bootstrapServers: "kafka.{{ .Namespace }}.svc.cluster.local:9092"
+                properties:
+                  security.protocol: SASL_PLAINTEXT
+                  sasl.mechanism: PLAIN
+                  sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username={{ .StateValues.esthesisSystemUsername }} password={{ .StateValues.esthesisSystemPassword }};"
       - management:
           health:
             ldap:
@@ -208,7 +241,7 @@ releases:
           enabled: false
       - web-modeler:
           enabled: false
-      {{- if or .StateValues.devMode .StateValues.esthesisSingleNode }}
+      {{- if .StateValues.devMode }}
       - elasticsearch:
           replicas: 1
           minimumMasterNodes: 1

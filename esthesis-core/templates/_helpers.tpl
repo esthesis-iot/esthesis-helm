@@ -28,52 +28,6 @@ spec:
     - port: 8080
 {{- end }}
 
-{{/* API APISIX route template */}}
-{{- define "route.api.template" }}
-apiVersion: apisix.apache.org/v2
-kind: ApisixRoute
-metadata:
-  name: {{ .servicePath }}-routes
-spec:
-  http:
-    - name: {{ .servicePath }}-route
-      match:
-        paths:
-          - /api/{{ .servicePath }}
-          - /api/{{ .servicePath }}/*
-      {{ if .devMode }}
-      upstreams:
-        - name: {{ .serviceName}}-upstream
-      {{ else }}
-      backends:
-        - serviceName: {{ .serviceName }}
-          servicePort: 8080
-      {{ end }}
-      plugins:
-        - name: proxy-rewrite
-          enable: true
-          config:
-            regex_uri:
-              - "/api/{{ .servicePath }}/(.*)"
-              - "/api/$1"
-        {{ if .serviceOidc }}
-        - name: openid-connect
-          enable: true
-          config:
-            client_id: "esthesis"
-            client_secret: ""
-            discovery: {{ .Values.oidcDiscoveryUrlCluster | quote}}
-            scope: "openid profile"
-            use_jwks: true
-            bearer_only: true
-            realm: "esthesis"
-            redirect_uri: "/api/{{ .servicePath }}/callback"
-            set_access_token_header: false
-            set_id_token_header: false
-            set_userinfo_header:  false
-        {{ end }}
-{{- end }}
-
 {{/* API Deployment template */}}
 {{- define "deployment.api.template" }}
 apiVersion: apps/v1
@@ -208,16 +162,3 @@ spec:
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
             {{- end }}
 {{- end }}
-
-{{/* APISIX Upstream definition for development */}}
-{{- define "upstream.dev.template" }}
-apiVersion: apisix.apache.org/v2
-kind: ApisixUpstream
-metadata:
-  name: {{ .serviceName }}-upstream
-spec:
-  externalNodes:
-    - type: Domain
-      name: {{ .devHost }}
-      port: {{ .servicePort }}
-{{- end}}

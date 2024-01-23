@@ -9,6 +9,7 @@ environments:
     values:
       - devMode: true
       - keycloakIngressName: "keycloak.esthesis"
+      - kafkaTopicReplicas: 1
 
 ---
 ##################################################################################################
@@ -166,46 +167,25 @@ releases:
           topics:
             - name: esthesis-command-reply
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
             - name: esthesis-telemetry
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
             - name: esthesis-metadata
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
             - name: esthesis-app
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
             - name: esthesis-ping
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
             - name: esthesis-command-request
               partitions: {{ .StateValues.kafkaTopicPartitions }}
-              {{- if .StateValues.devMode }}
-              replicationFactor: 1
-              {{- else }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-              {{- end }}
+      - extraConfig: |
+          offsets.topic.replication.factor={{ .StateValues.kafkaTopicReplicas }}
+          transaction.state.log.replication.factor={{ .StateValues.kafkaTopicReplicas }}
 
   - name: kafka-ui
     chart: "kafka-ui/kafka-ui"

@@ -52,9 +52,9 @@ spec:
       containers:
         - name: {{ .podName }}
           {{- if .registry }}
-          image: "{{ .registry }}/esthesisiot/{{ .podName }}:3.0.5-SNAPSHOT
+          image: "{{ .registry }}/esthesisiot/{{ .podName }}:3.0.5
           {{- else }}
-          image: "esthesisiot/{{ .podName }}:3.0.5-SNAPSHOT
+          image: "esthesisiot/{{ .podName }}:3.0.5
           {{- end }}
           imagePullPolicy: Always
           resources:

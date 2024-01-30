@@ -5,6 +5,8 @@ metadata:
   name: mosquitto
   labels:
     app: mosquitto
+    app.kubernetes.io/name: mosquitto
+
 spec:
   type: {{ .Values.mosquittoServiceType }}
   ports:

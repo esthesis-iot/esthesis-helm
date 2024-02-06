@@ -10,5 +10,6 @@
   "podProbes" true
   "registry" .Values.esthesisRegistry
   "timezone" .Values.timezone
+  "imagePullSecret" .Values.imagePullSecret
 ) .) }}
 {{ end }}

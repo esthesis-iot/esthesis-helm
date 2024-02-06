@@ -45,6 +45,7 @@ values:
   ##################################################################################################
   - esthesisVersion: 3.0.7-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
+  - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -107,17 +108,27 @@ releases:
       - mosquittoServerCert: {{ .StateValues.mosquittoServerCert }}
       - mosquittoServerKey: {{ .StateValues.mosquittoServerKey }}
       - mosquittoServiceType: {{ .StateValues.mosquittoServiceType }}
+      - imagePullSecret: {{ .StateValues.imagePullSecret }}
 
   - name: reloader
     chart: "reloader/reloader"
     version: "v1.0.22"
     installed: {{ .StateValues.devMode }}
+    values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
+      - reloader:
+          watchGlobally: false
 
   - name: redis
     chart: bitnami/redis
     version: "17.3.7"
     installed: {{ .StateValues.redisEnabled }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
@@ -127,6 +138,9 @@ releases:
     version: "14.5.1"
     installed: {{ .StateValues.mongoDbEnabled }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - architecture: replicaset
       - auth:
           rootPassword: {{ .StateValues.esthesisSystemPassword }}
@@ -150,6 +164,9 @@ releases:
     version: "26.6.2"
     installed: {{ .StateValues.kafkaEnabled }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       {{- if .StateValues.devMode }}
       - controller:
           replicaCount: 1
@@ -190,6 +207,8 @@ releases:
     version: "0.7.5"
     installed: {{ and .StateValues.kafkaEnabled .StateValues.devMode }}
     values:
+      - imagePullSecrets:
+        - {{ .StateValues.imagePullSecret }}
       - yamlApplicationConfig:
           kafka:
             clusters:
@@ -209,6 +228,10 @@ releases:
     version: "8.1.5"
     installed: {{ .StateValues.camundaEnabled }}
     values:
+      - global:
+          image:
+            pullSecrets:
+              - {{ .StateValues.imagePullSecret }}
       - operate:
           enabled: false
       - optimize:
@@ -235,6 +258,9 @@ releases:
     version: "15.1.1"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - proxy: edge
       - production: true
       - auth:
@@ -279,6 +305,9 @@ releases:
     version: "2.11.16"
     installed: {{ .StateValues.devMode }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - promtail:
           enabled: true
           existingSecret: "grafana-loki-config"
@@ -288,6 +317,9 @@ releases:
     version: "9.6.3"
     installed: {{ .StateValues.devMode }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
           password: {{ .StateValues.esthesisSystemPassword | quote }}
@@ -299,6 +331,9 @@ releases:
     version: "2.5.7"
     installed: {{ .StateValues.devMode }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - tempo:
           traces:
             jaeger:
@@ -312,6 +347,9 @@ releases:
     version: 5.6.1
     installed: {{ .StateValues.influxDbEnabled }}
     values:
+      - global:
+          imagePullSecrets:
+            - {{ .StateValues.imagePullSecret }}
       - auth:
           createUserToken: true
           admin:

@@ -14,6 +14,8 @@ spec:
       labels:
         app: esthesis-core-ui
     spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
       containers:
         - name: esthesis-core-ui
           {{- if .Values.esthesisRegistry }}

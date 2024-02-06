@@ -40,6 +40,7 @@ helmDefaults:
 ##################################################################################################
 values:
   - esthesisVersion: 3.0.7-SNAPSHOT
+  - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}
   - esthesisAdminUsername: {{ env "ESTHESIS_ADMIN_USERNAME" | default "esthesis-admin" }}
@@ -73,6 +74,7 @@ releases:
       - devMode: {{ .StateValues.devMode }}
       - timezone: {{ .StateValues.timezone | quote }}
       - esthesisRegistry: {{ .StateValues.esthesisRegistry | quote }}
+      - imagePullSecret: {{ .Values.imagePullSecret | quote }}
       - quarkus:
           log:
             min-level: "TRACE"

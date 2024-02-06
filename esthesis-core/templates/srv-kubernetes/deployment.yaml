@@ -10,5 +10,6 @@
   "registry" .Values.esthesisRegistry
   "serviceAccount" "esthesis-core-srv-kubernetes"
   "timezone" .Values.timezone
+  "imagePullSecret" .Values.imagePullSecret
 ) .) }}
 {{ end }}

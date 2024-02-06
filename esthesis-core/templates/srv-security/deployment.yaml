@@ -9,6 +9,7 @@
   "podProbes" true
   "registry" .Values.esthesisRegistry
   "timezone" .Values.timezone
+  "imagePullSecret" .Values.imagePullSecret
   "extraEnvVars" (dict
     "ESTHESIS_SECURITY_ADMIN_USERNAME" .Values.esthesisAdminUsername
   )

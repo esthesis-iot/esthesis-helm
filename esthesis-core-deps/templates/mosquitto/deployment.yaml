@@ -15,8 +15,8 @@ spec:
         app: mosquitto
     spec:
       containers:
-        - image: eclipse-mosquitto:2.0.15
-          name: mosquitto
+        - name: mosquitto
+          image: eclipse-mosquitto:2.0.15
           ports:
             - containerPort: 1883
               name: mqtt
@@ -48,6 +48,8 @@ spec:
             - name: mosquitto-acl
               mountPath: /mosquitto/secret
             {{- end}}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
       volumes:
         - name: mosquitto-persistent-storage
           persistentVolumeClaim:

@@ -49,8 +49,10 @@ spec:
       {{- if .serviceAccount }}
       serviceAccountName: {{ .serviceAccount }}
       {{- end }}
+      {{- if .imagePullSecret }}
       imagePullSecrets:
         - name: {{ .imagePullSecret }}
+      {{- end }}
       containers:
         - name: {{ .podName }}
           {{- if .registry }}

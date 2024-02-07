@@ -48,8 +48,10 @@ spec:
             - name: mosquitto-acl
               mountPath: /mosquitto/secret
             {{- end}}
+      {{- if .Values.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret }}
+      {{- end }}
       volumes:
         - name: mosquitto-persistent-storage
           persistentVolumeClaim:

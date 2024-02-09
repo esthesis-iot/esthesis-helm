@@ -46,6 +46,7 @@ values:
   - esthesisVersion: 3.0.7-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
+  - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -393,3 +394,8 @@ releases:
           deleteImages: true
       - registry:
           enabled: true
+          service:
+            type: NodePort
+            {{- if .StateValues.registryNodePort }}
+            nodePort: {{ .StateValues.registryNodePort }}
+            {{- end }}

@@ -168,7 +168,7 @@ releases:
           replicaCount: 1
       {{- end }}
       - kraft:
-          clusterId: {{ .Namespace | b64enc | quote }}
+          clusterId: "b607a50e-8d56-4aba-81a2-a96fd8e2c270"
       - sasl:
           interbroker:
             password: {{ .StateValues.esthesisSystemPassword | quote }}

@@ -43,7 +43,6 @@ values:
   ##################################################################################################
   # Global values
   ##################################################################################################
-  - esthesisVersion: 3.0.7-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}
@@ -91,7 +90,6 @@ values:
 ##################################################################################################
 releases:
   - name: esthesis-core-deps
-    version: {{ .StateValues.esthesisVersion | quote }}
     chart: "./"
     values:
       - devMode: {{ .StateValues.devMode }}
@@ -168,7 +166,7 @@ releases:
           replicaCount: 1
       {{- end }}
       - kraft:
-          clusterId: "b607a50e-8d56-4aba-81a2-a96fd8e2c270"
+          clusterId: "M3Q1ZTNlMWFhMTgyNDhiZj"
       - sasl:
           interbroker:
             password: {{ .StateValues.esthesisSystemPassword | quote }}

@@ -234,7 +234,7 @@ releases:
       - global:
           image:
             pullSecrets:
-              - {{ .StateValues.imagePullSecret | quote }}
+              - name: {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - operate:
           enabled: false

@@ -385,7 +385,7 @@ releases:
           name: docker-registry
           {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret | quote }}
+            - name: {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
       - ui:
           proxy: true

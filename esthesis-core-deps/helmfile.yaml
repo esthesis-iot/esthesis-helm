@@ -117,7 +117,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - architecture: standalone
       - auth:
@@ -131,7 +131,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - architecture: replicaset
       - auth:
@@ -159,7 +159,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       {{- if .StateValues.devMode }}
       - controller:
@@ -209,7 +209,7 @@ releases:
     values:
       {{- if .StateValues.imagePullSecret }}
       - imagePullSecrets:
-        - {{ .StateValues.imagePullSecret }}
+        - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - yamlApplicationConfig:
           kafka:
@@ -234,7 +234,7 @@ releases:
       - global:
           image:
             pullSecrets:
-              - {{ .StateValues.imagePullSecret }}
+              - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - operate:
           enabled: false
@@ -265,7 +265,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - proxy: edge
       - production: true
@@ -314,7 +314,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - promtail:
           enabled: true
@@ -328,7 +328,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
@@ -344,7 +344,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - tempo:
           traces:
@@ -362,7 +362,7 @@ releases:
       {{- if .StateValues.imagePullSecret }}
       - global:
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - auth:
           createUserToken: true
@@ -385,7 +385,7 @@ releases:
           name: docker-registry
           {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
-            - {{ .StateValues.imagePullSecret }}
+            - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
       - ui:
           proxy: true

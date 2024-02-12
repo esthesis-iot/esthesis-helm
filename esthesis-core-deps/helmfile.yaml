@@ -209,7 +209,7 @@ releases:
     values:
       {{- if .StateValues.imagePullSecret }}
       - imagePullSecrets:
-        - {{ .StateValues.imagePullSecret | quote }}
+        - name: {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - yamlApplicationConfig:
           kafka:

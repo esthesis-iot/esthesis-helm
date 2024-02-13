@@ -65,6 +65,7 @@ values:
   - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
+  - mongoDbStorageClass: {{ env "MONGODB_STORAGE_CLASS" }}
   # REDIS
   - redisEnabled: {{ env "REDIS_ENABLED" | default true }}
   # Kafka
@@ -128,10 +129,13 @@ releases:
     version: "14.5.1"
     installed: {{ .StateValues.mongoDbEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+      {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
+      {{- end }}
+      {{- if .StateValues.mongoDbStorageClass }}
+          storageClass: {{ .StateValues.mongoDbStorageClass | quote }}
       {{- end }}
       - architecture: replicaset
       - auth:
@@ -147,7 +151,7 @@ releases:
           init-db.js: |
             use esthesiscore
             db.grantRolesToUser('{{ .StateValues.esthesisSystemUsername }}', ["dbAdmin"])
-       {{- if .StateValues.devMode }}
+      {{- if .StateValues.devMode }}
       - replicaCount: 1
       {{- end }}
 

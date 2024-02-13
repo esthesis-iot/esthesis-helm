@@ -18,7 +18,6 @@ spec:
         - name: esthesis-core-ui
           {{- if .Values.esthesisRegistry }}
           image: "{{ .Values.esthesisRegistry }}/esthesis-core-ui:{{ .Chart.Version }}"
-          {{ Chart.Release.Revision}}
           {{- else }}
           image: "esthesisiot/esthesis-core-ui:{{ .Chart.Version }}"
           {{- end }}

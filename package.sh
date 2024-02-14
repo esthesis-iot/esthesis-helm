@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 pushd .
 cd esthesis-core
 ./package.sh

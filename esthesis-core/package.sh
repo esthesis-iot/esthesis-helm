@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 CHART_VERSION=$(cat Chart.yaml | grep version | sed "s/version: //g")
 echo "CHART_VERSION: $CHART_VERSION"
 

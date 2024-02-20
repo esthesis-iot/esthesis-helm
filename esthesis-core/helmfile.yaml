@@ -29,6 +29,14 @@ environments:
 
 ---
 ##################################################################################################
+# The repositories used by this Helmfile.
+##################################################################################################
+repositories:
+  - name: esthesis
+    url: https://esthes.is/helm
+
+---
+##################################################################################################
 # Default values
 ##################################################################################################
 helmDefaults:
@@ -66,8 +74,9 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - name: esthesis-core
-    chart: "./"
+  - version: "3.0.9_SNAPSHOT"
+    name: esthesis-core
+    chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core" | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
       - timezone: {{ .StateValues.timezone | quote }}

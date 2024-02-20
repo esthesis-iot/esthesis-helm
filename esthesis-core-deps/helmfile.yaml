@@ -63,6 +63,7 @@ values:
   - keycloakIngressName: {{ env "KEYCLOAK_INGRESS_NAME" }}
   - keycloakCertManagerClusterIssuer: {{ env "KEYCLOAK_CERT_MANAGER_CLUSTER_ISSUER" }}
   - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" }}
+  - keycloakStorageClass: {{ env "KEYCLOAK_STORAGE_CLASS" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   - mongoDbStorageClass: {{ env "MONGODB_STORAGE_CLASS" }}
@@ -90,8 +91,9 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - name: esthesis-core-deps
-    chart: "./"
+  - version: "3.0.9_SNAPSHOT"
+    chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core-deps" | quote }}
+    name: esthesis-core-deps
     values:
       - devMode: {{ .StateValues.devMode }}
       - esthesisAdminUsername: {{ .StateValues.esthesisAdminUsername | quote }}
@@ -115,11 +117,11 @@ releases:
     version: "17.3.7"
     installed: {{ .StateValues.redisEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
@@ -130,13 +132,13 @@ releases:
     installed: {{ .StateValues.mongoDbEnabled }}
     values:
       - global:
-      {{- if .StateValues.imagePullSecret }}
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
-      {{- if .StateValues.mongoDbStorageClass }}
+          {{- end }}
+          {{- if .StateValues.mongoDbStorageClass }}
           storageClass: {{ .StateValues.mongoDbStorageClass | quote }}
-      {{- end }}
+          {{- end }}
       - architecture: replicaset
       - auth:
           rootPassword: {{ .StateValues.esthesisSystemPassword }}
@@ -160,11 +162,11 @@ releases:
     version: "26.6.2"
     installed: {{ .StateValues.kafkaEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       {{- if .StateValues.devMode }}
       - controller:
           replicaCount: 1
@@ -234,12 +236,12 @@ releases:
     version: "8.1.5"
     installed: {{ .StateValues.camundaEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           image:
             pullSecrets:
               - name: {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - operate:
           enabled: false
       - optimize:
@@ -266,11 +268,14 @@ releases:
     version: "15.1.1"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+        {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+        {{- end }}
+        {{- if .StateValues.keycloakStorageClass }}
+          storageClass: {{ .StateValues.keycloakStorageClass | quote }}
+        {{- end }}
       - proxy: edge
       - production: true
       - auth:
@@ -315,11 +320,11 @@ releases:
     version: "2.11.16"
     installed: {{ .StateValues.devMode }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - promtail:
           enabled: true
           existingSecret: "grafana-loki-config"
@@ -329,11 +334,11 @@ releases:
     version: "9.6.3"
     installed: {{ .StateValues.devMode }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
           password: {{ .StateValues.esthesisSystemPassword | quote }}
@@ -345,11 +350,11 @@ releases:
     version: "2.5.7"
     installed: {{ .StateValues.devMode }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - tempo:
           traces:
             jaeger:
@@ -363,11 +368,11 @@ releases:
     version: "5.6.1"
     installed: {{ .StateValues.influxDbEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
       - auth:
           createUserToken: true
           admin:

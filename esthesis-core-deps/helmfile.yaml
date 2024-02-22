@@ -91,7 +91,7 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.23-SNAPSHOT"
+  - version: "3.0.23"
     chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core-deps" | quote }}
     name: esthesis-core-deps
     values:

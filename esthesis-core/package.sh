@@ -4,7 +4,7 @@ echo "CHART_VERSION: $CHART_VERSION"
 
 # Package and index Helm.
 helm package . -d ../../esthesis-docs/helm
-pushd .helm
+pushd .
 cd ../../esthesis-docs/helm
 helm repo index .
 popd

@@ -8,5 +8,5 @@ maintainers:
     email: esthesis@eurodyn.com
     url: https://www.eurodyn.com
 icon: https://esthes.is/media/logo.png
-version: "3.0.20-SNAPSHOT"
-appVersion: "3.0.20-SNAPSHOT"
+version: "3.0.20"
+appVersion: "3.0.20"

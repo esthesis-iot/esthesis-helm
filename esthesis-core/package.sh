@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-CHART_VERSION=$(cat Chart.yaml | grep version | sed "s/version: //g")
+CHART_VERSION=$(helm show chart . | awk '/version/ {print $2}')
 echo "CHART_VERSION: $CHART_VERSION"
 
 # Package and index Helm.
 helm package . -d ../../esthesis-docs/helm
-pushd .
+pushd .helm
 cd ../../esthesis-docs/helm
 helm repo index .
 popd

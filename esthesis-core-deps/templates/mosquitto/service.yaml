@@ -14,8 +14,6 @@ spec:
       name: mqtt
     - port: 8883
       name: mqtts
-    - port: 9001
-      name: ws
   selector:
     app: mosquitto
 {{- end }}

@@ -1,5 +1,5 @@
 {{ if not .Values.devMode }}
-{{ $redirectUrl := print "https://" .Values.esthesisIngressName "/callback" }}
+{{ $redirectUrl := print "https://" .Values.esthesisHostname "/callback" }}
 {{ template "deployment.api.template" (merge (dict
   "podLogging" true
   "podMaxCpu" "1"

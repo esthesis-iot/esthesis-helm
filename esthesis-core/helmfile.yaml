@@ -13,7 +13,7 @@ environments:
       - oidcDiscoveryUrlCluster: {{ if (env "OIDC_DISCOVERY_URL_CLUSTER") }}{{ env "OIDC_DISCOVERY_URL_CLUSTER" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis/.well-known/openid-configuration{{ end }} 
       - oidcJwtVerifyLocationCluster: {{ if (env "OIDC_JWT_VERIFY_LOCATION_CLUSTER") }}{{ env "OIDC_JWT_VERIFY_LOCATION_CLUSTER" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis/protocol/openid-connect/certs{{ end }}
       - oidcAuthorityUrlExternal: {{ env "OIDC_AUTHORITY_URL_EXTERNAL" }}
-      - esthesisIngressName: {{ env "ESTHESIS_INGRESS_NAME" }}
+      - esthesisHostname: {{ env "ESTHESIS_HOSTNAME" }}
   dev:
     values:
       - devMode: true
@@ -24,7 +24,7 @@ environments:
       - oidcDiscoveryUrlCluster: http://keycloak.esthesis/realms/esthesis/.well-known/openid-configuration
       - oidcJwtVerifyLocationCluster: http://keycloak.esthesis/realms/esthesis/protocol/openid-connect/certs
       - redisHosts: redis://redis.esthesis:6379
-      - esthesisIngressName: "esthesis-ingress"
+      - esthesisHostname: "esthesis-core.esthesis"
       - mongoDbUrlCluster: mongodb://mongodb-headless.esthesis:27017
 
 ---
@@ -55,6 +55,7 @@ values:
   - esthesisSystemUsername: {{ env "ESTHESIS_SYSTEM_USERNAME" | default "esthesis-system" }}
   - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "esthesis-system" }}
   - esthesisRegistry: {{ env "ESTHESIS_REGISTRY_URL" }}
+  - ingressClassName: {{ env "INGRESS_CLASS_NAME" }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   - mongoDbDatabase: {{ env "MONGODB_DATABASE" | default "esthesiscore" }}
@@ -101,8 +102,9 @@ releases:
       - esthesisAdminPassword: {{ .StateValues.esthesisAdminPassword | quote }}
       - esthesisSystemUsername: {{ .Values.esthesisSystemUsername | quote }}
       - esthesisSystemPassword: {{ .StateValues.esthesisSystemPassword | quote }}
-      - esthesisIngressName: {{ .StateValues.esthesisIngressName | quote }}
+      - esthesisHostname: {{ .StateValues.esthesisHostname | quote }}
       - esthesisUiLogoutUrl: {{ .StateValues.esthesisUiLogoutUrl | quote }}
+      - ingressClassName: {{ .StateValues.ingressClassName | quote }}
       # OIDC
       - oidcAuthorityUrlExternal: {{ .StateValues.oidcAuthorityUrlExternal | quote }}
       - oidcAuthorityUrlCluster: {{ .StateValues.oidcAuthorityUrlCluster | quote }}

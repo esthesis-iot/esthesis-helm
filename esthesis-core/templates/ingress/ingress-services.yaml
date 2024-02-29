@@ -7,6 +7,8 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "64m"
     nginx.ingress.kubernetes.io/rewrite-target: "/api/$1"
+    # Do not create a DNS record (if external-dns is used), unless the resource is annotated.
+    external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
     {{- if .Values.esthesisUiCertManagerClusterIssuer }}
     cert-manager.io/cluster-issuer: {{ .Values.esthesisUiCertManagerClusterIssuer | quote }}
     {{- end }}
@@ -14,8 +16,11 @@ metadata:
     cert-manager.io/issuer: {{ .Values.esthesisUiCertManagerIssuer | quote }}
     {{- end }}
 spec:
+  {{- if .Values.ingressClassName }}
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- end }}
   rules:
-    - host: {{ .Values.esthesisIngressName }}
+    - host: {{ .Values.esthesisHostname }}
       http:
         paths:
           - path: "/api/about(.*)"
@@ -140,7 +145,7 @@ spec:
   {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer }}
   tls:
     - hosts:
-        - {{ .Values.esthesisIngressName }}
+        - {{ .Values.esthesisHostname }}
       secretName: esthesis-services-ingress-tls
   {{- end }}
   {{- end }}

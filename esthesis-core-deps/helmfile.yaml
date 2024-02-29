@@ -5,11 +5,13 @@ environments:
   default:
     values:
       - devMode: false
+      - domain: {{ env "DOMAIN" }}
   dev:
     values:
       - devMode: true
-      - keycloakIngressName: "keycloak.esthesis"
+      - keycloakHostname: "keycloak.esthesis"
       - kafkaTopicReplicas: 1
+      - domain: esthesis
 
 ---
 ##################################################################################################
@@ -27,6 +29,8 @@ repositories:
     url: https://provectus.github.io/kafka-ui-charts
   - name: joxit
     url: https://helm.joxit.dev
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
 
 ---
 ##################################################################################################
@@ -46,6 +50,7 @@ values:
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}
+  - ingressClassName: {{ env "INGRESS_CLASS_NAME" }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -60,7 +65,7 @@ values:
   ##################################################################################################
   # Keycloak
   - keycloakEnabled: {{ env "KEYCLOAK_ENABLED" | default true }}
-  - keycloakIngressName: {{ env "KEYCLOAK_INGRESS_NAME" }}
+  - keycloakHostname: {{ env "KEYCLOAK_HOSTNAME" }}
   - keycloakCertManagerClusterIssuer: {{ env "KEYCLOAK_CERT_MANAGER_CLUSTER_ISSUER" }}
   - keycloakCertManagerIssuer: {{ env "KEYCLOAK_CERT_MANAGER_ISSUER" }}
   - keycloakStorageClass: {{ env "KEYCLOAK_STORAGE_CLASS" }}
@@ -85,6 +90,9 @@ values:
   - mosquittoServiceType: {{ env "MOSQUITTO_SERVICE_TYPE" | default "ClusterIP" }}
   # InfluxDB
   - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
+  - influxDbSize: {{ env "INFLUXDB_SIZE" | default "32Gi" }}
+  # Ingress nginx
+  - ingressNginxEnabled: {{ env "INGRESS_NGINX_ENABLED" | default false }}
 
 ---
 ##################################################################################################
@@ -102,6 +110,7 @@ releases:
       - esthesisSystemPassword: {{ .StateValues.esthesisSystemPassword | quote }}
       # Keycloak
       - keycloakEnabled: {{ .StateValues.keycloakEnabled }}
+      - keycloakFrontendUrl: {{ .StateValues.devMode | ternary "http://" "https://"}}{{ .StateValues.keycloakHostname }}
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
       - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
@@ -252,16 +261,32 @@ releases:
           enabled: false
       - web-modeler:
           enabled: false
-      {{- if .StateValues.devMode }}
-      - elasticsearch:
-          replicas: 1
-          minimumMasterNodes: 1
       - zeebe:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          {{- if .StateValues.devMode }}
           clusterSize: 1
           replicationFactor: 1
+          {{- end }}
       - zeebe-gateway:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          {{- if .StateValues.devMode }}
           replicas: 1
-      {{- end }}
+          {{- end }}
+      - elasticsearch:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          {{- if .StateValues.devMode }}
+          replicas: 1
+          minimumMasterNodes: 1
+          {{- end }}
 
   - name: keycloak
     chart: bitnami/keycloak
@@ -301,19 +326,28 @@ releases:
       {{- if not .StateValues.devMode }}
       - ingress:
           enabled: true
-          hostname: {{ .StateValues.keycloakIngressName | quote }}
+          hostname: {{ .StateValues.keycloakHostname | quote }}
+          ingressClassName: {{ .StateValues.ingressClassName | quote }}
           path: /
-          {{- if .StateValues.keycloakCertManagerClusterIssuer }}
+          {{- if or .StateValues.keycloakCertManagerClusterIssuer .StateValues.keycloakCertManagerIssuer }}
           tls: true
+          {{- end }}
           annotations:
+            # Do not create a DNS record (if external-dns is used), unless the resource is annotated.
+            external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
+            {{- if .StateValues.keycloakCertManagerClusterIssuer }}
             cert-manager.io/cluster-issuer: {{ .StateValues.keycloakCertManagerClusterIssuer | quote }}
-          {{- end }}
-          {{- if .StateValues.keycloakCertManagerIssuer }}
-          tls: true
-          annotations:
+            {{- end }}
+            {{- if .StateValues.keycloakCertManagerIssuer }}
             cert-manager.io/issuer: {{ .StateValues.keycloakCertManagerIssuer | quote }}
-          {{- end }}
+            {{- end }}
       {{- end }}
+      - extraEnvVars:
+          {{- if not .StateValues.devMode }}
+          # Allow admin service to be port-forwarded to localhost.
+          - name: KC_HOSTNAME_ADMIN
+            value: localhost
+          {{- end }}
 
   - name: grafana-loki
     chart: bitnami/grafana-loki
@@ -384,6 +418,8 @@ releases:
             bucket: esthesis
             username: {{ .StateValues.esthesisSystemUsername | quote }}
             password: {{ .StateValues.esthesisSystemPassword | quote }}
+      - persistence:
+          size: {{ .StateValues.influxDbSize | quote }}
 
   - name: docker-registry
     chart: joxit/docker-registry-ui
@@ -406,3 +442,19 @@ releases:
             {{- if .StateValues.registryNodePort }}
             nodePort: {{ .StateValues.registryNodePort }}
             {{- end }}
+
+  - name: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    version: "4.9.1"
+    installed: {{ .StateValues.ingressNginxEnabled }}
+    values:
+      - nameOverride: "{{ .Namespace }}"
+      - controller:
+          scope:
+            enabled: true
+            namespace: {{ .Namespace }}
+          service:
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: "*.{{ .StateValues.domain }}"
+          ingressClassResource:
+            name: "nginx-{{ .Namespace }}"

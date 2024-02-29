@@ -129,6 +129,7 @@ data:
       "clientAuthenticationFlow": "clients",
       "dockerAuthenticationFlow": "docker auth",
       "attributes": {
+        "frontendUrl": {{ .Values.keycloakFrontendUrl | quote }},
         "cibaBackchannelTokenDeliveryMode": "poll",
         "de.adorsys.keycloak.config.state-default-roles-client-backend-service-0": "[\"uma_protection\"]",
         "de.adorsys.keycloak.config.import-checksum-default": "ee33d4ed9458da05c69a9d4280c2a02878dd53d57f1d1af448917dea42e0d5a1",

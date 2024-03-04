@@ -8,7 +8,7 @@
   "podName" "esthesis-core-srv-kubernetes"
   "podProbes" true
   "registry" .Values.esthesisRegistry
-  "serviceAccount" "esthesis-core-srv-kubernetes"
+  "serviceAccountName" "esthesis-core-srv-kubernetes"
   "timezone" .Values.timezone
   "imagePullSecret" .Values.imagePullSecret
 ) .) }}

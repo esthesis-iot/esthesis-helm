@@ -56,6 +56,7 @@ values:
   - esthesisSystemPassword: {{ env "ESTHESIS_SYSTEM_PASSWORD" | default "esthesis-system" }}
   - esthesisRegistry: {{ env "ESTHESIS_REGISTRY_URL" }}
   - ingressClassName: {{ env "INGRESS_CLASS_NAME" }}
+  - esthesisKubernetesServiceCreateRBAC: {{ env "ESTHESIS_KUBERNETES_SERVICE_CREATE_RBAC" | default true }}
   # MongoDB
   - mongoDbEnabled: {{ env "MONGODB_ENABLED" | default true }}
   - mongoDbDatabase: {{ env "MONGODB_DATABASE" | default "esthesiscore" }}
@@ -105,6 +106,7 @@ releases:
       - esthesisHostname: {{ .StateValues.esthesisHostname | quote }}
       - esthesisUiLogoutUrl: {{ .StateValues.esthesisUiLogoutUrl | quote }}
       - ingressClassName: {{ .StateValues.ingressClassName | quote }}
+      - esthesisKubernetesServiceCreateRBAC: {{ .StateValues.esthesisKubernetesServiceCreateRBAC }}
       # OIDC
       - oidcAuthorityUrlExternal: {{ .StateValues.oidcAuthorityUrlExternal | quote }}
       - oidcAuthorityUrlCluster: {{ .StateValues.oidcAuthorityUrlCluster | quote }}

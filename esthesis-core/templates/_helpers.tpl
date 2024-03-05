@@ -166,17 +166,3 @@ spec:
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
             {{- end }}
 {{- end }}
-
-{{/*
-  Truncates a value to 63 characters and ensures it doesn't end with "-".
-  This function requires two arguments:
-  1. The prefix.
-  2. The suffix.
-*/}}
-{{- define "utility.safeName" -}}
-{{- $combined := printf "%s%s" (index . 0) (index . 1) | trunc 63 }}
-{{- if eq (last 1 $combined) "-" }}
-  {{- $combined = trimSuffix "-" $combined }}
-{{- end -}}
-{{- $combined -}}
-{{- end -}}

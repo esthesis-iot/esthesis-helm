@@ -2,13 +2,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "utility.safeName" .Release.Namespace "-esthesis-core-srv-kubernetes-cluster-role-binding" }}
+  name: {{ printf "%s-%s" .Release.Namespace "esthesis-core-srv-kubernetes-cluster-role-binding" | trunc 63 | trimSuffix "-" }}
 subjects:
 - kind: ServiceAccount
   name: esthesis-core-srv-kubernetes
   namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "utility.safeName" .Release.Namespace "-esthesis-core-srv-kubernetes-cluster-role" }}
+  name: {{ printf "%s-%s" .Release.Namespace "esthesis-core-srv-kubernetes-cluster-role" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 {{ end }}

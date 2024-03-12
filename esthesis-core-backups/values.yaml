@@ -3,7 +3,6 @@ global:
 
 mongodb:
   name: "mongodb-backup"
-  image: "mongo:latest"
   mongouser: "root"
   secretName: "my-mongodb"
   host: "my-mongodb"
@@ -14,7 +13,6 @@ mongodb:
 
 influxdb:
   name: "influxdb-backup"
-  image: "influxdb:2.7.5"
   secretName: "my-influxdb"
   host: "my-influxdb"
   port: "8086"

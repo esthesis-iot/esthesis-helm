@@ -1,0 +1,29 @@
+global:
+  namespace: "test-s3-backups"
+
+mongodb:
+  name: "mongodb-backup"
+  image: "mongo:latest"
+  mongouser: "root"
+  secretName: "my-mongodb"
+  host: "my-mongodb"
+  port: "27017"
+  schedule: "0 2 * * *"
+  subPath: "backup/mongodb"
+  restartPolicy: "OnFailure"
+
+influxdb:
+  name: "influxdb-backup"
+  image: "influxdb:2.7.5"
+  secretName: "my-influxdb"
+  host: "my-influxdb"
+  port: "8086"
+  schedule: "0 2 * * *"
+  subPath: "backup/influxdb"
+  restartPolicy: "OnFailure"
+
+backupPVC:
+  claimName: "backup-s3-claim"
+  volumeName: "backup-s3-pv"
+  storageClassName: "" ## Leave empty for S3
+  storage: "10Gi"

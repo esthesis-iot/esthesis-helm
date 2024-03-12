@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.global.namespace }}-esthesis-{{ .Values.influxdb.name }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  schedule: {{ .Values.influxdb.schedule }} # Runs daily at 2:00 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Values.influxdb.name }}
+            image: {{ .Values.influxdb.image }}
+            env:
+            - name: INFLUX_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.influxdb.secretName }}
+                  key: admin-user-token
+            - name: INFLUX_HOST
+              value: http://{{ .Values.influxdb.host }}:{{ .Values.influxdb.port }}
+            command: ["/bin/sh"]
+            args: 
+              - "-c"
+              - "influx backup --host $(INFLUX_HOST) /backup/influxdb/influxdb-backup-$(date +%Y-%m-%d-%H%M%S) --token $INFLUX_TOKEN"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup/influxdb
+              subPath: {{ .Values.influxdb.subPath }}
+          restartPolicy: {{ .Values.influxdb.restartPolicy }}
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: {{ .Values.global.namespace }}-esthesis-{{ .Values.backupPVC.claimName }}
+          

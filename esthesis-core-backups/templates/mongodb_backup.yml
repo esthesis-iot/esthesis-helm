@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.global.namespace }}-esthesis-{{ .Values.mongodb.name }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  schedule: {{ .Values.mongodb.schedule }} # Runs daily at 2:00 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Values.mongodb.name }}
+            image: {{ .Values.mongodb.image }} # Use an image with mongodump installed
+            env:
+            - name: MONGODB_USERNAME
+              value: {{ .Values.mongodb.mongouser }}
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongodb.secretName }}
+                  key: mongodb-root-password
+            - name: MONGODB_HOST
+              value: {{ .Values.mongodb.host }}
+            - name: MONGODB_PORT
+              value: {{ .Values.mongodb.port | quote}}
+            command: ["/bin/sh"]
+            args: 
+              - "-c"
+              - "mongodump --uri='mongodb://$(MONGODB_USERNAME):$(MONGODB_PASSWORD)@$(MONGODB_HOST):$(MONGODB_PORT)/' --archive=/backup/mongodb/mongodump-$(date +%Y-%m-%d-%H%M%S).gz --gzip"
+            volumeMounts:
+            - name: backup-volume
+              mountPath: /backup/mongodb
+              subPath: {{ .Values.mongodb.subPath }}
+          restartPolicy: {{ .Values.mongodb.restartPolicy }}
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: {{ .Values.global.namespace }}-esthesis-{{ .Values.backupPVC.claimName }}

@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: {{ .Values.influxdb.name }}
-            image: {{ .Values.influxdb.image }}
+            image: influxdb:2.7.5
             env:
             - name: INFLUX_TOKEN
               valueFrom:

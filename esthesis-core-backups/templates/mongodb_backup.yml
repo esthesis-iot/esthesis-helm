@@ -4,14 +4,14 @@ metadata:
   name: {{ .Values.global.namespace }}-esthesis-{{ .Values.mongodb.name }}
   namespace: {{ .Values.global.namespace }}
 spec:
-  schedule: {{ .Values.mongodb.schedule }} # Runs daily at 2:00 AM
+  schedule: {{ .Values.mongodb.schedule }}
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: {{ .Values.mongodb.name }}
-            image: {{ .Values.mongodb.image }} # Use an image with mongodump installed
+            image: mongo:latest
             env:
             - name: MONGODB_USERNAME
               value: {{ .Values.mongodb.mongouser }}

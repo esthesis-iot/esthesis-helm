@@ -93,6 +93,8 @@ values:
   - influxDbSize: {{ env "INFLUXDB_SIZE" | default "32Gi" }}
   # Ingress nginx
   - ingressNginxEnabled: {{ env "INGRESS_NGINX_ENABLED" | default false }}
+  - ingressNginxSSLCertArn: {{ env "INGRESS_NGINX_SSL_CERT_ARN" | default "" }}
+  - ingressNginxHostname: {{ env "INGRESS_NGINX_HOSTNAME" | default "" }}
 
 ---
 ##################################################################################################
@@ -460,5 +462,12 @@ releases:
           service:
             annotations:
               external-dns.alpha.kubernetes.io/hostname: "*.{{ .StateValues.domain }}"
+              service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+              service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+              service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+              service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "{{ .Values.ingressNginxSSLCertArn }}"
+            enableHttp: false
+            targetPorts:
+              https: http
           ingressClassResource:
             name: "nginx-{{ .Namespace }}"

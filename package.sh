@@ -7,3 +7,7 @@ pushd .
 cd esthesis-core-deps
 ./package.sh
 popd
+pushd .
+cd esthesis-core-backups
+./package.sh
+popd

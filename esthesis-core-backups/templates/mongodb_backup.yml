@@ -32,7 +32,7 @@ spec:
             - name: backup-volume
               mountPath: /backup/mongodb
               subPath: {{ .Values.mongodb.subPath }}
-          restartPolicy: {{ .Values.mongodb.restartPolicy }}
+          restartPolicy: OnFailure
           volumes:
           - name: backup-volume
             persistentVolumeClaim:

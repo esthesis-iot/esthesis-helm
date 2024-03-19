@@ -28,7 +28,7 @@ spec:
             - name: backup-volume
               mountPath: /backup/influxdb
               subPath: {{ .Values.influxdb.subPath }}
-          restartPolicy: {{ .Values.influxdb.restartPolicy }}
+          restartPolicy: OnFailure
           volumes:
           - name: backup-volume
             persistentVolumeClaim:

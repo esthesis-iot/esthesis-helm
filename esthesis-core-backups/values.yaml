@@ -9,7 +9,6 @@ mongodb:
   port: "27017"
   schedule: "0 2 * * *"
   subPath: "backup/mongodb"
-  restartPolicy: "OnFailure"
 
 influxdb:
   name: "influxdb-backup"
@@ -18,7 +17,6 @@ influxdb:
   port: "8086"
   schedule: "0 2 * * *"
   subPath: "backup/influxdb"
-  restartPolicy: "OnFailure"
 
 backupPVC:
   claimName: "backup-s3-claim"

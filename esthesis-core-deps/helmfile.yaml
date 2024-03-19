@@ -94,7 +94,6 @@ values:
   # Ingress nginx
   - ingressNginxEnabled: {{ env "INGRESS_NGINX_ENABLED" | default false }}
   - ingressNginxSSLCertArn: {{ env "INGRESS_NGINX_SSL_CERT_ARN" | default "" }}
-  - ingressNginxHostname: {{ env "INGRESS_NGINX_HOSTNAME" | default "" }}
 
 ---
 ##################################################################################################

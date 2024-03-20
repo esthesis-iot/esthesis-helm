@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.global.namespace }}-esthesis-{{ .Values.backupPVC.claimName }}
+  name: {{ .Namespace }}-{{ .Values.backupPVC.claimName }}
 spec:
   accessModes:
     - ReadWriteMany # supported options: ReadWriteMany / ReadOnlyMany

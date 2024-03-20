@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Values.global.namespace }}-esthesis-{{ .Values.influxdb.name }}
-  namespace: {{ .Values.global.namespace }}
+  name: {{ .Namespace }}-{{ .Values.influxdb.name }}
+  namespace: {{ .Namespace }}
 spec:
   schedule: {{ .Values.influxdb.schedule }} # Runs daily at 2:00 AM
   jobTemplate:
@@ -32,5 +32,5 @@ spec:
           volumes:
           - name: backup-volume
             persistentVolumeClaim:
-              claimName: {{ .Values.global.namespace }}-esthesis-{{ .Values.backupPVC.claimName }}
+              claimName: {{ .Namespace }}-{{ .Values.backupPVC.claimName }}
           

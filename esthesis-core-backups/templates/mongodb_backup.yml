@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Values.global.namespace }}-esthesis-{{ .Values.mongodb.name }}
-  namespace: {{ .Values.global.namespace }}
+  name: {{ .Namespace }}-{{ .Values.mongodb.name }}
+  namespace: {{ .Namespace }}
 spec:
   schedule: {{ .Values.mongodb.schedule }}
   jobTemplate:
@@ -36,4 +36,4 @@ spec:
           volumes:
           - name: backup-volume
             persistentVolumeClaim:
-              claimName: {{ .Values.global.namespace }}-esthesis-{{ .Values.backupPVC.claimName }}
+              claimName: {{ .Namespace }}-{{ .Values.backupPVC.claimName }}

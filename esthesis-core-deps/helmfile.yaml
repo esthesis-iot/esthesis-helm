@@ -93,7 +93,7 @@ values:
   - influxDbSize: {{ env "INFLUXDB_SIZE" | default "32Gi" }}
   # Ingress nginx
   - ingressNginxEnabled: {{ env "INGRESS_NGINX_ENABLED" | default false }}
-  - ingressNginxSSLCertArn: {{ env "INGRESS_NGINX_SSL_CERT_ARN" | default "" }}
+  - ingressNginxSSLCertArn: {{ env "AWS_INGRESS_NGINX_SSL_CERT_ARN" | default "" }}
 
 ---
 ##################################################################################################

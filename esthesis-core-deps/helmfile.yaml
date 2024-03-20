@@ -100,7 +100,7 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.34"
+  - version: "3.0.35-SNAPSHOT"
     chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core-deps" | quote }}
     name: esthesis-core-deps
     values:

@@ -10,10 +10,13 @@ metadata:
 spec:
   type: {{ .Values.mosquittoServiceType }}
   ports:
-    - port: 1883
-      name: mqtt
+    {{- if .Values.mosquittoMutualTls }}
     - port: 8883
       name: mqtts
+    {{- else }}
+    - port: 1883
+      name: mqtt
+    {{- end }}
   selector:
     app: mosquitto
 {{- end }}

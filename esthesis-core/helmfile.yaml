@@ -76,7 +76,7 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.35"
+  - version: "3.0.36-SNAPSHOT"
     name: esthesis-core
     chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core" | quote }}
     values:

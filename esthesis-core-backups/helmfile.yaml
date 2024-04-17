@@ -44,7 +44,7 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.35"
+  - version: "3.0.36-SNAPSHOT"
     chart: "esthesis/esthesis-core-backups"
     name: esthesis-core-backups
     values:

@@ -125,12 +125,12 @@ releases:
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
       - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
-      - mosquittoSuperuser: {{ .StateValues.mosquittoSuperuser }}
-      - mosquittoCaCert: {{ .StateValues.mosquittoCaCert }}
-      - mosquittoServerCert: {{ .StateValues.mosquittoServerCert }}
-      - mosquittoServerKey: {{ .StateValues.mosquittoServerKey }}
-      - mosquittoServiceType: {{ .StateValues.mosquittoServiceType }}
-      - imagePullSecret: {{ .StateValues.imagePullSecret }}
+      - mosquittoSuperuser: {{ .StateValues.mosquittoSuperuser | quote }}
+      - mosquittoCaCert: {{ .StateValues.mosquittoCaCert | quote }}
+      - mosquittoServerCert: {{ .StateValues.mosquittoServerCert | quote }}
+      - mosquittoServerKey: {{ .StateValues.mosquittoServerKey | quote }}
+      - mosquittoServiceType: {{ .StateValues.mosquittoServiceType | quote }}
+      - imagePullSecret: {{ .StateValues.imagePullSecret | quote }}
       # Grafana
       - grafanaEnabled: {{ .StateValues.grafanaEnabled }}
       # Grafana Loki

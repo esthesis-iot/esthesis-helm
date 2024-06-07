@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-realm-job
+  labels:
+    app.kubernetes.io/name: keycloak
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      containers:
+        - name: create-realm
+          image: bitnami/keycloak:24.0.5
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo Logging in to Keycloak.
+              until kcadm.sh config credentials --server http://keycloak --realm master --user {{ .Values.esthesisSystemUsername | quote }} --password {{ .Values.esthesisSystemPassword | quote }} --client admin-cli --config /tmp/keycloak.conf;
+              do
+                echo "Waiting for Keycloak to be ready...";
+                sleep 5;
+              done;
+              echo Creating esthesis realm.
+              if kcadm.sh get realms/esthesis --config /tmp/keycloak.conf; then
+                echo Realm 'esthesis' already exists. Exiting.
+                exit 0
+              else
+                kcadm.sh create realms -s realm=esthesis -s enabled=true --config /tmp/keycloak.conf
+              fi
+              echo Creating {{ .Values.esthesisAdminUsername }} and {{ .Values.esthesisSystemUsername }}  users.
+              kcadm.sh create users -r esthesis -s username={{ .Values.esthesisAdminUsername | quote }} -s enabled=true --config /tmp/keycloak.conf
+              kcadm.sh set-password -r esthesis --username {{ .Values.esthesisAdminUsername | quote }} --new-password {{ .Values.esthesisAdminPassword | quote }} --config /tmp/keycloak.conf
+              kcadm.sh create users -r esthesis -s username={{ .Values.esthesisSystemUsername | quote }} -s enabled=true --config /tmp/keycloak.conf
+              kcadm.sh set-password -r esthesis --username {{ .Values.esthesisSystemUsername | quote }} --new-password {{ .Values.esthesisSystemPassword | quote }} --config /tmp/keycloak.conf
+              echo Creating user and system roles.
+              kcadm.sh create roles -r esthesis -s name=user --config /tmp/keycloak.conf
+              kcadm.sh create roles -r esthesis -s name=system --config /tmp/keycloak.conf
+              echo Creating esthesis client.
+              kcadm.sh create clients -r esthesis -s clientId=esthesis -s enabled=true -s publicClient=true -s directAccessGrantsEnabled=true -s serviceAccountsEnabled=true -s "redirectUris=[\"{{ .Values.oidcRedirectUri }}\"]" --config /tmp/keycloak.conf
+              echo Assigning roles to users.
+              kcadm.sh add-roles -r esthesis --uusername {{ .Values.esthesisAdminUsername | quote }} --rolename user --config /tmp/keycloak.conf
+              kcadm.sh add-roles -r esthesis --uusername {{ .Values.esthesisSystemUsername |  quote }} --rolename system --config /tmp/keycloak.conf
+              echo Keycloak configuration complete.
+      restartPolicy: OnFailure

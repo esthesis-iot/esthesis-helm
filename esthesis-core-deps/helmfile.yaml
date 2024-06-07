@@ -6,12 +6,17 @@ environments:
     values:
       - devMode: false
       - domain: {{ env "DOMAIN" }}
+      - esthesisLocalCharts: {{ if (env "ESTHESIS_LOCAL_CHARTS") }}{{ env "ESTHESIS_LOCAL_CHARTS" }}{{ else }}false{{ end }}
+      - oidcRedirectUri: https://{{ env "ESTHESIS_HOSTNAME" }}/callback
   dev:
     values:
       - devMode: true
       - domain: esthesis
       - keycloakHostname: "keycloak.esthesis"
       - kafkaTopicReplicas: 1
+      - esthesisLocalCharts: true
+      - esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
+      - oidcRedirectUri: http://localhost:4200/callback
 
 ---
 ##################################################################################################
@@ -110,9 +115,9 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.38-SNAPSHOT"
-    chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core-deps" | quote }}
-    name: esthesis-core-deps
+  - name: esthesis-core-deps
+    chart: {{ or .StateValues.devMode .StateValues.esthesisLocalCharts | ternary "./" "esthesis/esthesis-core-deps" | quote }}
+    version: "3.0.38-SNAPSHOT"
     values:
       - devMode: {{ .StateValues.devMode }}
       - esthesisAdminUsername: {{ .StateValues.esthesisAdminUsername | quote }}
@@ -122,6 +127,7 @@ releases:
       # Keycloak
       - keycloakEnabled: {{ .StateValues.keycloakEnabled }}
       - keycloakFrontendUrl: {{ .StateValues.devMode | ternary "http://" "https://"}}{{ .StateValues.keycloakHostname }}
+      - oidcRedirectUri: {{ .StateValues.oidcRedirectUri }}
       # Mosquitto
       - mosquittoEnabled: {{ .StateValues.mosquittoEnabled }}
       - mosquittoMutualTls: {{ .StateValues.mosquittoMutualTls }}
@@ -241,7 +247,7 @@ releases:
     values:
       {{- if .StateValues.imagePullSecret }}
       - imagePullSecrets:
-        - name: {{ .StateValues.imagePullSecret | quote }}
+          - name: {{ .StateValues.imagePullSecret | quote }}
       {{- end }}
       - yamlApplicationConfig:
           kafka:
@@ -307,7 +313,7 @@ releases:
 
   - name: keycloak
     chart: bitnami/keycloak
-    version: "15.1.1"
+    version: "21.3.4"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
       {{- if or .StateValues.imagePullSecret .StateValues.keycloakStorageClass }}
@@ -317,7 +323,7 @@ releases:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
         {{- if .StateValues.keycloakStorageClass }}
-          storageClass: {{ .StateValues.keycloakStorageClass | quote }}
+        storageClass: {{ .StateValues.keycloakStorageClass | quote }}
         {{- end }}
       {{- end }}
       - proxy: edge
@@ -331,17 +337,6 @@ releases:
             password: {{ .StateValues.esthesisSystemPassword |quote }}
       - readinessProbe:
           timeoutSeconds: 60
-      - keycloakConfigCli:
-          enabled: true
-          existingConfigmap: esthesis-core-keycloak-config
-          backoffLimit: 30
-          extraEnvVars:
-            - name: LOGGING_LEVEL_ROOT
-              value: TRACE
-            - name: LOGGING_LEVEL_REALMCONFIG
-              value: TRACE
-          cleanupAfterFinished:
-            enabled: true
       {{- if not .StateValues.devMode }}
       - ingress:
           enabled: true

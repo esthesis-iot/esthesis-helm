@@ -75,7 +75,7 @@ spec:
             httpGet:
               path: /q/health/live
               port: 8080
-            failureThreshold: 1
+            failureThreshold: 2
             periodSeconds: 30
           startupProbe:
             httpGet:
@@ -109,18 +109,18 @@ spec:
             {{- end }}
             {{- if .podOidcClient }}
             - name: QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL
-              value: {{ .Values.oidcAuthorityUrlCluster | quote}}
+              value: {{ .Values.oidcClientAuthServerUrl | quote}}
             - name: OIDC_CLIENT_USERNAME
-              value: {{ .Values.esthesisSystemUsername | quote }}
+              value: {{ .Values.oidcClientGrantOptionsPasswordUsername | quote }}
             - name: OIDC_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: esthesis-core-secret
-                  key: esthesisSystemPassword
+                  key: oidcClientGrantOptionsPasswordPassword
             {{- end }}
-            {{- if .podJwtVerifier }}
-            - name: MP_JWT_VERIFY_PUBLICKEY_LOCATION
-              value: {{ .Values.oidcJwtVerifyLocationCluster | quote}}
+            {{- if .podOidc }}
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: {{ .Values.oidcAuthServerUrl | quote}}
             {{- end }}
             {{- if .podKafka }}
             - name: KAFKA_BOOTSTRAP_SERVERS

@@ -1,6 +1,6 @@
 {{ if not .Values.devMode }}
 {{ template "deployment.api.template" (merge (dict
-  "podJwtVerifier" true
+  "podOidc" true
   "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "256M"

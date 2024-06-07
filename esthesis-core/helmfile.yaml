@@ -9,23 +9,25 @@ environments:
       - mongoDbUrlCluster: {{ if (env "MONGODB_URL_CLUSTER") }}{{ env "MONGODB_URL_CLUSTER" }}{{ else }}mongodb://mongodb-0.mongodb-headless.{{ .Namespace }}.svc.cluster.local:27017,mongodb-1.mongodb-headless.{{ .Namespace }}.svc.cluster.local:27017{{ end }}
       - camundaGatewayUrlCluster: {{ if (env "CAMUNDA_GATEWAY_URL_CLUSTER") }}{{ env "CAMUNDA_GATEWAY_URL_CLUSTER" }}{{ else }}camunda-zeebe-gateway.{{ .Namespace }}.svc.cluster.local:26500{{ end }}
       - kafkaBootstrapServers: {{ if (env "KAFKA_BOOTSTRAP_SERVERS") }}{{ env "KAFKA_BOOTSTRAP_SERVERS" }}{{ else }}kafka.{{ .Namespace }}.svc.cluster.local:9092{{ end }}
-      - oidcAuthorityUrlCluster: {{ if (env "OIDC_AUTHORITY_URL_CLUSTER") }}{{ env "OIDC_AUTHORITY_URL_CLUSTER" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis{{ end }}
-      - oidcDiscoveryUrlCluster: {{ if (env "OIDC_DISCOVERY_URL_CLUSTER") }}{{ env "OIDC_DISCOVERY_URL_CLUSTER" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis/.well-known/openid-configuration{{ end }} 
-      - oidcJwtVerifyLocationCluster: {{ if (env "OIDC_JWT_VERIFY_LOCATION_CLUSTER") }}{{ env "OIDC_JWT_VERIFY_LOCATION_CLUSTER" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis/protocol/openid-connect/certs{{ end }}
-      - oidcAuthorityUrlExternal: {{ env "OIDC_AUTHORITY_URL_EXTERNAL" }}
+      - oidcAuthServerUrl: {{ if (env "OIDC_AUTH_SERVER_URL") }}{{ env "OIDC_AUTH_SERVER_URL" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis{{ end }}
+      - oidcClientAuthServerUrl: {{ if (env "OIDC_CLIENT_AUTH_SERVER_URL") }}{{ env "OIDC_CLIENT_AUTH_SERVER_URL" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis{{ end }}
+      - esthesisReportedOidcAuthority: {{ if (env "ESTHESIS_REPORTED_OIDC_AUTHORITY_URL") }}{{ env "ESTHESIS_REPORTED_OIDC_AUTHORITY_URL" }}{{ else }}http://keycloak.{{ .Namespace }}.svc.cluster.local/realms/esthesis{{ end }}
+      - esthesisReportedOidcPostLogoutUrl: {{ if (env "ESTHESIS_REPORTED_OIDC_POST_LOGOUT_URL") }}{{ env "ESTHESIS_REPORTED_OIDC_POST_LOGOUT_URL" }}{{ else }}http://esthesis-core.{{ .Namespace }}.svc.cluster.local/logout{{ end }}      
       - esthesisHostname: {{ env "ESTHESIS_HOSTNAME" }}
+      - esthesisLocalCharts: {{ if (env "ESTHESIS_LOCAL_CHARTS") }}{{ env "ESTHESIS_LOCAL_CHARTS" }}{{ else }}false{{ end }}
   dev:
     values:
       - devMode: true
-      - camundaGatewayUrlCluster: camunda-zeebe-gateway.esthesis:26500
-      - kafkaBootstrapServers: kafka.esthesis:9094
-      - oidcAuthorityUrlExternal: https://keycloak.esthesis/realms/esthesis
-      - oidcAuthorityUrlCluster: http://keycloak.esthesis/realms/esthesis
-      - oidcDiscoveryUrlCluster: http://keycloak.esthesis/realms/esthesis/.well-known/openid-configuration
-      - oidcJwtVerifyLocationCluster: http://keycloak.esthesis/realms/esthesis/protocol/openid-connect/certs
-      - redisHosts: redis://redis.esthesis:6379
+      - camundaGatewayUrlCluster: camunda-zeebe-gateway.{{ .Namespace }}:26500
+      - kafkaBootstrapServers: kafka.{{ .Namespace }}:9094
+      - redisHosts: redis://redis.{{ .Namespace }}:6379
+      - oidcAuthServerUrl: http://keycloak.{{ .Namespace }}/realms/esthesis
+      - oidcClientAuthServerUrl: http://keycloak.{{ .Namespace }}/realms/esthesis
+      - esthesisReportedOidcAuthority: http://keycloak.{{ .Namespace }}/realms/esthesis
+      - esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
       - esthesisHostname: "esthesis-core.esthesis"
       - mongoDbUrlCluster: mongodb://mongodb-headless.esthesis:27017
+      - esthesisLocalCharts: true
 
 ---
 ##################################################################################################
@@ -63,13 +65,15 @@ values:
   - mongoDbUsername: {{ env "MONGODB_USERNAME" | default .StateValues.esthesisSystemUsername }}
   - mongoDbPassword: {{ env "MONGODB_PASSWORD" | default .StateValues.esthesisSystemPassword }}
   # esthesis UI
-  - esthesisUiLogoutUrl: {{ env "ESTHESIS_UI_LOGOUT_URL" | default "/logout" }}
   - esthesisUiCertManagerClusterIssuer: {{ env "ESTHESIS_UI_CERT_MANAGER_CLUSTER_ISSUER" }}
   - esthesisUiCertManagerIssuer: {{ env "ESTHESIS_UI_CERT_MANAGER_ISSUER" }}
   # RabbitMQ
   - rabbitmqErlangCookie: {{ env "RABBITMQ_ERLANG_COOKIE" | default .StateValues.esthesisSystemUsername }}
   # Kafka
   - kafkaEnabled: {{ env "KAFKA_ENABLED" | default true }}
+  # OIDC
+  - oidcClientGrantOptionsPasswordUsername: {{ env "OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_USERNAME" | default .StateValues.esthesisSystemUsername }}
+  - oidcClientGrantOptionsPasswordPassword: {{ env "OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_PASSWORD" | default .StateValues.esthesisSystemPassword }}
 
 ---
 ##################################################################################################
@@ -78,7 +82,7 @@ values:
 releases:
   - version: "3.0.38-SNAPSHOT"
     name: esthesis-core
-    chart: {{ .StateValues.devMode | ternary "./" "esthesis/esthesis-core" | quote }}
+    chart: {{ or .StateValues.devMode .StateValues.esthesisLocalCharts | ternary "./" "esthesis/esthesis-core" | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
       - timezone: {{ .StateValues.timezone | quote }}
@@ -86,7 +90,6 @@ releases:
       - imagePullSecret: {{ .Values.imagePullSecret | quote }}
       - quarkus:
           log:
-            min-level: "TRACE"
             level: {{ .StateValues.esthesisLogLevel | quote }}
             category:
               esthesis:
@@ -104,14 +107,15 @@ releases:
       - esthesisSystemUsername: {{ .Values.esthesisSystemUsername | quote }}
       - esthesisSystemPassword: {{ .StateValues.esthesisSystemPassword | quote }}
       - esthesisHostname: {{ .StateValues.esthesisHostname | quote }}
-      - esthesisUiLogoutUrl: {{ .StateValues.esthesisUiLogoutUrl | quote }}
       - ingressClassName: {{ .StateValues.ingressClassName | quote }}
       - esthesisKubernetesServiceCreateRBAC: {{ .StateValues.esthesisKubernetesServiceCreateRBAC }}
       # OIDC
-      - oidcAuthorityUrlExternal: {{ .StateValues.oidcAuthorityUrlExternal | quote }}
-      - oidcAuthorityUrlCluster: {{ .StateValues.oidcAuthorityUrlCluster | quote }}
-      - oidcDiscoveryUrlCluster: {{ .StateValues.oidcDiscoveryUrlCluster | quote }}
-      - oidcJwtVerifyLocationCluster: {{ .StateValues.oidcJwtVerifyLocationCluster | quote }}
+      - oidcAuthServerUrl: {{ .StateValues.oidcAuthServerUrl | quote }}
+      - oidcClientAuthServerUrl: {{ .StateValues.oidcClientAuthServerUrl | quote }}
+      - oidcClientGrantOptionsPasswordUsername: {{ .StateValues.oidcClientGrantOptionsPasswordUsername | quote }}
+      - oidcClientGrantOptionsPasswordPassword: {{ .StateValues.oidcClientGrantOptionsPasswordPassword | quote }}
+      - esthesisReportedOidcAuthority: {{ .StateValues.esthesisReportedOidcAuthority | quote }}
+      - esthesisReportedOidcPostLogoutUrl: {{ .StateValues.esthesisReportedOidcPostLogoutUrl | quote }}
       # MongoDB
       - mongoDbEnabled: {{ .StateValues.mongoDbEnabled }}
       - mongoDbUrlCluster: {{ .StateValues.mongoDbUrlCluster | quote }}
@@ -130,5 +134,3 @@ releases:
       # Cert Manager
       - esthesisUiCertManagerClusterIssuer: {{ .StateValues.esthesisUiCertManagerClusterIssuer | quote }}
       - esthesisUiCertManagerIssuer: {{ .StateValues.esthesisUiCertManagerIssuer | quote }}
-
-

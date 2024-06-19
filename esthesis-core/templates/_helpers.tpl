@@ -110,17 +110,25 @@ spec:
             {{- if .podOidcClient }}
             - name: QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL
               value: {{ .Values.oidcClientAuthServerUrl | quote}}
-            - name: OIDC_CLIENT_USERNAME
+            - name: QUARKUS_OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_USERNAME
               value: {{ .Values.oidcClientGrantOptionsPasswordUsername | quote }}
-            - name: OIDC_CLIENT_PASSWORD
+            - name: QUARKUS_OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: esthesis-core-secret
                   key: oidcClientGrantOptionsPasswordPassword
+            - name: QUARKUS_OIDC_CLIENT_CLIENT_ID
+              value: {{ .Values.oidcClientId | quote}}
+            - name: QUARKUS_OIDC_CLIENT_GRANT_TYPE
+              value: "password"
+            - name: QUARKUS_OIDC_CLIENT_TLS_VERIFICATION
+              value: {{ .Values.oidcTlsVerification | quote}}
             {{- end }}
             {{- if .podOidc }}
             - name: QUARKUS_OIDC_AUTH_SERVER_URL
               value: {{ .Values.oidcAuthServerUrl | quote}}
+            - name: QUARKUS_OIDC_TLS_VERIFICATION
+              value: {{ .Values.oidcTlsVerification | quote}}
             {{- end }}
             {{- if .podKafka }}
             - name: KAFKA_BOOTSTRAP_SERVERS

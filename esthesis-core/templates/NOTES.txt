@@ -1,0 +1,5 @@
+*******************************************************************************
+Thank you for installing esthesis CORE. Once all services are up and running,
+you can access esthesis CORE at:
+https://{{ .Values.esthesisHostname }}
+*******************************************************************************

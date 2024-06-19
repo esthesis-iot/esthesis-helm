@@ -15,6 +15,7 @@ environments:
       - esthesisReportedOidcPostLogoutUrl: {{ if (env "ESTHESIS_REPORTED_OIDC_POST_LOGOUT_URL") }}{{ env "ESTHESIS_REPORTED_OIDC_POST_LOGOUT_URL" }}{{ else }}http://esthesis-core.{{ .Namespace }}.svc.cluster.local/logout{{ end }}      
       - esthesisHostname: {{ env "ESTHESIS_HOSTNAME" }}
       - esthesisLocalCharts: {{ if (env "ESTHESIS_LOCAL_CHARTS") }}{{ env "ESTHESIS_LOCAL_CHARTS" }}{{ else }}false{{ end }}
+      - oidcTlsVerification: {{ if (env "OIDC_TLS_VERIFICATION") }}{{ env "OIDC_TLS_VERIFICATION" }}{{ else }}required{{ end }}
   dev:
     values:
       - devMode: true
@@ -28,6 +29,7 @@ environments:
       - esthesisHostname: "esthesis-core.esthesis"
       - mongoDbUrlCluster: mongodb://mongodb-headless.esthesis:27017
       - esthesisLocalCharts: true
+      - oidcTlsVerification: false
 
 ---
 ##################################################################################################
@@ -74,6 +76,7 @@ values:
   # OIDC
   - oidcClientGrantOptionsPasswordUsername: {{ env "OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_USERNAME" | default .StateValues.esthesisSystemUsername }}
   - oidcClientGrantOptionsPasswordPassword: {{ env "OIDC_CLIENT_GRANT_OPTIONS_PASSWORD_PASSWORD" | default .StateValues.esthesisSystemPassword }}
+  - oidcClientId: {{ env "OIDC_CLIENT_ID" | default "esthesis" }}
 
 ---
 ##################################################################################################
@@ -100,7 +103,7 @@ releases:
                 level: {{ .StateValues.esthesisLogLevel | quote }}
               "org.mongodb":
                 level: {{ .StateValues.esthesisLogLevel | quote }}
-              "io.quarkus.oidc.token.propagation.reactive":
+              "io.quarkus.oidc":
                 level: {{ .StateValues.esthesisLogLevel | quote }}
       - esthesisAdminUsername: {{ .StateValues.esthesisAdminUsername | quote }}
       - esthesisAdminPassword: {{ .StateValues.esthesisAdminPassword | quote }}
@@ -116,6 +119,8 @@ releases:
       - oidcClientGrantOptionsPasswordPassword: {{ .StateValues.oidcClientGrantOptionsPasswordPassword | quote }}
       - esthesisReportedOidcAuthority: {{ .StateValues.esthesisReportedOidcAuthority | quote }}
       - esthesisReportedOidcPostLogoutUrl: {{ .StateValues.esthesisReportedOidcPostLogoutUrl | quote }}
+      - oidcTlsVerification: {{ .StateValues.oidcTlsVerification }}
+      - oidcClientId: {{ .StateValues.oidcClientId | quote }}
       # MongoDB
       - mongoDbEnabled: {{ .StateValues.mongoDbEnabled }}
       - mongoDbUrlCluster: {{ .StateValues.mongoDbUrlCluster | quote }}

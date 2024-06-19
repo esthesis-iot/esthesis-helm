@@ -43,5 +43,11 @@ spec:
               echo Assigning roles to users.
               kcadm.sh add-roles -r esthesis --uusername {{ .Values.esthesisAdminUsername | quote }} --rolename user --config /tmp/keycloak.conf
               kcadm.sh add-roles -r esthesis --uusername {{ .Values.esthesisSystemUsername |  quote }} --rolename system --config /tmp/keycloak.conf
+              echo Setting default First name, Last name and email for {{ .Values.esthesisAdminUsername }}.
+              USERID=$(kcadm.sh get users -r esthesis -q username={{ .Values.esthesisAdminUsername | quote}} --config /tmp/keycloak.conf | grep \"id\" | awk -F'"' '{print $4}')
+              kcadm.sh update users/$USERID -r esthesis -s firstName=esthesis -s lastName=admin -s email=esthesis-admin@localhost --config /tmp/keycloak.conf
+              echo Setting default First name, Last name and email for {{ .Values.esthesisSystemUsername }}.
+              USERID=$(kcadm.sh get users -r esthesis -q username={{ .Values.esthesisSystemUsername | quote}} --config /tmp/keycloak.conf | grep \"id\" | awk -F'"' '{print $4}')
+              kcadm.sh update users/$USERID -r esthesis -s firstName=esthesis -s lastName=system -s email=esthesis-system@localhost --config /tmp/keycloak.conf
               echo Keycloak configuration complete.
       restartPolicy: OnFailure

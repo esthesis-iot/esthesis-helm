@@ -51,6 +51,7 @@ helmDefaults:
 # Default state values
 ##################################################################################################
 values:
+  - esthesisVersion: 3.0.39-SNAPSHOT
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}
@@ -83,9 +84,9 @@ values:
 # Release definitions
 ##################################################################################################
 releases:
-  - version: "3.0.39-SNAPSHOT"
-    name: esthesis-core
+  - name: esthesis-core
     chart: {{ or .StateValues.devMode .StateValues.esthesisLocalCharts | ternary "./" "esthesis/esthesis-core" | quote }}
+    version: {{ .StateValues.esthesisVersion | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
       - timezone: {{ .StateValues.timezone | quote }}

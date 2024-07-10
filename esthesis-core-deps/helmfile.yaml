@@ -54,6 +54,7 @@ values:
   ##################################################################################################
   # Global values
   ##################################################################################################
+  - esthesisVersion: 3.0.39-SNAPSHOT
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}
@@ -121,7 +122,7 @@ values:
 releases:
   - name: esthesis-core-deps
     chart: {{ or .StateValues.devMode .StateValues.esthesisLocalCharts | ternary "./" "esthesis/esthesis-core-deps" | quote }}
-    version: "3.0.38-SNAPSHOT"
+    version: {{ .StateValues.esthesisVersion | quote }}
     values:
       - devMode: {{ .StateValues.devMode }}
       - esthesisAdminUsername: {{ .StateValues.esthesisAdminUsername | quote }}

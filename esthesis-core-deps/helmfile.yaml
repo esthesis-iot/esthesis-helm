@@ -328,7 +328,7 @@ releases:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
         {{- if .StateValues.keycloakStorageClass }}
-        storageClass: {{ .StateValues.keycloakStorageClass | quote }}
+        defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
         {{- end }}
       {{- end }}
       - proxy: edge

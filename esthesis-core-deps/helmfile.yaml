@@ -318,7 +318,7 @@ releases:
 
   - name: keycloak
     chart: bitnami/keycloak
-    version: "21.3.4"
+    version: "21.7.1"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
       {{- if or .StateValues.imagePullSecret .StateValues.keycloakStorageClass }}
@@ -327,9 +327,9 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-        {{- if .StateValues.keycloakStorageClass }}
-        defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
-        {{- end }}
+          {{- if .StateValues.keycloakStorageClass }}
+          defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
+          {{- end }}
       {{- end }}
       - proxy: edge
       - production: true

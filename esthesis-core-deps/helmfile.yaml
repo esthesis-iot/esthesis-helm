@@ -332,6 +332,7 @@ releases:
           {{- end }}
       {{- end }}
       - proxy: edge
+      - proxyHeaders: xforwarded
       - production: true
       - auth:
           adminUser: {{ .StateValues.esthesisSystemUsername | quote }}

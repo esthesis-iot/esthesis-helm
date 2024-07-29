@@ -6,6 +6,7 @@
   "podName" "esthesis-core-srv-agent"
   "podOidcClient" true
   "podProbes" true
+  "podMongoDb" true
   "podRedis" true
   "registry" .Values.esthesisRegistry
   "timezone" .Values.timezone

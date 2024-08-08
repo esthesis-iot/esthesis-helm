@@ -318,7 +318,7 @@ releases:
 
   - name: keycloak
     chart: bitnami/keycloak
-    version: "19.4.1"
+    version: "22.0.0"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
       {{- if or .StateValues.imagePullSecret .StateValues.keycloakStorageClass }}
@@ -328,11 +328,10 @@ releases:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
           {{- if .StateValues.keycloakStorageClass }}
-          storageClass: {{ .StateValues.keycloakStorageClass | quote }}
+          defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
           {{- end }}
       {{- end }}
-      - proxy: edge
-      - proxyHeaders: ""
+      - proxyHeaders: xforwarded
       - production: true
       - auth:
           adminUser: {{ .StateValues.esthesisSystemUsername | quote }}
@@ -365,8 +364,10 @@ releases:
       - extraEnvVars:
           {{- if not .StateValues.devMode }}
           # Allow admin service to be port-forwarded to localhost.
+          - name: KC_HOSTNAME
+            value: https://{{ .StateValues.keycloakHostname }}/
           - name: KC_HOSTNAME_ADMIN
-            value: localhost
+            value: https://{{ .StateValues.keycloakHostname }}/
           {{- end }}
 
   - name: grafana-loki
@@ -479,12 +480,10 @@ releases:
               service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
               service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
               service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
-              service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "{{ .Values.ingressNginxSSLCertArn }}"
+              service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "{{ .StateValues.ingressNginxSSLCertArn }}"
             enableHttp: false
             targetPorts:
               https: http
-          ingressClassResource:
-            name: "nginx-{{ .Namespace }}"
 
   - name: orionld
     chart: fiware/orion

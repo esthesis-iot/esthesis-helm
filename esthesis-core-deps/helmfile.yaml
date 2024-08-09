@@ -104,7 +104,9 @@ values:
   - influxDbEnabled: {{ env "INFLUXDB_ENABLED" | default true }}
   - influxDbSize: {{ env "INFLUXDB_SIZE" | default "32Gi" }}
   # Ingress nginx
+  - ingressNginxLoadBalancerIP: {{ env "INGRESS_NGINX_LOAD_BALANCER_IP" }}
   - ingressNginxEnabled: {{ env "INGRESS_NGINX_ENABLED" | default false }}
+  - ingressNginxCustomSSL: {{ env "INGRESS_NGINX_CUSTOM_SSL" }}
   - ingressNginxSSLCertArn: {{ env "INGRESS_NGINX_SSL_CERT_ARN" | default "" }}
   # Grafana
   - grafanaEnabled: {{ env "GRAFANA_ENABLED" | default false }}
@@ -475,15 +477,27 @@ releases:
             enabled: true
             namespace: {{ .Namespace }}
           service:
+            {{- if .StateValues.ingressNginxLoadBalancerIP }}
+            externalIPs: 
+              - {{ .StateValues.ingressNginxLoadBalancerIP }}
+            {{- end }}
             annotations:
               external-dns.alpha.kubernetes.io/hostname: "*.{{ .StateValues.domain }}"
               service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
               service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
               service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
               service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "{{ .StateValues.ingressNginxSSLCertArn }}"
+            {{- if not .StateValues.ingressNginxCustomSSL }}
             enableHttp: false
             targetPorts:
               https: http
+            {{- end}}
+          ingressClassResource:
+            name: "nginx-{{ .Namespace }}"
+          {{- if .StateValues.ingressNginxCustomSSL }}
+          extraArgs:
+              default-ssl-certificate: "{{ .Namespace }}/{{ .StateValues.ingressNginxCustomSSL }}"
+          {{- end }}
 
   - name: orionld
     chart: fiware/orion

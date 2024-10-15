@@ -54,7 +54,7 @@ values:
   ##################################################################################################
   # Global values
   ##################################################################################################
-  - esthesisVersion: "3.0.53-SNAPSHOT"
+  - esthesisVersion: "3.0.53"
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}

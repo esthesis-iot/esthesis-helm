@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esthesis-edge-deployment
+spec:
+  selector:
+    matchLabels:
+      app: esthesis-edge
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: esthesis-edge
+    spec:
+      {{ if .Values.global.imagePullSecret }}
+      imagePullSecrets:
+        - name: "{{ .Values.global.imagePullSecret }}"
+      {{ end }}
+      containers:
+        - name: esthesis-edge
+          {{- if .Values.global.esthesisRegistry }}
+          image: "{{ .Values.global.esthesisRegistry }}/esthesis-edge:{{ .Chart.Version }}"
+          {{- else }}
+          image: "esthesisiot/esthesis-edge:{{ .Chart.Version }}"
+          {{- end }}
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          env:
+            - name: "TZ"
+              value: "{{ .Values.global.timezone }}"
+
+            - name: "QUARKUS_DATASOURCE_USERNAME"
+              value: "{{ .Values.quarkus.datasource.username }}"
+            - name: "QUARKUS_DATASOURCE_PASSWORD"
+              value: "{{ .Values.quarkus.datasource.password }}"
+            - name: "QUARKUS_DATASOURCE_JDBC_URL"
+              value: "{{ .Values.quarkus.datasource.jdbc.url }}"
+
+            - name: "QUARKUS_REST_CLIENT_ESTHESIS_AGENT_SERVICE_CLIENT_URL"
+              value: "{{ .Values.quarkus.restClient.esthesisAgentServiceClient.url }}"
+            - name: "QUARKUS_REST_CLIENT_ENEDIS_CLIENT_URL"
+              value: "{{ .Values.quarkus.restClient.enedisClient.url }}"
+
+            - name: "ESTHESIS_EDGE_ADMIN_SECRET"
+              value: "{{ .Values.esthesis.edge.adminSecret }}"
+            - name: "ESTHESIS_EDGE_SYNC_CRON"
+              value: "{{ .Values.esthesis.edge.syncCron }}"
+            - name: "ESTHESIS_EDGE_PURGE_CRON"
+              value: "{{ .Values.esthesis.edge.purgeCron }}"
+            - name: "ESTHESIS_EDGE_PURGE_SUCCESSFUL_MINUTES"
+              value: "{{ .Values.esthesis.edge.purgeSuccessfulMinutes }}"
+
+            - name: "ESTHESIS_EDGE_LOCAL_ENABLED"
+              value: "{{ .Values.esthesis.edge.local.enabled }}"
+            - name: "ESTHESIS_EDGE_LOCAL_INFLUXDB_URL"
+              value: "{{ .Values.esthesis.edge.local.influxDb.url }}"
+            - name: "ESTHESIS_EDGE_LOCAL_INFLUXDB_TOKEN"
+              value: "{{ .Values.esthesis.edge.local.influxDb.token }}"
+            - name: "ESTHESIS_EDGE_LOCAL_INFLUXDB_BUCKET"
+              value: "{{ .Values.esthesis.edge.local.influxDb.bucket }}"
+            - name: "ESTHESIS_EDGE_LOCAL_INFLUXDB_ORG"
+              value: "{{ .Values.esthesis.edge.local.influxDb.org }}"
+
+            - name: "ESTHESIS_EDGE_CORE_PUSH_ENABLED"
+              value: "{{ .Values.esthesis.edge.core.push.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_PUSH_URL"
+              value: "{{ .Values.esthesis.edge.core.push.url }}"
+            - name: "ESTHESIS_EDGE_CORE_PUSH_TOPIC_TELEMETRY"
+              value: "{{ .Values.esthesis.edge.core.push.topicTelemetry }}"
+            - name: "ESTHESIS_EDGE_CORE_PUSH_TOPIC_PING"
+              value: "{{ .Values.esthesis.edge.core.push.topicPing }}"
+            - name: "ESTHESIS_EDGE_CORE_REGISTRATION_ENABLED"
+              value: "{{ .Values.esthesis.edge.core.registration.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_REGISTRATION_SECRET"
+              value: "{{ .Values.esthesis.edge.core.registration.secret }}"
+            - name: "ESTHESIS_EDGE_CORE_REGISTRATION_TAGS"
+              value: "{{ .Values.esthesis.edge.core.registration.tags | join "," }}"
+            - name: "ESTHESIS_EDGE_CORE_KEY_ALGORITHM"
+              value: "{{ .Values.esthesis.edge.core.keyAlgorithm }}"
+
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_ENABLED"
+              value: "{{ .Values.esthesis.edge.modules.enedis.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_CRON"
+              value: "{{ .Values.esthesis.edge.modules.enedis.cron }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_MAX_DEVICES"
+              value: "{{ .Values.esthesis.edge.modules.enedis.maxDevices }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_PAST_DAYS_INIT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.pastDaysInit }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_CLIENT_ID"
+              value: "{{ .Values.esthesis.edge.modules.enedis.clientId }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_CLIENT_SECRET"
+              value: "{{ .Values.esthesis.edge.modules.enedis.clientSecret }}"
+
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DC_ENABLED"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dc.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DC_CATEGORY"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dc.category }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DC_MEASUREMENT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dc.measurement }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DC_ERRORS_THRESHOLD"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dc.errorsThreshold }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DCMP_ENABLED"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dcmp.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DCMP_CATEGORY"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dcmp.category }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DCMP_MEASUREMENT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dcmp.measurement }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DCMP_ERRORS_THRESHOLD"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dcmp.errorsThreshold }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DP_ENABLED"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dp.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DP_CATEGORY"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dp.category }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DP_MEASUREMENT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dp.measurement }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_FETCH_TYPES_DP_ERRORS_THRESHOLD"
+              value: "{{ .Values.esthesis.edge.modules.enedis.fetchTypes.dp.errorsThreshold }}"
+
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_ENABLED"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.enabled }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_STATE_CHECKING"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.stateChecking }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_WELCOME_URL"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.welcomeUrl }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_REDIRECT_URL"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.redirectUrl }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_DURATION"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.redirectUrl }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_LOGO1_URL"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.logo1Url }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_LOGO1_ALT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.logo1Alt }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_LOGO2_URL"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.logo2Url }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_LOGO2_ALT"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.logo2Alt }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_REGISTRATION_TITLE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.registration.title }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_REGISTRATION_MESSAGE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.registration.message }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_SUCCESS_TITLE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.success.title }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_SUCCESS_MESSAGE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.success.message }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_ERROR_TITLE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.error.title }}"
+            - name: "ESTHESIS_EDGE_CORE_MODULES_ENEDIS_SELF_REGISTRATION_PAGE_ERROR_MESSAGE"
+              value: "{{ .Values.esthesis.edge.modules.enedis.selfRegistration.page.error.message }}"

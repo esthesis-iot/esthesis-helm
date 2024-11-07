@@ -1,0 +1,9 @@
+dependencies:
+- name: mariadb
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 11.4.3
+- name: influxdb
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 5.6.1
+digest: sha256:df1da6e1eae0f0e2de6aea9ef22ee1a0c0004ae215af9f4fb1deaf439759f783
+generated: "2024-11-05T17:15:03.753239+02:00"

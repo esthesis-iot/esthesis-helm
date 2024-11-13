@@ -4,7 +4,7 @@
   "podKafka" true
   "podLogging" true
   "podMaxCpu" "1"
-  "podMaxMemory" "256M"
+  "podMaxMemory" "512M"
   "podMongoDb" true
   "podName" "esthesis-core-srv-device"
   "podProbes" true

@@ -14,7 +14,7 @@ cd esthesis-core-backups
 ./package.sh
 popd
 
-pushd .
-cd esthesis-edge
-./package.sh
-popd
+#pushd .
+#cd esthesis-edge
+#./package.sh
+#popd

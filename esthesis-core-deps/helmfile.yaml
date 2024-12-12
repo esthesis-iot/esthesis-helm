@@ -234,7 +234,10 @@ releases:
             - name: esthesis-metadata
               partitions: {{ .StateValues.kafkaTopicPartitions }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
-            - name: esthesis-app
+            - name: esthesis-app-unicast
+              partitions: {{ .StateValues.kafkaTopicPartitions }}
+              replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
+            - name: esthesis-app-broadcast
               partitions: {{ .StateValues.kafkaTopicPartitions }}
               replicationFactor: {{ .StateValues.kafkaTopicReplicas }}
             - name: esthesis-ping

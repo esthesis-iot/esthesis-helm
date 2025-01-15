@@ -51,7 +51,7 @@ helmDefaults:
 # Default state values
 ##################################################################################################
 values:
-  - esthesisVersion: "3.0.58"
+  - esthesisVersion: "3.0.59-SNAPSHOT"
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - timezone: {{ env "TIMEZONE" | default "Europe/Athens" }}
   - esthesisLogLevel: {{ env "ESTHESIS_LOG_LEVEL" | default "WARN" }}

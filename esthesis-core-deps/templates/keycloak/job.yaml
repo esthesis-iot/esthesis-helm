@@ -10,6 +10,8 @@ spec:
   ttlSecondsAfterFinished: 60
   template:
     spec:
+      imagePullSecrets:
+        - name: {{ .imagePullSecret }}
       containers:
         - name: create-realm
           image: bitnami/keycloak:24.0.5

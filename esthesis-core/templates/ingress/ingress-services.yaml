@@ -72,6 +72,13 @@ spec:
                 name: esthesis-core-srv-crypto-service
                 port:
                   number: 8080
+          - path: "/api/dashboard(.*)"
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: esthesis-core-srv-dashboard-service
+                port:
+                  number: 8080
           - path: "/api/dataflow(.*)"
             pathType: ImplementationSpecific
             backend:

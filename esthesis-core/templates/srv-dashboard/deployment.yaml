@@ -1,0 +1,17 @@
+{{ if not .Values.devMode }}
+{{ template "deployment.api.template" (merge (dict
+  "podOidc" true
+  "podOidcClient" true
+  "podMongoDb" true
+  "podKafka" true
+  "podLogging" true
+  "podRedis" true
+  "podMaxCpu" "1"
+  "podMaxMemory" "256M"
+  "podName" "esthesis-core-srv-dashboard"
+  "podProbes" true
+  "registry" .Values.esthesisRegistry
+  "timezone" .Values.timezone
+  "imagePullSecret" .Values.imagePullSecret
+) .) }}
+{{ end }}

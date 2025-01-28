@@ -1,0 +1,131 @@
+# Redis configuration
+redis:
+  architecture: standalone
+  auth:
+    password: esthesis-system
+
+# MongoDB configuration
+mongodb:
+  architecture: replicaset
+  auth:
+    rootPassword: esthesis-system
+    replicaSetKey: esthesis-system
+    usernames:
+      - esthesis-system
+    passwords:
+      - esthesis-system
+    databases:
+      - "esthesiscore"
+
+# Kafka configuration
+kafka:
+  provisioning:
+    enabled: true
+    topics:
+      - name: esthesis-command-reply
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-telemetry
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-metadata
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-app-unicast
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-app-broadcast
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-ping
+        partitions: 3
+        replicationFactor: 3
+      - name: esthesis-command-request
+        partitions: 3
+        replicationFactor: 3
+
+# Kafka UI configuration
+kafka-ui:
+  yamlApplicationConfig:
+    kafka:
+      clusters:
+        - name: kafka
+          bootstrapServers: "kafka.default.svc.cluster.local:9092"
+          properties:
+            security.protocol: SASL_PLAINTEXT
+            sasl.mechanism: PLAIN
+            sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username=esthesis-system password=esthesis-system;"
+
+# Keycloak configuration
+keycloak:
+  auth:
+    adminUser: esthesis-system
+    adminPassword: esthesis-system
+  ingress:
+    enabled: true
+    hostname: keycloak.esthesis
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+
+# Grafana configuration
+grafana:
+  admin:
+    user: esthesis-system
+    password: esthesis-system
+
+# InfluxDB configuration
+influxdb:
+  auth:
+    admin:
+      username: esthesis-system
+      password: esthesis-system
+    user:
+      org: esthesis
+      bucket: esthesis
+      username: esthesis-system
+      password: esthesis-system
+
+# Camunda configuration
+camunda:
+  zeebe:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+    clusterSize: 1
+    replicationFactor: 1
+  zeebe-gateway:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+    replicas: 1
+  elasticsearch:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+    replicas: 1
+    minimumMasterNodes: 1
+
+# Grafana Loki configuration
+grafana-loki:
+  promtail:
+    enabled: true
+
+# Ingress nginx configuration
+ingress-nginx:
+  controller:
+    scope:
+      enabled: true
+      namespace: default
+    service:
+      externalIPs:
+        - "192.168.1.1"  # Replace with actual LoadBalancer IP if needed
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: "*.esthesis"
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+    ingressClassResource:
+      name: "nginx-default"

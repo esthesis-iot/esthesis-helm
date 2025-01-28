@@ -1,1 +1,3 @@
 /esthesis-edge/esthesis-edge-helm-*.tgz
+# Chart dependencies
+**/charts/*.tgz

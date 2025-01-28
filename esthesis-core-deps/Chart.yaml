@@ -10,3 +10,29 @@ maintainers:
 icon: https://esthes.is/media/logo.png
 version: "3.0.59-SNAPSHOT"
 appVersion: "3.0.59-SNAPSHOT"
+
+dependencies:
+  - name: redis
+    version: "17.3.7"
+    repository: https://charts.bitnami.com/bitnami
+  - name: mongodb
+    version: "14.5.1"
+    repository: https://charts.bitnami.com/bitnami
+  - name: kafka
+    version: "26.6.2"
+    repository: https://charts.bitnami.com/bitnami
+  - name: kafka-ui
+    version: "0.7.5"
+    repository: https://provectus.github.io/kafka-ui-charts
+  - name: keycloak
+    version: "22.0.0"
+    repository: https://charts.bitnami.com/bitnami
+  - name: grafana
+    version: "9.6.3"
+    repository: https://charts.bitnami.com/bitnami
+  - name: grafana-loki
+    version: "2.11.16"
+    repository: https://charts.bitnami.com/bitnami
+  - name: ingress-nginx
+    version: "4.9.1"
+    repository: https://kubernetes.github.io/ingress-nginx

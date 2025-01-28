@@ -1,0 +1,25 @@
+# MongoDB backup configuration
+mongodb:
+  name: "esthesis-mongodb-backup-cronjob"  # Default: ESTHESIS_BACKUP_MONGODB_CRONJOB_NAME
+  mongouser: "root"  # Default: ESTHESIS_BACKUP_MONGODB_USER
+  secretName: "my-mongodb"  # Default: ESTHESIS_BACKUP_MONGODB_SECRET
+  host: "my-mongodb"  # Default: ESTHESIS_BACKUP_MONGODB_HOST
+  port: "27017"  # Default: ESTHESIS_BACKUP_MONGODB_PORT
+  schedule: "0 2 * * *"  # Default: ESTHESIS_BACKUP_MONGODB_SCHEDULE
+  subPath: "backup/mongodb"  # Default: ESTHESIS_BACKUP_MONGODB_PATH
+
+# InfluxDB backup configuration
+influxdb:
+  name: "esthesis-influxdb-backup-cronjob"  # Default: ESTHESIS_BACKUP_INFLUXDB_CRONJOB_NAME
+  secretName: "my-influxdb"  # Default: ESTHESIS_BACKUP_INFLUXDB_SECRET
+  host: "my-influxdb"  # Default: ESTHESIS_BACKUP_INFLUXDB_HOST
+  port: "8086"  # Default: ESTHESIS_BACKUP_INFLUXDB_PORT
+  schedule: "0 2 * * *"  # Default: ESTHESIS_BACKUP_INFLUXDB_SCHEDULE
+  subPath: "backup/influxdb"  # Default: ESTHESIS_BACKUP_INFLUXDB_PATH
+
+# Backup PVC configuration
+backupPVC:
+  claimName: "esthesis-backup-s3-claim"  # Default: ESTHESIS_BACKUP_PVC_NAME
+  volumeName: "esthesis-backup-s3-pv"  # Default: ESTHESIS_BACKUP_VOLUME_NAME
+  storageClassName: ""  # Default: ESTHESIS_BACKUP_STORAGE_CLASS_NAME
+  storage: "10Gi"  # Default: ESTHESIS_BACKUP_STORAGE

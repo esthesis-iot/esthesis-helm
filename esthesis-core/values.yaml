@@ -1,0 +1,56 @@
+# Global values for the application
+
+devMode: false
+timezone: "Europe/Athens"
+esthesisRegistry: ""
+imagePullSecret: ""
+
+esthesisLogLevel: "WARN"
+quarkus:
+  log:
+    level: "WARN"
+    category:
+      esthesis:
+        level: "WARN"
+
+esthesisAdminUsername: "esthesis-admin"
+esthesisAdminPassword: "esthesis-admin"
+esthesisSystemUsername: "esthesis-system"
+esthesisSystemPassword: "esthesis-system"
+esthesisHostname: ""
+ingressClassName: ""
+esthesisKubernetesServiceCreateRBAC: true
+
+# MongoDB configuration
+mongoDbEnabled: true
+mongoDbUrlCluster: "mongodb://mongodb-0.mongodb-headless.default.svc.cluster.local:27017,mongodb-1.mongodb-headless.default.svc.cluster.local:27017"
+mongoDbDatabase: "esthesiscore"
+mongoDbUsername: "esthesis-system"
+mongoDbPassword: "esthesis-system"
+
+# OIDC configuration
+oidcAuthServerUrl: "http://keycloak.default.svc.cluster.local/realms/esthesis"
+oidcClientAuthServerUrl: "http://keycloak.default.svc.cluster.local/realms/esthesis"
+oidcClientGrantOptionsPasswordUsername: "esthesis-system"
+oidcClientGrantOptionsPasswordPassword: "esthesis-system"
+esthesisReportedOidcAuthority: "http://keycloak.default.svc.cluster.local/realms/esthesis"
+esthesisReportedOidcPostLogoutUrl: "http://esthesis-core.default.svc.cluster.local/logout"
+oidcTlsVerification: "required"
+oidcClientId: "esthesis"
+
+# REDIS configuration
+redisHosts: "redis://redis-headless.default.svc.cluster.local:6379"
+
+# RabbitMQ configuration
+rabbitmqErlangCookie: "esthesis-system"
+
+# Camunda configuration
+camundaGatewayUrlCluster: "camunda-zeebe-gateway.default.svc.cluster.local:26500"
+
+# Kafka configuration
+kafkaEnabled: true
+kafkaBootstrapServers: "kafka.default.svc.cluster.local:9092"
+
+# Cert Manager configuration
+esthesisUiCertManagerClusterIssuer: ""
+esthesisUiCertManagerIssuer: ""

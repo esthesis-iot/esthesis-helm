@@ -79,26 +79,26 @@ kafka:
     enabled: true
     topics:
       - name: esthesis-command-reply
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-telemetry
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-metadata
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-app-unicast
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-app-broadcast
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-ping
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
       - name: esthesis-command-request
-        partitions: 3
-        replicationFactor: 3
+        partitions: 1
+        replicationFactor: 1
   kraft:
     clusterId: "M3Q1ZTNlMWFhMTgyNDhiZj"
   sasl:

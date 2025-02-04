@@ -134,19 +134,6 @@ keycloak:
       password: "esthesis-system" # Update the password with your own.
   readinessProbe:
     timeoutSeconds: 60
-  ingress:
-    enabled: true
-    hostname: keycloak.esthesis
-    path: /
-    tls: true
-    annotations:
-      cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
-  extraEnvVars:
-    # Allow admin service to be port-forwarded to localhost.
-    - name: KC_HOSTNAME
-      value: https://keycloak.esthesis/
-    - name: KC_HOSTNAME_ADMIN
-      value: https://keycloak.esthesis/
 
 # Camunda configuration
 camunda-platform:

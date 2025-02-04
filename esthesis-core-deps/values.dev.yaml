@@ -1,26 +1,30 @@
 ##################################################################################################
 # Global values
 ##################################################################################################
-devMode: false
+devMode: true
 
+domain: esthesis
+keycloakHostname: "keycloak.esthesis"
+kafkaTopicReplicas: 1
 esthesisVersion: "3.0.59-SNAPSHOT"
-esthesisLocalCharts: false
-# oidcRedirectUri: https://<enter_esthesis_domain_here>/callback
-oidcRedirectUri:
+esthesisLocalCharts: true
+esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
+oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
-imagePullSecret:
+imagePullSecret: 
+registryNodePort: 8080
 ingressClassName: 
 mosquittoServiceType: LoadBalancer
 
 # Enable/disable charts
 charts_enabled:
-  kafka-ui: false
-  orion: false
-  docker-registry-ui: false
-  grafana-tempo: false
-  grafana-loki: false
-  grafana: false
-  ingress-nginx: false
+  kafka-ui: true
+  orion: true
+  docker-registry-ui: true
+  grafana-tempo: true
+  grafana-loki: true
+  grafana: true
+  ingress-nginx: true
 
 ##################################################################################################
 # Accounts to be used throughout charts.
@@ -49,6 +53,7 @@ mongodb:
       - name: ""
     debug: true
   architecture: replicaset
+  replicaCount: 1
   auth:
     rootPassword: esthesis-system #Update the password with your own.
     replicaSetKey: "ZXN0aGVzaXMtc3lzdGVt"
@@ -58,7 +63,7 @@ mongodb:
       - "esthesis-system" #Update the password with your own.
     databases:
       - "esthesiscore"
-  #Update the user esthesis-system with your own
+  #update the user esthesis-system with your own
   initdbScripts:
     init-db.js: |
       use esthesiscore
@@ -106,6 +111,8 @@ kafka:
         - "esthesis-system" #Update the username with your own.
       passwords:
         - "esthesis-system" #Update the password with your own.
+  controller:
+    replicaCount: 1
   extraConfig: |
     offsets.topic.replication.factor=3
     transaction.state.log.replication.factor=3
@@ -118,7 +125,7 @@ keycloak:
   proxyHeaders: xforwarded
   production: true
   auth:
-    adminUser: esthesis-system #Update the username with your own.
+    adminUser: esthesis-system  #Update the username with your own.
     adminPassword: esthesis-system #Update the password with your own.
   postgresql:
     fullnameOverride: "postgresql"
@@ -176,12 +183,15 @@ camunda-platform:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    clusterSize: 1
+    replicationFactor: 1
   zeebeGateway:
     enabled: true
     resources:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    replicas: 1
   elasticsearch:
     fullnameOverride: "elasticsearch"
     enabled: true
@@ -189,6 +199,8 @@ camunda-platform:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    replicas: 1
+    minimumMasterNodes: 1
 
 # InfluxDB configuration
 influxdb:

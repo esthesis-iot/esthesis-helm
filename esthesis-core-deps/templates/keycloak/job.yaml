@@ -11,7 +11,7 @@ spec:
   template:
     spec:
       imagePullSecrets:
-        - name: {{ .imagePullSecret }}
+        - name: {{ .Values.imagePullSecret }}
       containers:
         - name: create-realm
           image: bitnami/keycloak:24.0.5

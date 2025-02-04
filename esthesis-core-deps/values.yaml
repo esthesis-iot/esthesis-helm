@@ -39,7 +39,7 @@ redis:
     - name: ""
   architecture: standalone
   auth:
-    password: esthesis-system #Update the password with your own.
+    password: esthesis-system # Update the password with your own.
 
 # MongoDB configuration
 mongodb:
@@ -50,15 +50,15 @@ mongodb:
     debug: true
   architecture: replicaset
   auth:
-    rootPassword: esthesis-system #Update the password with your own.
-    replicaSetKey: "ZXN0aGVzaXMtc3lzdGVt"
+    rootPassword: esthesis-system # Update the password with your own.
+    replicaSetKey: "ZXN0aGVzaXMtc3lzdGVt" # Base64 encoded string "esthesis-system"
     usernames:
-      - "esthesis-system" #Update the username with your own.
+      - "esthesis-system" # Update the username with your own.
     passwords:
-      - "esthesis-system" #Update the password with your own.
+      - "esthesis-system" # Update the password with your own.
     databases:
       - "esthesiscore"
-  #Update the user esthesis-system with your own
+  # Update the user esthesis-system with your own
   initdbScripts:
     init-db.js: |
       use esthesiscore
@@ -98,14 +98,14 @@ kafka:
     clusterId: "M3Q1ZTNlMWFhMTgyNDhiZj"
   sasl:
     interbroker:
-      password: "esthesis-system" #Update the password with your own.
+      password: "esthesis-system" # Update the password with your own.
     controller:
-      password: "esthesis-system" #Update the password with your own.
+      password: "esthesis-system" # Update the password with your own.
     client:
       users:
-        - "esthesis-system" #Update the username with your own.
+        - "esthesis-system" # Update the username with your own.
       passwords:
-        - "esthesis-system" #Update the password with your own.
+        - "esthesis-system" # Update the password with your own.
   extraConfig: |
     offsets.topic.replication.factor=3
     transaction.state.log.replication.factor=3
@@ -118,13 +118,13 @@ keycloak:
   proxyHeaders: xforwarded
   production: true
   auth:
-    adminUser: esthesis-system #Update the username with your own.
-    adminPassword: esthesis-system #Update the password with your own.
+    adminUser: esthesis-system # Update the username with your own.
+    adminPassword: esthesis-system # Update the password with your own.
   postgresql:
     fullnameOverride: "postgresql"
     auth:
-      postgresPassword: "esthesis-system" #Update the password with your own.
-      password: "esthesis-system" #Update the password with your own.
+      postgresPassword: "esthesis-system" # Update the password with your own.
+      password: "esthesis-system" # Update the password with your own.
   readinessProbe:
     timeoutSeconds: 60
   ingress:
@@ -197,13 +197,13 @@ influxdb:
     imagePullSecrets: []
   auth:
     admin:
-      username: esthesis-system #Update the username with your own.
-      password: esthesis-system #Update the password with your own.
+      username: esthesis-system # Update the username with your own.
+      password: esthesis-system # Update the password with your own.
     user:
       org: esthesis
       bucket: esthesis
-      username: esthesis-system #Update the username with your own.
-      password: esthesis-system #Update the password with your own.
+      username: esthesis-system # Update the username with your own.
+      password: esthesis-system # Update the password with your own.
   persistence:
     size: "32Gi"
 
@@ -213,8 +213,8 @@ grafana:
   global:
     imagePullSecrets: []
   admin:
-    user: esthesis-system #Update the username with your own.
-    password: esthesis-system #Update the password with your own.
+    user: esthesis-system # Update the username with your own.
+    password: esthesis-system # Update the password with your own.
 
 # Kafka UI configuration
 kafka-ui:

@@ -20,7 +20,7 @@ values:
   ##################################################################################################
   # Chart-specific values.
   ##################################################################################################
-  - esthesisVersion: "3.1.3"
+  - esthesisVersion: "3.1.4-SNAPSHOT"
   - mongodbname: {{ env "ESTHESIS_BACKUP_MONGODB_CRONJOB_NAME" | default "esthesis-mongodb-backup-cronjob" }}
   - mongodbuser: {{ env "ESTHESIS_BACKUP_MONGODB_USER" | default "root" }}
   - mongodbsecretName: {{ env "ESTHESIS_BACKUP_MONGODB_SECRET | default "my-mongodb" }}

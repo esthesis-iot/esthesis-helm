@@ -11,10 +11,9 @@ esthesisLocalCharts: true
 esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
-imagePullSecret: 
+imagePullSecret:
 registryNodePort: 8080
-ingressClassName: 
-mosquittoServiceType: LoadBalancer
+ingressClassName:
 
 # Enable/disable charts
 charts_enabled:
@@ -35,12 +34,24 @@ esthesisAdminPassword: esthesis-admin
 esthesisSystemUsername: esthesis-system
 esthesisSystemPassword: esthesis-system
 
+##################################################################################################
+# Mosquitto Values
+##################################################################################################
+
+mosquittoEnabled: false
+mosquittoServiceType: LoadBalancer
+mosquittoMutualTls: false
+mosquittoSuperuser: esthesis
+mosquittoCaCert: ""
+mosquittoServerCert: ""
+mosquittoServerKey: ""
+
 # Redis configuration
 redis:
   fullnameOverride: "redis"
   image:
     pullSecrets:
-    - name: ""
+      - name: ""
   architecture: standalone
   auth:
     password: esthesis-system # Update the password with your own.
@@ -74,7 +85,7 @@ kafka:
   fullnameOverride: "kafka"
   image:
     pullSecrets:
-    - name: ""
+      - name: ""
   provisioning:
     enabled: true
     topics:
@@ -125,7 +136,7 @@ keycloak:
   proxyHeaders: xforwarded
   production: true
   auth:
-    adminUser: esthesis-system  # Update the username with your own.
+    adminUser: esthesis-system # Update the username with your own.
     adminPassword: esthesis-system # Update the password with your own.
   postgresql:
     fullnameOverride: "postgresql"
@@ -247,12 +258,12 @@ ingress-nginx:
       namespace: default
     service:
       externalIPs:
-        - "192.168.1.1"  # Replace with actual LoadBalancer IP if needed
+        - "192.168.1.1" # Replace with actual LoadBalancer IP if needed
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "*.esthesis"
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
     ingressClassResource:
       name: "nginx-default"
 
@@ -270,7 +281,7 @@ docker-registry-ui:
     service:
       type: NodePort
       nodePort: ""
-      
+
 # Grafana Tempo configuration
 grafana-tempo:
   fullnameOverride: "grafana-tempo"
@@ -282,4 +293,4 @@ grafana-tempo:
         grpc: false
         thriftHttp: false
       otlp:
-        grpc: true  # Needed by Quarkus (port 4317)  
+        grpc: true # Needed by Quarkus (port 4317)

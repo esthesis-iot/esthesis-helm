@@ -32,33 +32,33 @@ quarkus:
 
 # MongoDB configuration
 mongoDbEnabled: true
-mongoDbUrlCluster: "mongodb://mongodb-headless.esthesis:27017"
+mongoDbUrlCluster: "mongodb://mongodb-headless:27017"
 mongoDbDatabase: "esthesiscore"
 mongoDbUsername: "esthesis-system"
 mongoDbPassword: "esthesis-system"
 
 # OIDC configuration
-oidcAuthServerUrl: "http://keycloak.default/realms/esthesis"
-oidcClientAuthServerUrl: "http://keycloak.default/realms/esthesis"
+oidcAuthServerUrl: "http://keycloak/realms/esthesis"
+oidcClientAuthServerUrl: "http://keycloak/realms/esthesis"
 oidcClientGrantOptionsPasswordUsername: "esthesis-system"
 oidcClientGrantOptionsPasswordPassword: "esthesis-system"
-esthesisReportedOidcAuthority: "http://keycloak.default/realms/esthesis"
+esthesisReportedOidcAuthority: "http://keycloak/realms/esthesis"
 esthesisReportedOidcPostLogoutUrl: "http://localhost:4200/logged-out"
 oidcTlsVerification: false
 oidcClientId: "esthesis"
 
 # REDIS configuration
-redisHosts: "redis://redis-headless.default:6379"
+redisHosts: "redis://redis-headless:6379"
 
 # RabbitMQ configuration
 rabbitmqErlangCookie: "esthesis-system"
 
 # Camunda configuration
-camundaGatewayUrlCluster: "camunda-zeebe-gateway.default:26500"
+camundaGatewayUrlCluster: "camunda-zeebe-gateway:26500"
 
 # Kafka configuration
 kafkaEnabled: true
-kafkaBootstrapServers: "kafka.default:9092"
+kafkaBootstrapServers: "kafka:9092"
 
 # Cert Manager configuration
 esthesisUiCertManagerClusterIssuer: ""

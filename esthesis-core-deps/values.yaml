@@ -11,7 +11,6 @@ esthesisLocalCharts: true
 esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
-imagePullSecret:
 registryNodePort: 8080
 ingressClassName:
 
@@ -49,8 +48,7 @@ mosquittoServerKey: ""
 redis:
   fullnameOverride: "redis"
   image:
-    pullSecrets:
-      - name: ""
+    pullSecrets: []
   architecture: standalone
   auth:
     password: esthesis-system
@@ -59,8 +57,7 @@ redis:
 mongodb:
   fullnameOverride: "mongodb"
   image:
-    pullSecrets:
-      - name: ""
+    pullSecrets: []
     debug: true
   architecture: replicaset
   replicaCount: 1
@@ -82,8 +79,7 @@ mongodb:
 kafka:
   fullnameOverride: "kafka"
   image:
-    pullSecrets:
-      - name: ""
+    pullSecrets: []
   provisioning:
     enabled: true
     topics:
@@ -149,8 +145,7 @@ camunda-platform:
   global:
     zeebeClusterName: "zeebe"
     image:
-      pullSecrets:
-        - name: "regcred"
+      pullSecrets: []
     identity:
       keycloak:
         url:

@@ -13,6 +13,7 @@ oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
 registryNodePort: 8080
 ingressClassName:
+imagePullSecret: ""
 
 # Enable/disable charts
 charts_enabled:

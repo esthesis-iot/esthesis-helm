@@ -3,6 +3,7 @@ devMode: false
 timezone: "Europe/Athens"
 imagePullSecret: ""
 ingressClassName: ""
+ingressTlsSecret: ""
 
 esthesisRegistry: ""
 esthesisLogLevel: "WARN"

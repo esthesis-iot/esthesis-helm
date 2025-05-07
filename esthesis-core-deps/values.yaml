@@ -185,7 +185,6 @@ camunda-platform:
         memory: "256Mi"
     replicas: 1
   elasticsearch:
-    fullnameOverride: "elasticsearch"
     enabled: true
     resources:
       requests:

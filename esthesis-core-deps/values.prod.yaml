@@ -195,7 +195,6 @@ camunda-platform:
         cpu: "100m"
         memory: "256Mi"
   elasticsearch:
-    fullnameOverride: "elasticsearch"
     enabled: true
     resources:
       requests:

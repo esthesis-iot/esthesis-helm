@@ -203,6 +203,7 @@ influxdb:
     admin:
       username: esthesis-system
       password: esthesis-system
+      token: "918UdZNzKNEf7YeL7efV"
     user:
       org: esthesis
       bucket: esthesis

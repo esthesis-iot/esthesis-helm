@@ -149,12 +149,7 @@ spec:
                 name: esthesis-core-srv-tag-service
                 port:
                   number: 8080
-  {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer }}
-  tls:
-    - hosts:
-        - {{ .Values.esthesisHostname }}
-      secretName: esthesis-ui-ingress-tls
-  {{- else if .Values.ingressTlsSecret }}
+  {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer .Values.ingressTlsSecret }}
   tls:
     - hosts:
         - {{ .Values.esthesisHostname }}

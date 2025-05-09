@@ -29,12 +29,7 @@ spec:
                 name: esthesis-core-ui-service
                 port:
                   number: 80
-  {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer }}
-  tls:
-    - hosts:
-        - {{ .Values.esthesisHostname }}
-      secretName: esthesis-ui-ingress-tls
-  {{- else if .Values.ingressTlsSecret }}
+  {{- if or .Values.esthesisUiCertManagerClusterIssuer .Values.esthesisUiCertManagerIssuer .Values.ingressTlsSecret }}
   tls:
     - hosts:
         - {{ .Values.esthesisHostname }}

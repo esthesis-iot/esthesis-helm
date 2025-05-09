@@ -4,14 +4,11 @@
 devMode: true
 
 domain: esthesis
-keycloakHostname: "keycloak.esthesis"
-kafkaTopicReplicas: 1
 esthesisVersion: "3.0.59-SNAPSHOT"
 esthesisLocalCharts: true
 esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
-registryNodePort: 8080
 ingressClassName:
 imagePullSecret: ""
 

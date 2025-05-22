@@ -58,3 +58,7 @@ dependencies:
     version: "2.5.7"
     repository: https://charts.bitnami.com/bitnami
     condition: charts_enabled.grafana-tempo
+  - name: ollama
+    version: "1.16.0"
+    repository: https://otwld.github.io/ollama-helm
+    condition: charts_enabled.ollama

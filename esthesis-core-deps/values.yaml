@@ -21,6 +21,7 @@ charts_enabled:
   grafana-loki: false
   grafana: false
   ingress-nginx: false
+  ollama: false
 
 ##################################################################################################
 # Accounts to be used throughout charts.
@@ -284,3 +285,14 @@ grafana-tempo:
         thriftHttp: false
       otlp:
         grpc: true # Needed by Quarkus (port 4317)
+
+# Ollama
+ollama:
+  fullnameOverride: "ollama"
+  ollama:
+    models:
+      pull:
+        - "qwen3:0.6b"
+        - "nomic-embed-text"
+      run:
+        - "qwen3:0.6b"

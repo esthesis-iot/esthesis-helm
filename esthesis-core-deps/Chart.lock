@@ -38,5 +38,8 @@ dependencies:
 - name: grafana-tempo
   repository: https://charts.bitnami.com/bitnami
   version: 2.5.7
-digest: sha256:009ab1f9a1c6476cee211cebee687e178c4353b5ee74f1d4887b9e7cee5a4d0a
-generated: "2025-03-13T14:59:09.7011734+02:00"
+- name: ollama
+  repository: https://otwld.github.io/ollama-helm
+  version: 1.16.0
+digest: sha256:f9bec2759ad798d3abc9aa4f616fe4d088c4ea12e8afb0054005eef05dc5972a
+generated: "2025-05-22T09:47:29.826943+03:00"

@@ -1,0 +1,5 @@
+{{ if not .Values.devMode && .Values.chatbotEnabled }}
+{{ template "service.api.template" (merge (dict
+  "serviceName" "esthesis-core-srv-chatbot"
+) .) }}
+{{ end }}

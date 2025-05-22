@@ -15,6 +15,7 @@ esthesisSystemPassword: "esthesis-system"
 esthesisHostname: ""
 esthesisLocalCharts: false
 esthesisKubernetesServiceCreateRBAC: true
+chatbotEnabled: false
 
 quarkus:
   log:

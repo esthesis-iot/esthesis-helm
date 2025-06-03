@@ -10,7 +10,7 @@ dependencies:
   version: 26.6.2
 - name: kafka-ui
   repository: https://provectus.github.io/kafka-ui-charts
-  version: 0.7.5
+  version: 0.7.6
 - name: keycloak
   repository: https://charts.bitnami.com/bitnami
   version: 22.0.0
@@ -41,5 +41,5 @@ dependencies:
 - name: ollama
   repository: https://otwld.github.io/ollama-helm
   version: 1.16.0
-digest: sha256:f9bec2759ad798d3abc9aa4f616fe4d088c4ea12e8afb0054005eef05dc5972a
-generated: "2025-05-22T09:47:29.826943+03:00"
+digest: sha256:4ce1a42f0ca0ec430c9962b891ae16a925df772a63c88eff0e6e0c66fbe1ee61
+generated: "2025-06-03T10:15:47.544288+03:00"

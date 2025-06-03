@@ -1,4 +1,4 @@
-{{ if not .Values.devMode && .Values.chatbotEnabled }}
+{{ if and (not .Values.devMode) .Values.chatbot.service.enabled }}
 {{ template "service.api.template" (merge (dict
   "serviceName" "esthesis-core-srv-chatbot"
 ) .) }}

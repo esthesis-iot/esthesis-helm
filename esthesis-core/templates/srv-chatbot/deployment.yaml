@@ -1,4 +1,4 @@
-{{ if not .Values.devMode && .Values.chatbotEnabled }}
+{{ if and (not .Values.devMode) .Values.chatbot.service.enabled }}
 {{ template "deployment.api.template" (merge (dict
   "podOidc" true
   "podOidcClient" true
@@ -7,6 +7,7 @@
   "podMaxMemory" "1G"
   "podName" "esthesis-core-srv-chatbot"
   "podProbes" true
+  "podChatbot" true
   "registry" .Values.esthesisRegistry
   "timezone" .Values.timezone
   "imagePullSecret" .Values.imagePullSecret

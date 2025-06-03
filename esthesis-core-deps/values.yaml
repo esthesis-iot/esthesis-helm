@@ -5,7 +5,7 @@ devMode: true
 
 domain: esthesis
 esthesisVersion: "3.0.59-SNAPSHOT"
-esthesisLocalCharts: true
+#esthesisLocalCharts: true
 esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
@@ -34,9 +34,8 @@ esthesisSystemPassword: esthesis-system
 ##################################################################################################
 # Mosquitto Values
 ##################################################################################################
-
-mosquittoEnabled: false
-mosquittoServiceType: LoadBalancer
+mosquittoEnabled: true
+mosquittoServiceType: ClusterIP
 mosquittoMutualTls: false
 mosquittoSuperuser: esthesis
 mosquittoCaCert: ""
@@ -118,8 +117,8 @@ kafka:
   controller:
     replicaCount: 1
   extraConfig: |
-    offsets.topic.replication.factor=3
-    transaction.state.log.replication.factor=3
+    offsets.topic.replication.factor=1
+    transaction.state.log.replication.factor=1
 
 # Keycloak configuration
 keycloak:

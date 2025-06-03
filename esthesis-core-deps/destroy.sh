@@ -29,6 +29,8 @@ pvcs=(
   data-esthesis-core-deps-zeebe-2
   redis-data-esthesis-core-deps-redis-replicas-0
   redis-data-esthesis-core-deps-redis-replicas-1
+  data-esthesis-core-deps-elasticsearch-master-0
+  data-esthesis-core-deps-elasticsearch-master-1
 )
 for pvc in "${pvcs[@]}"; do
   kubectl -n "$1" delete pvc "$pvc" --ignore-not-found
@@ -37,7 +39,13 @@ done
 # Delete secrets.
 secrets=(
   esthesis-core-deps-ingress-nginx-admission
+  mosquitto-acl
 )
 for secret in "${secrets[@]}"; do
   kubectl -n "$1" delete secret "$secret" --ignore-not-found
 done
+
+keycloak_secret=$(kubectl get secrets --no-headers -o custom-columns=":metadata.name" | grep '^keycloak')
+if [ -n "$keycloak_secret" ]; then
+  kubectl -n "$1" delete secret "$keycloak_secret" --ignore-not-found
+fi

@@ -5,8 +5,7 @@ devMode: false
 
 domain: ""
 esthesisVersion: "3.0.59-SNAPSHOT"
-esthesisLocalCharts: false
-# oidcRedirectUri: https://<enter_esthesis_domain_here>/callback
+#esthesisLocalCharts: false
 oidcRedirectUri: ""
 timezone: "Europe/Athens"
 imagePullSecret: ""
@@ -38,7 +37,7 @@ esthesisSystemPassword: esthesis-system
 
 mosquittoEnabled: true
 mosquittoServiceType: LoadBalancer
-mosquittoMutualTls: true
+mosquittoMutualTls: false
 mosquittoSuperuser: esthesis
 mosquittoCaCert: ""
 mosquittoServerCert: ""
@@ -52,7 +51,7 @@ redis:
       - name: ""
   architecture: standalone
   auth:
-    password: esthesis-system # Update the password with your own.
+    password: esthesis-system
 
 # MongoDB configuration
 mongodb:
@@ -63,15 +62,14 @@ mongodb:
     debug: true
   architecture: replicaset
   auth:
-    rootPassword: esthesis-system # Update the password with your own.
+    rootPassword: esthesis-system
     replicaSetKey: "ZXN0aGVzaXMtc3lzdGVt" # Base64 encoded string "esthesis-system"
     usernames:
-      - "esthesis-system" # Update the username with your own.
+      - "esthesis-system"
     passwords:
-      - "esthesis-system" # Update the password with your own.
+      - "esthesis-system"
     databases:
       - "esthesiscore"
-  # Update the user esthesis-system with your own
   initdbScripts:
     init-db.js: |
       use esthesiscore
@@ -111,14 +109,14 @@ kafka:
     clusterId: "M3Q1ZTNlMWFhMTgyNDhiZj"
   sasl:
     interbroker:
-      password: "esthesis-system" # Update the password with your own.
+      password: "esthesis-system"
     controller:
-      password: "esthesis-system" # Update the password with your own.
+      password: "esthesis-system"
     client:
       users:
-        - "esthesis-system" # Update the username with your own.
+        - "esthesis-system"
       passwords:
-        - "esthesis-system" # Update the password with your own.
+        - "esthesis-system"
   extraConfig: |
     offsets.topic.replication.factor=3
     transaction.state.log.replication.factor=3
@@ -131,13 +129,13 @@ keycloak:
   proxyHeaders: xforwarded
   production: true
   auth:
-    adminUser: esthesis-system # Update the username with your own.
-    adminPassword: esthesis-system # Update the password with your own.
+    adminUser: esthesis-system
+    adminPassword: esthesis-system
   postgresql:
     fullnameOverride: "postgresql"
     auth:
-      postgresPassword: "esthesis-system" # Update the password with your own.
-      password: "esthesis-system" # Update the password with your own.
+      postgresPassword: "esthesis-system"
+      password: "esthesis-system"
   readinessProbe:
     timeoutSeconds: 60
   ingress:
@@ -165,7 +163,7 @@ camunda-platform:
       keycloak:
         url:
           protocol: "http"
-          host: "keycloak-headless.<enter_your_namespace_here>.svc.cluster.local"
+          host: "keycloak-headless"
           port: "8080"
       auth:
         enabled: false
@@ -209,13 +207,13 @@ influxdb:
     imagePullSecrets: []
   auth:
     admin:
-      username: esthesis-system # Update the username with your own.
-      password: esthesis-system # Update the password with your own.
+      username: esthesis-system
+      password: esthesis-system
     user:
       org: esthesis
       bucket: esthesis
-      username: esthesis-system # Update the username with your own.
-      password: esthesis-system # Update the password with your own.
+      username: esthesis-system
+      password: esthesis-system
   persistence:
     size: "32Gi"
 
@@ -225,8 +223,8 @@ grafana:
   global:
     imagePullSecrets: []
   admin:
-    user: esthesis-system # Update the username with your own.
-    password: esthesis-system # Update the password with your own.
+    user: esthesis-system
+    password: esthesis-system
 
 # Kafka UI configuration
 kafka-ui:
@@ -236,11 +234,10 @@ kafka-ui:
     kafka:
       clusters:
         - name: kafka
-          bootstrapServers: "kafka.default.svc.cluster.local:9092"
+          bootstrapServers: "kafka:9092"
           properties:
             security.protocol: SASL_PLAINTEXT
             sasl.mechanism: PLAIN
-            # Update the esthesis-system username and password with your own.
             sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username=esthesis-system password=esthesis-system;"
 
 # Grafana Loki configuration

@@ -13,7 +13,7 @@ esthesisAdminPassword: "esthesis-admin"
 esthesisSystemUsername: "esthesis-system"
 esthesisSystemPassword: "esthesis-system"
 esthesisHostname: ""
-esthesisLocalCharts: false
+#esthesisLocalCharts: false
 esthesisKubernetesServiceCreateRBAC: true
 chatbotEnabled: false
 
@@ -65,3 +65,26 @@ kafkaBootstrapServers: "kafka.<enter_your_namespace_here>.svc.cluster.local:9092
 # Cert Manager configuration
 esthesisUiCertManagerClusterIssuer: ""
 esthesisUiCertManagerIssuer: ""
+
+# Chatbot configuration
+chatbot:
+  service:
+    enabled: false
+  chatModel:
+    provider: "ollama"
+  embeddingModel:
+    provider: "ollama"
+  openai:
+    apiKey: ""
+    chatModel:
+      modelName: "gpt-3.5-turbo"
+      temperature: 0.1
+  ollama:
+    baseUrl: "http://ollama:11434"
+    timeout: "60s"
+    chatModel:
+      modelId: "qwen3:0.6b"
+      temperature: 0.1
+    embeddingModel:
+      modelId: "nomic-embed-text"
+      temperature: 0.1

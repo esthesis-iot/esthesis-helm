@@ -173,4 +173,26 @@ spec:
             - name: QUARKUS_LOG_CATEGORY_IO_QUARKUS_OIDC_TOKEN_PROPAGATION_REACTIVE
               value: {{ .Values.quarkus.log.category.esthesis.level | quote}}
             {{- end }}
+            {{- if .podChatbot }}
+            - name: QUARKUS_LANGCHAIN4J_CHAT_MODEL_PROVIDER
+              value: {{ .Values.chatbot.chatModel.provider | quote }}
+            - name: QUARKUS_LANGCHAIN4J_EMBEDDING_MODEL_PROVIDER
+              value: {{ .Values.chatbot.embeddingModel.provider | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OPENAI_API_KEY
+              value: {{ .Values.chatbot.openai.apiKey | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_MODEL_NAME
+              value: {{ .Values.chatbot.openai.chatModel.modelName | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_TEMPERATURE
+              value: {{ .Values.chatbot.openai.chatModel.temperature }}
+            - name: QUARKUS_LANGCHAIN4J_OLLAMA_BASE_URL
+              value: {{ .Values.chatbot.ollama.baseUrl | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OLLAMA_CHAT_MODEL_MODEL_ID
+              value: {{ .Values.chatbot.ollama.chatModel.modelId | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OLLAMA_CHAT_MODEL_TEMPERATURE
+              value: {{ .Values.chatbot.ollama.chatModel.temperature }}
+            - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_MODEL_ID
+              value: {{ .Values.chatbot.ollama.embeddingModel.modelId | quote }}
+            - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_TEMPERATURE
+              value: {{ .Values.chatbot.ollama.embeddingModel.temperature }}
+            {{- end }}
 {{- end }}

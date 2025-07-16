@@ -183,16 +183,16 @@ spec:
             - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_MODEL_NAME
               value: {{ .Values.chatbot.openai.chatModel.modelName | quote }}
             - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_TEMPERATURE
-              value: {{ .Values.chatbot.openai.chatModel.temperature }}
+              value: "{{ .Values.chatbot.openai.chatModel.temperature }}"
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_BASE_URL
               value: {{ .Values.chatbot.ollama.baseUrl | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_CHAT_MODEL_MODEL_ID
               value: {{ .Values.chatbot.ollama.chatModel.modelId | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_CHAT_MODEL_TEMPERATURE
-              value: {{ .Values.chatbot.ollama.chatModel.temperature }}
+              value: "{{ .Values.chatbot.ollama.chatModel.temperature }}"
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_MODEL_ID
               value: {{ .Values.chatbot.ollama.embeddingModel.modelId | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_TEMPERATURE
-              value: {{ .Values.chatbot.ollama.embeddingModel.temperature }}
+              value: "{{ .Values.chatbot.ollama.embeddingModel.temperature }}"
             {{- end }}
 {{- end }}

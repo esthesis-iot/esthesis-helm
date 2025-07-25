@@ -64,3 +64,30 @@ kafkaBootstrapServers: "kafka:9092"
 # Cert Manager configuration
 esthesisUiCertManagerClusterIssuer: ""
 esthesisUiCertManagerIssuer: ""
+
+
+# Chatbot configuration
+chatbot:
+  service:
+    enabled: false
+  chatModel:
+    provider: "ollama"
+  embeddingModel:
+    provider: "ollama"
+  easyRag:
+    path: "rag"
+    pathType: "classpath"
+  openai:
+    apiKey: "change-me"
+    chatModel:
+      modelName: "gpt-3.5-turbo"
+      temperature: 0.1
+  ollama:
+    baseUrl: "http://ollama:11434"
+    timeout: "60s"
+    chatModel:
+      modelId: "qwen3:0.6b"
+      temperature: 0.1
+    embeddingModel:
+      modelId: "nomic-embed-text"
+      temperature: 0.1

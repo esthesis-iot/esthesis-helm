@@ -194,5 +194,9 @@ spec:
               value: {{ .Values.chatbot.ollama.embeddingModel.modelId | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_TEMPERATURE
               value: "{{ .Values.chatbot.ollama.embeddingModel.temperature }}"
+            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH
+              value: {{ .Values.chatbot.easyRag.path | quote }}
+            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH_TYPE
+              value: {{ .Values.chatbot.easyRag.pathType | quote }}
             {{- end }}
 {{- end }}

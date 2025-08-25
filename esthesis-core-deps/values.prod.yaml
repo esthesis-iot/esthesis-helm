@@ -46,9 +46,8 @@ mosquittoServerKey: ""
 # Redis configuration
 redis:
   fullnameOverride: "redis"
-  image:
-    pullSecrets: []
-  architecture: standalone
+  global:
+    imagePullSecrets: []
   auth:
     password: esthesis-system
 

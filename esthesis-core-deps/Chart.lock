@@ -1,45 +1,48 @@
 dependencies:
 - name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 17.3.7
-- name: mongodb
-  repository: https://charts.bitnami.com/bitnami
-  version: 14.5.1
-- name: kafka
-  repository: https://charts.bitnami.com/bitnami
-  version: 26.6.2
+  repository: oci://registry-1.docker.io/cloudpirates
+  version: 0.1.5
+- name: psmdb-db
+  repository: https://percona.github.io/percona-helm-charts
+  version: 1.20.1
+- name: psmdb-operator
+  repository: https://percona.github.io/percona-helm-charts
+  version: 1.20.1
+- name: strimzi-kafka-operator
+  repository: https://strimzi.io/charts/
+  version: 0.47.0
 - name: kafka-ui
   repository: https://provectus.github.io/kafka-ui-charts
   version: 0.7.6
-- name: keycloak
-  repository: https://charts.bitnami.com/bitnami
-  version: 22.0.0
+- name: keycloakx
+  repository: https://codecentric.github.io/helm-charts
+  version: 7.1.2
 - name: grafana
-  repository: https://charts.bitnami.com/bitnami
-  version: 9.6.3
-- name: grafana-loki
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.11.16
+  repository: https://grafana.github.io/helm-charts
+  version: 9.3.4
+- name: loki
+  repository: https://grafana.github.io/helm-charts
+  version: 6.37.0
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 4.9.1
 - name: camunda-platform
   repository: https://helm.camunda.io
   version: 10.0.2
-- name: influxdb
-  repository: https://charts.bitnami.com/bitnami
-  version: 5.6.1
+- name: influxdb2
+  repository: https://helm.influxdata.com
+  version: 2.1.2
 - name: orion
   repository: https://fiware.github.io/helm-charts/
   version: 1.3.0
 - name: docker-registry-ui
   repository: https://helm.joxit.dev
   version: 1.1.3
-- name: grafana-tempo
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.5.7
+- name: tempo
+  repository: https://grafana.github.io/helm-charts
+  version: 1.23.3
 - name: ollama
   repository: https://otwld.github.io/ollama-helm
   version: 1.16.0
-digest: sha256:4ce1a42f0ca0ec430c9962b891ae16a925df772a63c88eff0e6e0c66fbe1ee61
-generated: "2025-06-03T10:15:47.544288+03:00"
+digest: sha256:31a84c75b8d3f346bb2fa49805092d4461889046e9bd3a8a404a42d7fb3d99b9
+generated: "2025-08-27T13:05:37.424192279+03:00"

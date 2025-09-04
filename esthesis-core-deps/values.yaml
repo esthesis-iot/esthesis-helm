@@ -261,8 +261,8 @@ camunda-platform:
     replicas: 1
     minimumMasterNodes: 1
   identityPostgresql:
-  image:
-    repository: bitnamilegacy/postgresql
+    image:
+      repository: bitnamilegacy/postgresql
   volumePermissions:
     image:
       repository: bitnamilegacy/os-shell

@@ -28,6 +28,12 @@ dependencies:
     version: "0.7.6"
     repository: https://provectus.github.io/kafka-ui-charts
     condition: charts_enabled.kafka-ui
+  - name: pg-operator
+    version: "2.7.0"
+    repository: https://percona.github.io/percona-helm-charts/
+  - name: pg-db
+    version: "2.7.0"
+    repository: https://percona.github.io/percona-helm-charts/
   - name: keycloakx
     version: "7.1.2"
     repository: https://codecentric.github.io/helm-charts

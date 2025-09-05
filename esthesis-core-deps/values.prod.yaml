@@ -6,7 +6,7 @@ domain: ""
 esthesisVersion: "3.0.59-SNAPSHOT"
 oidcRedirectUri: ""
 timezone: "Europe/Athens"
-imagePullSecret: ""
+imagePullSecret: "regcred"
 ingressClassName: ""
 
 # Enable/disable charts
@@ -45,17 +45,22 @@ mosquittoServerKey: ""
 redis:
   fullnameOverride: "redis"
   global:
-    imagePullSecrets: []
+    imagePullSecrets:
+        - name: "regcred"
   auth:
     password: esthesis-system
 
 ##################################################################################################
 # MongoDB (Percona Operator + DB)
 ##################################################################################################
-psmdb-operator: {}
+psmdb-operator:
+  imagePullSecrets:
+    - name: "regcred"
 
 psmdb-db:
   name: "mongodb"
+  imagePullSecrets:
+    - name: "regcred"
   clusterServiceDNSSuffix: cluster.local
   replsets:
     rs0:
@@ -69,6 +74,38 @@ psmdb-db:
       roles:
         - name: dbAdmin
           db: esthesiscore
+
+pg-operator:
+  imagePullSecrets:
+    - name: "regcred"
+
+pg-db:
+  databaseInitSQL:
+    key: init.sql
+    name: postgres-dt-init
+  imagePullSecrets:
+    - name: "regcred"
+  instances:
+    - name: instance1
+      replicas: 1
+      resources:
+        requests:
+          cpu: 500m
+          memory: 256Mi
+        limits:
+          cpu: 1.0
+          memory: 1Gi
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+  proxy:
+    pgBouncer:
+      replicas: 1
+  backups:
+    enabled: false
 
 ##################################################################################################
 # Kafka (Strimzi)
@@ -85,13 +122,11 @@ kafka:
     type: persistent-claim
     size: 20Gi
     class: ""          # set StorageClass if needed
-
   auth:
     type: scram-sha-512
     users:
       - name: esthesis-system
         password: esthesis-system
-
   topics:
     - name: esthesis-command-reply
       partitions: 3
@@ -145,26 +180,43 @@ keycloakx:
   image:
     pullSecrets: []
   replicas: 1
-  env:
+  service:
+    httpPort: 8080
+  args:
+    - start
+  extraEnv: |
+    - name: KC_HOSTNAME
+      value: https://keycloak.esthesis-dev.eurodyn.com/auth
+    - name: KC_HOSTNAME_ADMIN
+      value: https://keycloak.esthesis-dev.eurodyn.com/auth
     - name: KEYCLOAK_ADMIN
       value: esthesis-system
     - name: KEYCLOAK_ADMIN_PASSWORD
       value: esthesis-system
-    - name: KC_PROXY_HEADERS
-      value: xforwarded
-    - name: KC_HTTP_ENABLED
-      value: "true"
-  postgresql:
-    enabled: true
-    auth:
-      postgresPassword: "esthesis-system"
-      password: "esthesis-system"
+    - name: KC_PROXY
+      value: "passthrough"
+  database:
+    vendor: postgres
+    hostname: esthesis-deps-pg-db-pgbouncer
+    port: 5432
+    database: keycloak
+    username: postgres
+    password: esthesis-system
   ingress:
     enabled: true
-    hostname: keycloak.esthesis
+    ingressClassName: "nginx"
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
-    tls: true
+    servicePort: "http"
+    rules:
+      - host: 'keycloak.esthesis-dev.eurodyn.com'
+        paths:
+          - path: '/auth/'
+            pathType: Prefix
+    tls:
+      - hosts:
+        - keycloak.esthesis-dev.eurodyn.com
+
 
 ##################################################################################################
 # Camunda
@@ -173,7 +225,8 @@ camunda-platform:
   global:
     zeebeClusterName: "zeebe"
     image:
-      pullSecrets: []
+      pullSecrets:
+        - name: "regcred"
     identity:
       keycloak:
         url:
@@ -221,7 +274,8 @@ camunda-platform:
 influxdb2:
   fullnameOverride: "influxdb"
   image:
-    pullSecrets: []
+    pullSecrets:
+      - regcred
   adminUser:
     organization: esthesis
     bucket: esthesis

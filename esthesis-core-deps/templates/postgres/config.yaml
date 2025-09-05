@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-dt-init
+data:
+  init.sql: |
+    CREATE DATABASE keycloak OWNER postgres;
+    GRANT ALL PRIVILEGES ON DATABASE keycloak TO postgres;
+    ALTER USER postgres WITH PASSWORD '{{ .Values.esthesisSystemPassword }}';

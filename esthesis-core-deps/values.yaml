@@ -423,6 +423,9 @@ grafana-tempo:
   volumePermissions:
     image:
       repository: bitnamilegacy/os-shell
+  memcached:
+    image:
+      repository: bitnamilegacy/memcached
 
 # Ollama
 ollama:

@@ -16,7 +16,7 @@ spec:
       {{- end }}
       containers:
         - name: create-realm
-          image: bitnami/keycloak:24.0.5
+          image: bitnamilegacy/keycloak:24.0.5
           command:
             - /bin/sh
             - -c

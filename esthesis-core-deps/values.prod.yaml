@@ -82,7 +82,7 @@ pg-operator:
 pg-db:
   databaseInitSQL:
     key: init.sql
-    name: postgres-dt-init
+    name: postgres-init
   imagePullSecrets:
     - name: "regcred"
   instances:

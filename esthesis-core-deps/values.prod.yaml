@@ -114,52 +114,42 @@ strimzi-kafka-operator: {}
 
 kafka:
   name: kafka
-  namespace: default
-  kraft:
-    enabled: true
-  replicas: 3
+  replicas: 1
+  version: "3.9.0"
+  metadataVersion: "3.9-IV0"
   storage:
     type: persistent-claim
     size: 20Gi
-    class: ""          # set StorageClass if needed
+    class: ""             # use your StorageClass name or leave empty
   auth:
     type: scram-sha-512
-    users:
-      - name: esthesis-system
-        password: esthesis-system
+  config:
+    offsets.topic.replication.factor: 1
+    transaction.state.log.replication.factor: 1
+    default.replication.factor: 1
+    min.insync.replicas: 1
+    auto.create.topics.enable: "false"
   topics:
-    - name: esthesis-command-reply
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-telemetry
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-metadata
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-app-unicast
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-app-broadcast
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-ping
-      partitions: 3
-      replicationFactor: 3
-    - name: esthesis-command-request
-      partitions: 3
-      replicationFactor: 3
-
-  brokerConfig:
-    "offsets.topic.replication.factor": "3"
-    "transaction.state.log.replication.factor": "3"
+    - { name: esthesis-command-reply, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-telemetry,     partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-metadata,      partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-app-unicast,   partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-app-broadcast, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-ping,          partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-command-request, partitions: 1, replicationFactor: 1 }
+  users:
+    - name: esthesis-system
+      auth: scram-sha-512
+      # authorization:
+      #   acls:
+      #     - operation: All
+      #       resource:
+      #         type: cluster
 
 ##################################################################################################
 # Kafka UI (Provectus)
 ##################################################################################################
 kafka-ui:
-  fullnameOverride: "kafka-ui"
-  imagePullSecrets: []
   yamlApplicationConfig:
     kafka:
       clusters:

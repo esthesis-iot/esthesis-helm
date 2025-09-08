@@ -1,0 +1,20 @@
+{{- if and .Values.kafka .Values.kafka.users }}
+{{- range .Values.kafka.users }}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: {{ .name }}
+  labels:
+    strimzi.io/cluster: {{ $.Values.kafka.name | default "kafka" }}
+spec:
+  authentication:
+    type: {{ .auth | default "scram-sha-512" }}
+  {{- with .authorization }}
+  authorization:
+    type: simple
+    acls:
+      {{- toYaml .acls | nindent 6 }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

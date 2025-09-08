@@ -1,0 +1,25 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: controllers
+  labels:
+    strimzi.io/cluster: {{ .Values.kafka.name | default "kafka" }}
+spec:
+  replicas: 3
+  roles: ["controller"]
+  storage:
+    type: persistent-claim
+    size: 20Gi
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: brokers
+  labels:
+    strimzi.io/cluster: {{ .Values.kafka.name | default "kafka" }}
+spec:
+  replicas: 3
+  roles: ["broker"]
+  storage:
+    type: persistent-claim
+    size: 20Gi

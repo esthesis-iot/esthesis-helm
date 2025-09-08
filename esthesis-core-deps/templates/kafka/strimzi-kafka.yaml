@@ -1,0 +1,34 @@
+{{- if .Values.kafka }}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ .Values.kafka.name | default "kafka" }}
+  annotations:
+    strimzi.io/kraft: "enabled"
+    strimzi.io/node-pools: "enabled"
+spec:
+  kafka:
+    version: {{ .Values.kafka.version | default "3.9.0" | quote }}
+    metadataVersion: {{ .Values.kafka.metadataVersion | default "3.9-IV0" | quote }}
+    replicas: {{ .Values.kafka.replicas | default 1 }}
+    storage:
+      type: {{ .Values.kafka.storage.type | default "persistent-claim" | quote }}
+      size: {{ .Values.kafka.storage.size | default "20Gi" | quote }}
+      {{- with .Values.kafka.storage.class }}
+      class: {{ . | quote }}
+      {{- end }}
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+        authentication:
+          type: {{ default "scram-sha-512" .Values.kafka.auth.type }}
+    config:
+      {{- range $k, $v := .Values.kafka.config }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+{{- end }}

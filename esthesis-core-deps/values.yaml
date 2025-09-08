@@ -3,7 +3,6 @@
 ##################################################################################################
 devMode: true
 
-# memcached:1.6.22-debian-11-r1
 
 domain: esthesis
 esthesisVersion: "3.0.59-SNAPSHOT"
@@ -16,14 +15,14 @@ imagePullSecret: ""
 
 # Enable/disable charts
 charts_enabled:
-  kafka-ui: true
+  kafka-ui: false
   orion: false
-  docker-registry-ui: true
-  grafana-tempo: true
-  grafana-loki: true
-  grafana: true
+  docker-registry-ui: false
+  grafana-tempo: false
+  grafana-loki: false
+  grafana: false
   ingress-nginx: false
-  ollama: true
+  ollama: false
 
 ##################################################################################################
 # Accounts to be used throughout charts.

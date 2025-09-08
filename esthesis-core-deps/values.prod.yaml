@@ -141,18 +141,18 @@ kafka:
         - "esthesis-system"
       passwords:
         - "esthesis-system"
-    externalAccess:
-      image:
-        repository: bitnamilegacy/kubectl
-    volumePermissions:
-      image:
-        repository: bitnamilegacy/os-shell
-    metrics:
-      image:
-        repository: bitnamilegacy/kafka-exporter-archived
-    jmx:
-      image: 
-        repository: bitnamilegacy/jmx-exporter
+  externalAccess:
+    image:
+      repository: bitnamilegacy/kubectl
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/kafka-exporter-archived
+  jmx:
+    image: 
+      repository: bitnamilegacy/jmx-exporter
   extraConfig: |
     offsets.topic.replication.factor=3
     transaction.state.log.replication.factor=3
@@ -269,12 +269,12 @@ camunda-platform:
   identityPostgresql:
     image:
       repository: bitnamilegacy/postgresql
-    volumePermissions:
-      image:
-        repository: bitnamilegacy/os-shell
-    metrics:
-      image:
-        repository: bitnamilegacy/postgres-exporter
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/postgres-exporter
   webModelerPostgresql:
     image:
       repository: bitnamilegacy/postgresql

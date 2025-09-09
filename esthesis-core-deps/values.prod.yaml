@@ -47,17 +47,43 @@ mosquittoServerKey: ""
 redis:
   fullnameOverride: "redis"
   image:
+    repository: bitnamilegacy/redis
     pullSecrets: []
   architecture: standalone
   auth:
     password: esthesis-system
+  sentinel:
+    image:
+      repository: bitnamilegacy/redis-sentinel
+  metrics:
+    image:
+      repository: bitnamilegacy/redis-exporter
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  sysctl:
+    image:
+      repository: bitnamilegacy/bitnami-shell-archived
 
 # MongoDB configuration
 mongodb:
   fullnameOverride: "mongodb"
   image:
+    repository: bitnamilegacy/mongodb
     pullSecrets: []
     debug: true
+  tls:
+    image:
+      repository: bitnamilegacy/nginx
+  externalAccess:
+    image:
+      repository: bitnamilegacy/kubectl
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/mongodb-exporter
   architecture: replicaset
   auth:
     rootPassword: esthesis-system
@@ -77,6 +103,7 @@ mongodb:
 kafka:
   fullnameOverride: "kafka"
   image:
+    repository: bitnamilegacy/kafka
     pullSecrets: []
   provisioning:
     enabled: true
@@ -114,6 +141,18 @@ kafka:
         - "esthesis-system"
       passwords:
         - "esthesis-system"
+  externalAccess:
+    image:
+      repository: bitnamilegacy/kubectl
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/kafka-exporter-archived
+  jmx:
+    image: 
+      repository: bitnamilegacy/jmx-exporter
   extraConfig: |
     offsets.topic.replication.factor=3
     transaction.state.log.replication.factor=3
@@ -123,6 +162,8 @@ keycloak:
   fullnameOverride: "keycloak"
   global:
     imagePullSecrets: []
+  image:
+    repository: bitnamilegacy/keycloak
   proxyHeaders: xforwarded
   production: true
   auth:
@@ -142,6 +183,9 @@ keycloak:
     tls: true
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+  keycloakConfigCli:
+    image:
+        repository: bitnamilegacy/keycloak-config-cli
   extraEnvVars:
     # Allow admin service to be port-forwarded to localhost.
     - name: KC_HOSTNAME
@@ -173,6 +217,20 @@ camunda-platform:
     enabled: false
   identityKeycloak:
     enabled: false
+    image:
+      repository: bitnamilegacy/keycloak
+    postgresql:
+      image:
+        repository: bitnamilegacy/postgresql
+      volumePermissions:
+        image:
+          repository: bitnamilegacy/os-shell
+      metrics:
+        image:
+          repository: bitnamilegacy/postgres-exporter
+    keycloakConfigCli:
+      image:
+        repository: bitnamilegacy/keycloak-config-cli
   webModeler:
     enabled: false
   connectors:
@@ -191,16 +249,44 @@ camunda-platform:
         memory: "256Mi"
   elasticsearch:
     enabled: true
+    image:
+      repository: bitnamilegacy/elasticsearch
+    sysctlImage:
+      repository: bitnamilegacy/os-shell
+    metrics:
+      image:
+        repository: bitnamilegacy/elasticsearch-exporter
+    volumePermissions:
+      image:
+        repository: bitnamilegacy/os-shell
+    copyTlsCerts:
+      image:
+        repository: bitnamilegacy/os-shell
     resources:
       requests:
         cpu: "100m"
         memory: "256Mi"
+  identityPostgresql:
+    image:
+      repository: bitnamilegacy/postgresql
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/postgres-exporter
+  webModelerPostgresql:
+    image:
+      repository: bitnamilegacy/postgresql
+  
 
 # InfluxDB configuration
 influxdb:
   fullnameOverride: "influxdb"
   global:
     imagePullSecrets: []
+  image:
+    repository: bitnamilegacy/influxdb
   auth:
     admin:
       username: esthesis-system
@@ -213,15 +299,33 @@ influxdb:
       password: esthesis-system
   persistence:
     size: "32Gi"
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  uploadProviders:
+    google:
+      image:
+        repository: bitnamilegacy/google-cloud-sdk
+    azure:
+      image:
+        repository: bitnamilegacy/azure-cli
+    aws:
+      image:
+        repository: bitnamilegacy/aws-cli
 
 # Grafana configuration
 grafana:
   fullnameOverride: "grafana"
   global:
     imagePullSecrets: []
+  image:
+    repository: bitnamilegacy/grafana
   admin:
     user: esthesis-system
     password: esthesis-system
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
 
 # Kafka UI configuration
 kafka-ui:
@@ -244,6 +348,30 @@ grafana-loki:
     imagePullSecrets: []
   promtail:
     enabled: true
+    image:
+      repository: bitnamilegacy/promtail-archived
+  loki:
+    image:
+      repository: bitnamilegacy/grafana-loki
+  gateway:
+    image: 
+      repository: bitnamilegacy/nginx
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  memcachedchunks:
+    image:
+      repository: bitnamilegacy/memcached
+  memcachedfrontend:
+    image:
+      repository: bitnamilegacy/memcached
+  memcachedindexqueries:
+    image:
+      repository: bitnamilegacy/memcached
+  memcachedindexwrites:
+    image:
+      repository: bitnamilegacy/memcached
+
 
 # Ingress nginx configuration
 ingress-nginx:
@@ -284,12 +412,26 @@ grafana-tempo:
   global:
     imagePullSecrets: []
   tempo:
+    image:
+      repository: bitnamilegacy/grafana-tempo
     traces:
       jaeger:
         grpc: false
         thriftHttp: false
       otlp:
         grpc: true # Needed by Quarkus (port 4317)
+  query:
+    image:
+      repository: bitnamilegacy/grafana-tempo-query
+  vulture:
+    image:
+      repository: bitnamilegacy/grafana-tempo-vulture
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  memcached:
+    image:
+      repository: bitnamilegacy/memcached
 
 # Ollama
 ollama:

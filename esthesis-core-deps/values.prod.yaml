@@ -11,14 +11,14 @@ ingressClassName: ""
 
 # Enable/disable charts
 charts_enabled:
-  kafka-ui: false
-  orion: false
-  docker-registry-ui: false
-  grafana-tempo: false
-  grafana-loki: false
-  grafana: false
-  ingress-nginx: false
-  ollama: false
+  kafka-ui: true
+  orion: true
+  docker-registry-ui: true
+  grafana-tempo: true
+  grafana-loki: true
+  grafana: true
+  ingress-nginx: true
+  ollama: true
 
 ##################################################################################################
 # Accounts
@@ -176,9 +176,9 @@ keycloakx:
     - start
   extraEnv: |
     - name: KC_HOSTNAME
-      value: https://keycloak.esthesis-dev.eurodyn.com/auth
+      value: https://keycloakpats.esthesis-dev.eurodyn.com/auth
     - name: KC_HOSTNAME_ADMIN
-      value: https://keycloak.esthesis-dev.eurodyn.com/auth
+      value: https://keycloakpats.esthesis-dev.eurodyn.com/auth
     - name: KEYCLOAK_ADMIN
       value: esthesis-system
     - name: KEYCLOAK_ADMIN_PASSWORD
@@ -199,13 +199,13 @@ keycloakx:
       cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
     servicePort: "http"
     rules:
-      - host: 'keycloak.esthesis-dev.eurodyn.com'
+      - host: 'keycloakpats.esthesis-dev.eurodyn.com'
         paths:
           - path: '/auth/'
             pathType: Prefix
     tls:
       - hosts:
-        - keycloak.esthesis-dev.eurodyn.com
+        - keycloakpats.esthesis-dev.eurodyn.com
 
 
 ##################################################################################################
@@ -291,8 +291,44 @@ grafana:
 ##################################################################################################
 loki:
   fullnameOverride: "grafana-loki"
+  imagePullSecrets:
+    - name: "regcred"
+  # These 3 variables are necessary if you wish to enable loki-gateway
+  #global:
+  #  dnsNamespace: kube-system
+  #  clusterDomain: esthesis-dev.eurodyn.com
+  #  dnsService: rke2-coredns-rke2-coredns
   promtail:
     enabled: true
+  test:
+    enabled: false
+  singleBinary:
+    replicas: 1
+    persistence:
+     enabled: true
+     size: 10Gi
+  write:
+    replicas: 0
+  read:
+    replicas: 0
+  backend:
+    replicas: 0
+  gateway:
+    enabled: false
+    nginxConfig:
+      enableIPv6: false
+  loki:
+    storage:
+      type: filesystem
+    schemaConfig:
+      configs:
+        - from: "2025-09-01"          # use today's date or slightly earlier for a fresh cluster
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
 
 ##################################################################################################
 # Tempo (official)

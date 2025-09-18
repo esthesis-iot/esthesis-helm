@@ -17,7 +17,7 @@ charts_enabled:
   grafana-tempo: true
   grafana-loki: true
   grafana: true
-  ingress-nginx: true
+  ingress-nginx: false
   ollama: true
 
 ##################################################################################################

@@ -187,7 +187,7 @@ keycloakx:
       value: "passthrough"
   database:
     vendor: postgres
-    hostname: esthesis-deps-pg-db-pgbouncer
+    hostname: esthesis-core-deps-pg-pgbouncer
     port: 5432
     database: keycloak
     username: postgres

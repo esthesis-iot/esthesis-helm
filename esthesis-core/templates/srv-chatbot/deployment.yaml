@@ -5,7 +5,7 @@
   "podLogging" true
   "podMaxCpu" "1"
   "podMaxMemory" "1G"
-  "podName" "esthesis-core-srv-chatbot"
+  "podName" (include "chatbotImage" .)
   "podProbes" true
   "podChatbot" true
   "registry" .Values.esthesisRegistry

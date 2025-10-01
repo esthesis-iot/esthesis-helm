@@ -178,12 +178,21 @@ spec:
               value: {{ .Values.chatbot.chatModel.provider | quote }}
             - name: QUARKUS_LANGCHAIN4J_EMBEDDING_MODEL_PROVIDER
               value: {{ .Values.chatbot.embeddingModel.provider | quote }}
+            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH
+              value: {{ .Values.chatbot.easyRag.path | quote }}
+            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH_TYPE
+              value: {{ .Values.chatbot.easyRag.pathType | quote }}
+
+              {{- if eq .Values.chatbot.chatModel.provider "openai" }}
             - name: QUARKUS_LANGCHAIN4J_OPENAI_API_KEY
               value: {{ .Values.chatbot.openai.apiKey | quote }}
             - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_MODEL_NAME
               value: {{ .Values.chatbot.openai.chatModel.modelName | quote }}
             - name: QUARKUS_LANGCHAIN4J_OPENAI_CHAT_MODEL_TEMPERATURE
               value: "{{ .Values.chatbot.openai.chatModel.temperature }}"
+              {{- end }}
+
+              {{- if eq .Values.chatbot.chatModel.provider "ollama" }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_BASE_URL
               value: {{ .Values.chatbot.ollama.baseUrl | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_CHAT_MODEL_MODEL_ID
@@ -194,9 +203,13 @@ spec:
               value: {{ .Values.chatbot.ollama.embeddingModel.modelId | quote }}
             - name: QUARKUS_LANGCHAIN4J_OLLAMA_EMBEDDING_MODEL_TEMPERATURE
               value: "{{ .Values.chatbot.ollama.embeddingModel.temperature }}"
-            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH
-              value: {{ .Values.chatbot.easyRag.path | quote }}
-            - name: QUARKUS_LANGCHAIN4J_EASY_RAG_PATH_TYPE
-              value: {{ .Values.chatbot.easyRag.pathType | quote }}
+              {{- end }}
             {{- end }}
 {{- end }}
+
+
+{{- define "chatbotImage" -}}
+{{- with .Values.chatbot.chatModel }}
+{{- printf "esthesis-core-srv-chatbot-%s" .provider -}}
+{{- end -}}
+{{- end -}}

@@ -160,7 +160,9 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: redis
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
@@ -178,7 +180,9 @@ releases:
           {{- if .StateValues.mongoDbStorageClass }}
           storageClass: {{ .StateValues.mongoDbStorageClass | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: mongodb
       - architecture: replicaset
       - auth:
           rootPassword: {{ .StateValues.esthesisSystemPassword }}
@@ -207,7 +211,9 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: kafka
       {{- if .StateValues.devMode }}
       - controller:
           replicaCount: 1
@@ -336,7 +342,13 @@ releases:
           {{- if .StateValues.keycloakStorageClass }}
           defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: keycloak
+      - postgresql:
+          image:
+            registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+            repository: postgresql
       - proxyHeaders: xforwarded
       - production: true
       - auth:
@@ -386,7 +398,10 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - loki:
+          image:
+            registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+            repository: grafana-loki
       - promtail:
           enabled: true
           existingSecret: "grafana-loki-config"
@@ -401,7 +416,9 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: grafana
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
           password: {{ .StateValues.esthesisSystemPassword | quote }}
@@ -418,7 +435,10 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - tempo:
+          image:
+            registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+            repository: grafana-tempo
       - tempo:
           traces:
             jaeger:
@@ -437,7 +457,9 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
+      - image:
+          registry: {{ .StateValues.bitnamiImageRegistry | quote }}
+          repository: influxdb
       - auth:
           createUserToken: true
           admin:

@@ -14,7 +14,7 @@ spec:
         - name: {{ .Values.imagePullSecret }}
       containers:
         - name: create-realm
-          image: bitnami/keycloak:24.0.5
+          image: docker.io/bitnamilegacy/bitnami/keycloak:24.0.5
           command:
             - /bin/sh
             - -c

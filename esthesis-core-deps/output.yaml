@@ -1,0 +1,4359 @@
+Adding repo esthesis https://esthes.is/helm
+"esthesis" has been added to your repositories
+
+Adding repo camunda https://helm.camunda.io
+"camunda" has been added to your repositories
+
+Adding repo kafka-ui https://provectus.github.io/kafka-ui-charts
+"kafka-ui" has been added to your repositories
+
+Adding repo joxit https://helm.joxit.dev
+"joxit" has been added to your repositories
+
+Adding repo ingress-nginx https://kubernetes.github.io/ingress-nginx
+"ingress-nginx" has been added to your repositories
+
+Adding repo fiware https://fiware.github.io/helm-charts
+"fiware" has been added to your repositories
+
+Pulling registry-1.docker.io/bitnamicharts/influxdb:5.6.1
+Pulling registry-1.docker.io/bitnamicharts/mongodb:14.5.1
+Pulling registry-1.docker.io/bitnamicharts/redis:17.3.7
+Pulling registry-1.docker.io/bitnamicharts/kafka:26.6.2
+Pulling registry-1.docker.io/bitnamicharts/keycloak:22.0.0
+Building dependency release=esthesis-core-deps, chart=.
+Templating release=esthesis-core-deps, chart=.
+---
+# Source: esthesis-core-deps/templates/mosquitto/tls.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mosquitto-acl
+type: Opaque
+stringData:
+  aclfile.conf: |-
+    pattern write $SYS/broker/connection/%c/state
+    pattern write esthesis/ping/%u
+    pattern write esthesis/telemetry/%u
+    pattern write esthesis/metadata/%u
+    pattern read esthesis/command/request/%u
+    pattern write esthesis/command/reply/%u
+    user esthesis
+    topic esthesis/#
+data:
+  ca.crt: |-
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN4RENDQWF5Z0F3SUJBZ0lCQVRBTkJna3Foa2lHOXcwQkFRc0ZBREFTTVJBd0RnWURWUVFEREFkeWIyOTAKTFdOaE1DQVhEVEkwTURNd01URXhOREV4TmxvWUR6SXdOak14TWpNd01qSXdNREF3V2pBU01SQXdEZ1lEVlFRRApEQWR5YjI5MExXTmhNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXduN0FrR0ZQCnQyNjhPUUd4clV3NE56UWlJVWlxdEF6amxRajh3WU5Cb0E0Q0pFTmwrTzZXbFB3Ym5pS3hEMFdBUkcrdmkyNTkKemZOK3JkMUVELzNnQnY4SGdYV3o4WkhzNDRNVC9zODBTSWtEMVFrMmx5OEthQWswbWhCRHltYkUvc3B6d0paaQpQQVQ1WmlTMFZkaVhUVmhBaEZacnUvbXVwVEhhTXh3MVI5WFUvOEFqNHJVS1gzdVlNNWhxZTM3QWNQeXBKMFZaCkJMTWhZME5COTVFdWtZVlFGWlByUFpQNVN1SmN0cWd0NVR6N3pTcGtCbnF4ZGVYLy8rQW82YndqRjZqU1BaeUEKNEhGTUlKWkQvcmtSLytKUGN6bEMrTUJraWlFWDVSMU9DRlU0QmxmV0Nhcm9telV1aFh2VzNrbEhsWDNOam9lVQpucitvelZtTi82b09GUUlEQVFBQm95TXdJVEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTRHQTFVZER3RUIvd1FFCkF3SUJCakFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBSy9NaHBsZUtyYjJWYWtrK3RwVXZtMnEzS3NnUGJlZmwKdEh3TnVMWjhmUnpOYU5FcTl6NzRDSElPSWNvSktvWFVzN3Z0YjJQSnBVOGc0WWxJcjVibFpZU05iZTlXYktoRwpFbUhaYjU3VEtUZHc0SkdYWlZNN3BEclJmQllDZGhCcm5ZbDhvNmdlV2ZEVUY3cDhmM0FZN0pvL1ZWQ1lPUEF2Cnd1RUx2RG4rR0lXZzhLZm5LUG9QSFBDM0ZvNFJaR2IvR1pOWDFBTURIVmhkaGJua1FJTG9uQWNISUJJS3NNWXMKU3IrRkMyUzNLU28zdXVTcGV0MWR1VmlHZVRUcW1Ibi9KQTVsQ2dLdHU0S3lOZDFIR3h1dUp1dnV6WXZ3TTBSMwpUVmFYVnc1QjViajRIamxDQnFIKyt1SEV2VWI4Wml0dlgvdGpjbEdHTkJMWHRXT2dPdmkrMVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  server.crt: |-
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURXVENDQWtHZ0F3SUJBZ0lHQVk0WW5HcnRNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1CSXhFREFPQmdOVkJBTU0KQjNKdmIzUXRZMkV3SGhjTk1qUXdNekEzTVRFeE1USTNXaGNOTXpreE1qTXdNakl3TURBd1dqQlZNVk13VVFZRApWUVFEREVwaFl6ZGhNbUpqWXpKa01HRXpOR1UzTVRrM056VTVNekJpWVRKaFl6SmlPQzB4T0RjM016QTRNekUwCkxtVjFMV05sYm5SeVlXd3RNUzVsYkdJdVlXMWhlbTl1WVhkekxtTnZiVENDQVNJd0RRWUpLb1pJaHZjTkFRRUIKQlFBRGdnRVBBRENDQVFvQ2dnRUJBTGMrTEF6Rkg0NThkQk1ydUZTL2N3Q3diQ2M3bDE1UWV4T2QrbThOUy9zMApmVzRYOFppYW42Z2dGNythMy9KS3FtZEl5cFhRQUI0UUZUZEo2eEVzODJURzlaK1dTWDZWREViM1JOTHJxaHl4Ck5mWDFaTjFsemp3MUplVE42RWN3bWtWZGE3ZHFSMS83VTRlTXBnN1RvcFlkVTBkdnkrYVVYTGh3M0tmTlorS1MKVkM5c1l3azJTU0N2MU9ZODZlRnM3d1h4OCs3WlZTSkRKYmMzN2lHL3JzcWtkcmttVmZtYjBpOEtsakdWZ0p0SwphYi9xVkRlUTY0d0VkNkJGVGNGbDUxUjJJSGo0dUxPMnU1NWF1RDF5VGVhNSs2NkNqa3dzUXRZS2xEVVA3MGQzCnZrZ050S01qSWQ5VHNhbUNQTU9pUVo3cjluSUNsZ1ZIemtTUzhWWkhaQzhDQXdFQUFhTnlNSEF3WUFZRFZSMFIKQkZrd1Y0SktZV00zWVRKaVkyTXlaREJoTXpSbE56RTVOemMxT1RNd1ltRXlZV015WWpndE1UZzNOek13T0RNeApOQzVsZFMxalpXNTBjbUZzTFRFdVpXeGlMbUZ0WVhwdmJtRjNjeTVqYjIyQ0NXMXZjM0YxYVhSMGJ6QU1CZ05WCkhSTUJBZjhFQWpBQU1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ0Z0RE9CUGp1WkM4dnU4WjR6SUpNZ0EzMFQKRmdMT2dnb2hCdVp6WW5aSlVMY2pUeGVQdGNkNGlYYnVGeFNtQmtRNlMxSTk5b3FSWmRubnlVWkZVaHd2ZFZTZwp0Z2ppTEtwTGcxaU9FUk1VeHJ1SzlKa1ZZMlMxTWZLSkZWdzlHSG5vSTBzNlVnZlZnaGllbDBKbmsxTUxTbmphCkErRXhGdnduVGtySEpwWFo0NWlXblZtemtvSXM2WnBuRURjMERCWFJ3MWora1EvbFZsaGZZUkxOcnFvN2RmQ0wKTkpwV0RwenZxbndaQzE3U3gzQkx6TTluamtIN01tRTJNVENrT051SFNidTUyWkpmVnFUakNRTUZqNTVaVXljcQpCa3NTd3F6K3RMT0lNWGJ0aEVGaTZ2LzUwZFdWRHNjaVF3bXNvNDhoOXo5YTZHS3VNQit5NXdWSnUrWVoKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQotLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJQ3hEQ0NBYXlnQXdJQkFnSUJBVEFOQmdrcWhraUc5dzBCQVFzRkFEQVNNUkF3RGdZRFZRUUREQWR5YjI5MApMV05oTUNBWERUSTBNRE13TVRFeE5ERXhObG9ZRHpJd05qTXhNak13TWpJd01EQXdXakFTTVJBd0RnWURWUVFECkRBZHliMjkwTFdOaE1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBd243QWtHRlAKdDI2OE9RR3hyVXc0TnpRaUlVaXF0QXpqbFFqOHdZTkJvQTRDSkVObCtPNldsUHdibmlLeEQwV0FSRyt2aTI1OQp6Zk4rcmQxRUQvM2dCdjhIZ1hXejhaSHM0NE1UL3M4MFNJa0QxUWsybHk4S2FBazBtaEJEeW1iRS9zcHp3SlppClBBVDVaaVMwVmRpWFRWaEFoRlpydS9tdXBUSGFNeHcxUjlYVS84QWo0clVLWDN1WU01aHFlMzdBY1B5cEowVloKQkxNaFkwTkI5NUV1a1lWUUZaUHJQWlA1U3VKY3RxZ3Q1VHo3elNwa0JucXhkZVgvLytBbzZid2pGNmpTUFp5QQo0SEZNSUpaRC9ya1IvK0pQY3psQytNQmtpaUVYNVIxT0NGVTRCbGZXQ2Fyb216VXVoWHZXM2tsSGxYM05qb2VVCm5yK296Vm1OLzZvT0ZRSURBUUFCb3lNd0lUQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01BNEdBMVVkRHdFQi93UUUKQXdJQkJqQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFLL01ocGxlS3JiMlZha2srdHBVdm0ycTNLc2dQYmVmbAp0SHdOdUxaOGZSek5hTkVxOXo3NENISU9JY29KS29YVXM3dnRiMlBKcFU4ZzRZbElyNWJsWllTTmJlOVdiS2hHCkVtSFpiNTdUS1RkdzRKR1haVk03cERyUmZCWUNkaEJybllsOG82Z2VXZkRVRjdwOGYzQVk3Sm8vVlZDWU9QQXYKd3VFTHZEbitHSVdnOEtmbktQb1BIUEMzRm80UlpHYi9HWk5YMUFNREhWaGRoYm5rUUlMb25BY0hJQklLc01ZcwpTcitGQzJTM0tTbzN1dVNwZXQxZHVWaUdlVFRxbUhuL0pBNWxDZ0t0dTRLeU5kMUhHeHV1SnV2dXpZdndNMFIzClRWYVhWdzVCNWJqNEhqbENCcUgrK3VIRXZVYjhaaXR2WC90amNsR0dOQkxYdFdPZ092aSsxUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  server.key: |-
+    LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRQzNQaXdNeFIrT2ZIUVQKSzdoVXYzTUFzR3duTzVkZVVIc1RuZnB2RFV2N05IMXVGL0dZbXArb0lCZS9tdC95U3FwblNNcVYwQUFlRUJVMwpTZXNSTFBOa3h2V2Zsa2wrbFF4RzkwVFM2Nm9jc1RYMTlXVGRaYzQ4TlNYa3plaEhNSnBGWFd1M2FrZGYrMU9ICmpLWU8wNktXSFZOSGI4dm1sRnk0Y055bnpXZmlrbFF2YkdNSk5ra2dyOVRtUE9uaGJPOEY4ZlB1MlZVaVF5VzMKTis0aHY2N0twSGE1SmxYNW05SXZDcFl4bFlDYlNtbS82bFEza091TUJIZWdSVTNCWmVkVWRpQjQrTGl6dHJ1ZQpXcmc5Y2szbXVmdXVnbzVNTEVMV0NwUTFEKzlIZDc1SURiU2pJeUhmVTdHcGdqekRva0dlNi9aeUFwWUZSODVFCmt2RldSMlF2QWdNQkFBRUNnZ0VBV1lXSXZMWmpLOWZXVjNWUkNTbzlFM1dkYU85ZWpJZXlFVXZwU083TWs0MjUKeDVydi81ZHU3NUs2TjNRQSs1eUpzb3JuMmhmenJydzV1VGltSEU2REhGVnRNMG1YWHoyTzhXNmxFNHhwbjduZAp2R3RtR3htOUQwSUI0TTNOc0ZYbzBJR0srZUQwdk1vS3JWckQxOU9DQjJlTlE0VzFMbEdHR04rZWxXWXUzZ3U5ClFvNCtCcUFGM3dQa09zWGtzQUtYMDh1ZW5zRWlxam55MXoxNWs2L1dzVUsyZ0hFLzNyVGYwMzNWU1hNU3Z4RHoKMlE1YkM2NzRMNlgrZmdxU0NKYTYvNEtyUjhlcGc0WGJiRWRlUHdGMjZZNDZLaWF5QnJMM3pOQU1Wa1VhczNGMAptelFEeW5ka1VJeDlKcGVMclJNOGNCQTNBY0VLbGJGb1hFcmVLWFdFclFLQmdRREM3Snk2aWplVVNUK1ROMHhtCmVxYXV2eExHcW80aFZlaG9mQ1hyR0NkempWK0d0WWZIT3pNamF0bEVLbmFLL1ZxSlZGTDVacnUxNkZHTTNSb0IKUm1OejY1ZlV0RU5ScWtneU1qTFZLOVNpY3Z4UlU5THUrRmdmM09zWUVVRFJ5VUlvRmx0UGRiaFlhckdMSlNQMQpObWYrbnB3eTVWWWx0U3EzRGg4ZzMyNE5aUUtCZ1FEd3FKQkJsdU8xam81bThoYjlFbHEyRUxqSlY2ay9YMzlBCkxIS2svTlNQTTF3RjJFOGRVbmxYWUEvb2tUWGx0MjN5eVVJbEFEa0tPL2RYcmJSUnVHbjBHZkV4LzdkL3Zlb0QKZ3JpY2xKTVluc2pDK1VmSkprRHQyeDdnUlVSb1JJb2oydnEwSjRUV3BBK2YvM3UreUJCcG1nbk5NMUp6QUdqRwo0QUtGU0dLTUF3S0JnSE1DUUljZnZpTlVCSnJMNmR3ZFNmT1k4VzhlZXJYWWhrUC8zQytXRk5Ecy9RdnlWNmFKCm0yYXVTSHNid3MzSEpvQVlyTXhTZlRhYldHS1FvaU5XY0orWXhnRE9TMW9INm9rVGJVS3hsY2d6cUFRa1BUU2EKZXdSeHlKUnV1WndONzJiUHFoaDhFTVM2VHY4V2J0emp1UUJXZlRyYWJiWFo2dFlQRXZiR1haeXhBb0dBWnlWSQpGdVNPR2szTVdQRWZ5ejNucFNzTG1EZzdNUTlFSWdRcTZ1MzJTSjRScmV1bEZRTTVRS3JLaHJwZUtHUHkrdUVwCnVXUWNEbmZmTGpRa0dmWjVhd2NIYW8rWVhXYlBlc3UzUmwwam9xVERsVlYwWUJGR09PdjJrdGI5Vjljd2dlZWsKRmp6dDRYVVZ3VlNsL0FJUmpzRlh2QnhvRlNReXhESlV3ajFoQjNNQ2dZQi9ZTnEvMXNSTE5ibHpEaEJ6M3kzcQo2eHlBZE5qWjJlWStGM2l5YjQzQXVNTU01UUZrSXBObFRma0VOSjAwdHEvZldiQzBhNjQreUZxc2FOWlZidnNICjFXOFRjdGIxY3pFbzRvN05BOUpDSUU4Z1ZJYXQrLzNPeDBKek0zK0s5VENIdU5KUXU2MHBhdHdoazU2NWtBS0gKR3RoRGhZTHFHNjNWNHVDUkRVL2NOUT09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+---
+# Source: esthesis-core-deps/templates/mosquitto/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-config
+data:
+  mosquitto.conf: |
+    port 8883
+    cafile /mosquitto/secret/ca.crt
+    certfile /mosquitto/secret/server.crt
+    keyfile /mosquitto/secret/server.key
+    allow_anonymous false
+    require_certificate true
+    use_identity_as_username true
+    acl_file /mosquitto/secret/aclfile.conf
+---
+# Source: esthesis-core-deps/templates/mosquitto/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+    app.kubernetes.io/name: mosquitto
+
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8883
+      name: mqtts
+  selector:
+    app: mosquitto
+---
+# Source: esthesis-core-deps/templates/mosquitto/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+spec:
+  selector:
+    matchLabels:
+      app: mosquitto
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:2.0.15
+          ports:
+            - containerPort: 1883
+              name: mqtt
+            - containerPort: 8883
+              name: mqtts
+            - containerPort: 9001
+              name: ws
+          startupProbe:
+            tcpSocket:
+              port: 8883
+          livenessProbe:
+            tcpSocket:
+              port: 8883
+          volumeMounts:
+            - name: mosquitto-config
+              mountPath: /mosquitto/config/mosquitto.conf
+              subPath: mosquitto.conf
+            - name: mosquitto-acl
+              mountPath: /mosquitto/secret
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: mosquitto-config
+          configMap:
+            name: mosquitto-config
+        - name: mosquitto-acl
+          secret:
+            secretName: mosquitto-acl
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: server.crt
+                path: server.crt
+              - key: server.key
+                path: server.key
+              - key: aclfile.conf
+                path: aclfile.conf
+---
+# Source: esthesis-core-deps/templates/keycloak/job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-realm-job
+  labels:
+    app.kubernetes.io/name: keycloak
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: create-realm
+          image: docker.io/bitnamilegacy/bitnami/keycloak:24.0.5
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo Logging in to Keycloak.
+              until kcadm.sh config credentials --server http://keycloak --realm master --user "resonance-system" --password "P3jpnvFQK64SOtM5" --client admin-cli --config /tmp/keycloak.conf;
+              do
+                echo "Waiting for Keycloak to be ready...";
+                sleep 5;
+              done;
+              echo Creating esthesis realm.
+              if kcadm.sh get realms/esthesis --config /tmp/keycloak.conf; then
+                echo Realm 'esthesis' already exists. Exiting.
+                exit 0
+              else
+                kcadm.sh create realms -s realm=esthesis -s enabled=true --config /tmp/keycloak.conf
+              fi
+              echo Creating resonance-admin and resonance-system  users.
+              kcadm.sh create users -r esthesis -s username="resonance-admin" -s enabled=true --config /tmp/keycloak.conf
+              kcadm.sh set-password -r esthesis --username "resonance-admin" --new-password "by87sjoA2h7IJeM4" --config /tmp/keycloak.conf
+              kcadm.sh create users -r esthesis -s username="resonance-system" -s enabled=true --config /tmp/keycloak.conf
+              kcadm.sh set-password -r esthesis --username "resonance-system" --new-password "P3jpnvFQK64SOtM5" --config /tmp/keycloak.conf
+              echo Creating user and system roles.
+              kcadm.sh create roles -r esthesis -s name=user --config /tmp/keycloak.conf
+              kcadm.sh create roles -r esthesis -s name=system --config /tmp/keycloak.conf
+              echo Creating esthesis client.
+              kcadm.sh create clients -r esthesis -s clientId=esthesis -s enabled=true -s publicClient=true -s directAccessGrantsEnabled=true -s serviceAccountsEnabled=true -s "redirectUris=[\"https://esthesis-core.resonance.edrnd.cloud/callback\"]" --config /tmp/keycloak.conf
+              echo Assigning roles to users.
+              kcadm.sh add-roles -r esthesis --uusername "resonance-admin" --rolename user --config /tmp/keycloak.conf
+              kcadm.sh add-roles -r esthesis --uusername "resonance-system" --rolename system --config /tmp/keycloak.conf
+              echo Setting default First name, Last name and email for resonance-admin.
+              USERID=$(kcadm.sh get users -r esthesis -q username="resonance-admin" --config /tmp/keycloak.conf | grep \"id\" | awk -F'"' '{print $4}')
+              kcadm.sh update users/$USERID -r esthesis -s firstName=esthesis -s lastName=admin -s email=esthesis-admin@localhost --config /tmp/keycloak.conf
+              echo Setting default First name, Last name and email for resonance-system.
+              USERID=$(kcadm.sh get users -r esthesis -q username="resonance-system" --config /tmp/keycloak.conf | grep \"id\" | awk -F'"' '{print $4}')
+              kcadm.sh update users/$USERID -r esthesis -s firstName=esthesis -s lastName=system -s email=esthesis-system@localhost --config /tmp/keycloak.conf
+              echo Keycloak configuration complete.
+      restartPolicy: OnFailure
+
+Templating release=redis, chart=/home/thanos98/.cache/helmfile/bitnami/redis/17.3.7/redis
+---
+# Source: redis/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: true
+metadata:
+  name: redis
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: redis/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  redis-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+---
+# Source: redis/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-configuration
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+data:
+  redis.conf: |-
+    # User-supplied common configuration:
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly yes
+    # Disable RDB persistence, AOF persistence already enabled.
+    save ""
+    # End of common configuration
+  master.conf: |-
+    dir /data
+    # User-supplied master configuration:
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    # End of master configuration
+  replica.conf: |-
+    dir /data
+    # User-supplied replica configuration:
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    # End of replica configuration
+---
+# Source: redis/templates/health-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-health
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+data:
+  ping_readiness_local.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_local.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    responseFirstWord=$(echo $response | head -n1 | awk '{print $1;}')
+    if [ "$response" != "PONG" ] && [ "$responseFirstWord" != "LOADING" ] && [ "$responseFirstWord" != "MASTERDOWN" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_master.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
+    [[ -n "$REDIS_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
+    response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_master.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
+    [[ -n "$REDIS_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
+    response=$(
+      timeout -s 3 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    responseFirstWord=$(echo $response | head -n1 | awk '{print $1;}')
+    if [ "$response" != "PONG" ] && [ "$responseFirstWord" != "LOADING" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_readiness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_readiness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+  ping_liveness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+---
+# Source: redis/templates/scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+data:
+  start-master.sh: |
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    if [[ -f /opt/bitnami/redis/mounted-etc/master.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
+    fi
+    if [[ -f /opt/bitnami/redis/mounted-etc/redis.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
+    fi
+    ARGS=("--port" "${REDIS_PORT}")
+    ARGS+=("--requirepass" "${REDIS_PASSWORD}")
+    ARGS+=("--masterauth" "${REDIS_PASSWORD}")
+    ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
+    ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
+    exec redis-server "${ARGS[@]}"
+---
+# Source: redis/templates/headless-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-redis
+      port: 6379
+      targetPort: redis
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+---
+# Source: redis/templates/master/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-master
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: master
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  sessionAffinity: None
+  ports:
+    - name: tcp-redis
+      port: 6379
+      targetPort: redis
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/component: master
+---
+# Source: redis/templates/master/application.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-master
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: redis
+    helm.sh/chart: redis-17.3.7
+    app.kubernetes.io/instance: redis
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/instance: redis
+      app.kubernetes.io/component: master
+  serviceName: redis-headless
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        helm.sh/chart: redis-17.3.7
+        app.kubernetes.io/instance: redis
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: master
+      annotations:
+        checksum/configmap: 26a6e08c4dc3a04e2beaf94e6e98b2ec2ff4b8b1824f579e019b88c47139b2f5
+        checksum/health: df4f1e213756e7c4bc0408d512fd2606fe5469a422ad6732bfd427ba71910296
+        checksum/scripts: 6c2c6892d1179eda131a455eb88ff7e2142da711255196e1e2ba488573bc87a1
+        checksum/secret: 2db610a041cda2000c98a6cb30639f974c615ed869b8b736f0e1c00ce2e6b1a0
+    spec:
+      
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: redis
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: redis
+                    app.kubernetes.io/instance: redis
+                    app.kubernetes.io/component: master
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: redis
+          image: docker.io/bitnamilegacy/bitnami/redis:7.0.5-debian-11-r7
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - /opt/bitnami/scripts/start-scripts/start-master.sh
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: REDIS_REPLICATION_MODE
+              value: master
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "no"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: redis-password
+            - name: REDIS_TLS_ENABLED
+              value: "no"
+            - name: REDIS_PORT
+              value: "6379"
+          ports:
+            - name: redis
+              containerPort: 6379
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            # One second longer than command timeout should prevent generation of zombie processes.
+            timeoutSeconds: 6
+            successThreshold: 1
+            failureThreshold: 5
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh 5
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 5
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_readiness_local.sh 1
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: start-scripts
+              mountPath: /opt/bitnami/scripts/start-scripts
+            - name: health
+              mountPath: /health
+            - name: redis-data
+              mountPath: /data
+              subPath: 
+            - name: config
+              mountPath: /opt/bitnami/redis/mounted-etc
+            - name: redis-tmp-conf
+              mountPath: /opt/bitnami/redis/etc/
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: start-scripts
+          configMap:
+            name: redis-scripts
+            defaultMode: 0755
+        - name: health
+          configMap:
+            name: redis-health
+            defaultMode: 0755
+        - name: config
+          configMap:
+            name: redis-configuration
+        - name: redis-tmp-conf
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+        labels:
+          app.kubernetes.io/name: redis
+          app.kubernetes.io/instance: redis
+          app.kubernetes.io/component: master
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+
+Templating release=mongodb, chart=/home/thanos98/.cache/helmfile/bitnami/mongodb/14.5.1/mongodb
+---
+# Source: mongodb/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+secrets:
+  - name: mongodb
+automountServiceAccountToken: false
+---
+# Source: mongodb/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+type: Opaque
+data:
+  mongodb-root-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  mongodb-passwords: "UDNqcG52RlFLNjRTT3RNNQ=="
+  mongodb-replica-set-key: "VUROcWNHNTJSbEZMTmpSVFQzUk5OUT09"
+---
+# Source: mongodb/templates/common-scripts-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-common-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+data:
+  startup-probe.sh: |
+    #!/bin/bash
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep 'true'
+  readiness-probe.sh: |
+    #!/bin/bash
+    # Run the proper check depending on the version
+    [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+    . /opt/bitnami/scripts/libversion.sh
+    VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+    VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+    VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+    readiness_test='db.isMaster().ismaster || db.isMaster().secondary'
+    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
+        readiness_test='db.hello().isWritablePrimary || db.hello().secondary'
+    fi
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "${readiness_test}" | grep 'true'
+  ping-mongodb.sh: |
+    #!/bin/bash
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+---
+# Source: mongodb/templates/initialization-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-init-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+data:
+  init-db.js: |
+    use esthesiscore
+    db.grantRolesToUser('resonance-system', ["dbAdmin"])
+---
+# Source: mongodb/templates/replicaset/scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+data:
+  setup.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/mongodb-env.sh
+    . /opt/bitnami/scripts/libfs.sh
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    if is_empty_value "$MONGODB_ADVERTISED_PORT_NUMBER"; then
+      export MONGODB_ADVERTISED_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    fi
+
+    info "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    info "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
+
+    # Check for existing replica set in case there is no data in the PVC
+    # This is for cases where the PVC is lost or for MongoDB caches without
+    # persistence
+    current_primary=""
+    if is_dir_empty "${MONGODB_DATA_DIR}/db"; then
+      info "Data dir empty, checking if the replica set already exists"
+        current_primary=$(mongosh admin --host "mongodb-0.mongodb-headless.default.svc.cluster.local:27017,mongodb-1.mongodb-headless.default.svc.cluster.local:27017" --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD --eval 'db.runCommand("ismaster")' | awk -F\' '/primary/ {print $2}')
+      if ! is_empty_value "$current_primary"; then
+        info "Detected existing primary: ${current_primary}"
+      fi
+    fi
+
+    if ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" == "$current_primary" ]]; then
+        info "Advertised name matches current primary, configuring node as a primary"
+        export MONGODB_REPLICA_SET_MODE="primary"
+    elif ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" != "$current_primary" ]]; then
+        info "Current primary is different from this node. Configuring the node as replica of ${current_primary}"
+        export MONGODB_REPLICA_SET_MODE="secondary"
+        export MONGODB_INITIAL_PRIMARY_HOST="${current_primary%:*}"
+        export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="${current_primary#*:}"
+        export MONGODB_SET_SECONDARY_OK="yes"
+    elif [[ "$MY_POD_NAME" = "mongodb-0" ]]; then
+        info "Pod name matches initial primary pod name, configuring node as a primary"
+        export MONGODB_REPLICA_SET_MODE="primary"
+    else
+        info "Pod name doesn't match initial primary pod name, configuring node as a secondary"
+        export MONGODB_REPLICA_SET_MODE="secondary"
+        export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    fi
+
+    if [[ "$MONGODB_REPLICA_SET_MODE" == "secondary" ]]; then
+        export MONGODB_INITIAL_PRIMARY_ROOT_USER="$MONGODB_ROOT_USER"
+        export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
+        export MONGODB_ROOT_PASSWORD=""
+        export MONGODB_EXTRA_USERNAMES=""
+        export MONGODB_EXTRA_DATABASES=""
+        export MONGODB_EXTRA_PASSWORDS=""
+        export MONGODB_ROOT_PASSWORD_FILE=""
+        export MONGODB_EXTRA_USERNAMES_FILE=""
+        export MONGODB_EXTRA_DATABASES_FILE=""
+        export MONGODB_EXTRA_PASSWORDS_FILE=""
+    fi
+
+    exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+  setup-hidden.sh: |-
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/mongodb-env.sh
+
+    echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    echo "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
+    echo "Configuring node as a hidden node"
+    export MONGODB_REPLICA_SET_MODE="hidden"
+    export MONGODB_INITIAL_PRIMARY_ROOT_USER="$MONGODB_ROOT_USER"
+    export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
+    export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    export MONGODB_ROOT_PASSWORD=""
+    export MONGODB_EXTRA_USERNAMES=""
+    export MONGODB_EXTRA_DATABASES=""
+    export MONGODB_EXTRA_PASSWORDS=""
+    export MONGODB_ROOT_PASSWORD_FILE=""
+    export MONGODB_EXTRA_USERNAMES_FILE=""
+    export MONGODB_EXTRA_DATABASES_FILE=""
+    export MONGODB_EXTRA_PASSWORDS_FILE=""
+    exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+---
+# Source: mongodb/templates/arbiter/headless-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-arbiter-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: arbiter
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-mongodb
+      port: 27017
+      targetPort: mongodb
+  selector:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: arbiter
+---
+# Source: mongodb/templates/replicaset/headless-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: "mongodb"
+      port: 27017
+      targetPort: mongodb
+  selector:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: mongodb
+---
+# Source: mongodb/templates/arbiter/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-arbiter
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: arbiter
+spec:
+  serviceName: mongodb-arbiter-headless
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: mongodb
+      app.kubernetes.io/name: mongodb
+      app.kubernetes.io/component: arbiter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mongodb
+        app.kubernetes.io/version: 7.0.5
+        helm.sh/chart: mongodb-14.5.1
+        app.kubernetes.io/component: arbiter
+    spec:
+      
+      imagePullSecrets:
+        - name: regcred
+      serviceAccountName: mongodb
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mongodb
+                    app.kubernetes.io/name: mongodb
+                    app.kubernetes.io/component: arbiter
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        sysctls: []
+      
+      enableServiceLinks: true
+      initContainers:
+      containers:
+        - name: mongodb-arbiter
+          image: docker.io/bitnamilegacy/bitnami/mongodb:7.0.5-debian-11-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_SERVICE_NAME
+              value: "mongodb-arbiter-headless"
+            - name: MONGODB_REPLICA_SET_MODE
+              value: "arbiter"
+            - name: MONGODB_INITIAL_PRIMARY_HOST
+              value: mongodb-0.mongodb-headless.$(MY_POD_NAMESPACE).svc.cluster.local
+            - name: MONGODB_REPLICA_SET_NAME
+              value: "rs0"
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+            - name: MONGODB_PORT_NUMBER
+              value: "27017"
+            - name: MONGODB_ENABLE_IPV6
+              value: "no"
+            - name: MONGODB_INITIAL_PRIMARY_ROOT_USER
+              value: "root"
+            - name: MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-replica-set-key
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "no"
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+            tcpSocket:
+              port: mongodb
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+            tcpSocket:
+              port: mongodb
+          resources:
+            limits: {}
+            requests: {}
+---
+# Source: mongodb/templates/replicaset/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/version: 7.0.5
+    helm.sh/chart: mongodb-14.5.1
+    app.kubernetes.io/component: mongodb
+spec:
+  serviceName: mongodb-headless
+  podManagementPolicy: OrderedReady
+  replicas: 2
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: mongodb
+      app.kubernetes.io/name: mongodb
+      app.kubernetes.io/component: mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mongodb
+        app.kubernetes.io/version: 7.0.5
+        helm.sh/chart: mongodb-14.5.1
+        app.kubernetes.io/component: mongodb
+    spec:
+      
+      imagePullSecrets:
+        - name: regcred
+      serviceAccountName: mongodb
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mongodb
+                    app.kubernetes.io/name: mongodb
+                    app.kubernetes.io/component: mongodb
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        sysctls: []
+      
+      enableServiceLinks: true
+      containers:
+        - name: mongodb
+          image: docker.io/bitnamilegacy/bitnami/mongodb:7.0.5-debian-11-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /scripts/setup.sh
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: K8S_SERVICE_NAME
+              value: "mongodb-headless"
+            - name: MONGODB_INITIAL_PRIMARY_HOST
+              value: mongodb-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
+            - name: MONGODB_REPLICA_SET_NAME
+              value: "rs0"
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+            - name: MONGODB_EXTRA_USERNAMES
+              value: "resonance-system"
+            - name: MONGODB_EXTRA_DATABASES
+              value: "esthesiscore"
+            - name: MONGODB_EXTRA_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-passwords
+            - name: MONGODB_ROOT_USER
+              value: "root"
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: mongodb-replica-set-key
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "no"
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: "0"
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              value: "no"
+            - name: MONGODB_DISABLE_JAVASCRIPT
+              value: "no"
+            - name: MONGODB_ENABLE_JOURNAL
+              value: "yes"
+            - name: MONGODB_PORT_NUMBER
+              value: "27017"
+            - name: MONGODB_ENABLE_IPV6
+              value: "no"
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+              value: "no"
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+            exec:
+              command:
+                - /bitnami/scripts/ping-mongodb.sh
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bitnami/scripts/readiness-probe.sh
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: datadir
+              mountPath: /bitnami/mongodb
+              subPath: 
+            - name: common-scripts
+              mountPath: /bitnami/scripts
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            - name: scripts
+              mountPath: /scripts/setup.sh
+              subPath: setup.sh
+            
+      volumes:
+        - name: common-scripts
+          configMap:
+            name: mongodb-common-scripts
+            defaultMode: 0550
+        - name: custom-init-scripts
+          configMap:
+            name: mongodb-init-scripts
+        - name: scripts
+          configMap:
+            name: mongodb-scripts
+            defaultMode: 0755
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: datadir
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: bitnami-sc
+
+Templating release=kafka, chart=/home/thanos98/.cache/helmfile/bitnami/kafka/26.6.2/kafka
+---
+# Source: kafka/templates/rbac/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kafka
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: kafka
+automountServiceAccountToken: true
+---
+# Source: kafka/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-user-passwords
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+type: Opaque
+data:
+  client-passwords: "UDNqcG52RlFLNjRTT3RNNQ=="
+  system-user-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  inter-broker-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  controller-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+---
+# Source: kafka/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-kraft-cluster-id
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+type: Opaque
+data:
+  kraft-cluster-id: "TTNRMVpUTmxNV0ZoTVRneU5EaGlaag=="
+---
+# Source: kafka/templates/controller-eligible/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-controller-configuration
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: controller-eligible
+    app.kubernetes.io/part-of: kafka
+data:
+  server.properties: |-
+    # Listeners configuration
+    listeners=CLIENT://:9092,INTERNAL://:9094,CONTROLLER://:9093
+    advertised.listeners=CLIENT://advertised-address-placeholder:9092,INTERNAL://advertised-address-placeholder:9094
+    listener.security.protocol.map=CLIENT:SASL_PLAINTEXT,INTERNAL:SASL_PLAINTEXT,CONTROLLER:SASL_PLAINTEXT
+    # KRaft process roles
+    process.roles=controller,broker
+    #node.id=
+    controller.listener.names=CONTROLLER
+    controller.quorum.voters=0@kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9093,1@kafka-controller-1.kafka-controller-headless.default.svc.cluster.local:9093,2@kafka-controller-2.kafka-controller-headless.default.svc.cluster.local:9093
+    # Kraft Controller listener SASL settings
+    sasl.mechanism.controller.protocol=PLAIN
+    listener.name.controller.sasl.enabled.mechanisms=PLAIN
+    listener.name.controller.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="controller_user" password="controller-password-placeholder" user_controller_user="controller-password-placeholder";
+    # Kafka data logs directory
+    log.dir=/bitnami/kafka/data
+    # Kafka application logs directory
+    logs.dir=/opt/bitnami/kafka/logs
+    
+    sasl.enabled.mechanisms=PLAIN,SCRAM-SHA-256,SCRAM-SHA-512
+    # Interbroker configuration
+    inter.broker.listener.name=INTERNAL
+    sasl.mechanism.inter.broker.protocol=PLAIN
+    # Listeners SASL JAAS configuration
+    listener.name.client.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required user_resonance-system="password-placeholder-0";
+    listener.name.client.scram-sha-256.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required;
+    listener.name.client.scram-sha-512.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required;
+    listener.name.internal.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="inter_broker_user" password="interbroker-password-placeholder" user_inter_broker_user="interbroker-password-placeholder" user_resonance-system="password-placeholder-0";
+    listener.name.internal.scram-sha-256.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="inter_broker_user" password="interbroker-password-placeholder";
+    listener.name.internal.scram-sha-512.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="inter_broker_user" password="interbroker-password-placeholder";
+    # End of SASL JAAS configuration
+    offsets.topic.replication.factor=3
+    transaction.state.log.replication.factor=3
+---
+# Source: kafka/templates/scripts-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+data:
+  kafka-init.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    error(){
+      local message="${1:?missing message}"
+      echo "ERROR: ${message}"
+      exit 1
+    }
+
+    retry_while() {
+        local -r cmd="${1:?cmd is missing}"
+        local -r retries="${2:-12}"
+        local -r sleep_time="${3:-5}"
+        local return_value=1
+
+        read -r -a command <<< "$cmd"
+        for ((i = 1 ; i <= retries ; i+=1 )); do
+            "${command[@]}" && return_value=0 && break
+            sleep "$sleep_time"
+        done
+        return $return_value
+    }
+
+    replace_in_file() {
+        local filename="${1:?filename is required}"
+        local match_regex="${2:?match regex is required}"
+        local substitute_regex="${3:?substitute regex is required}"
+        local posix_regex=${4:-true}
+
+        local result
+
+        # We should avoid using 'sed in-place' substitutions
+        # 1) They are not compatible with files mounted from ConfigMap(s)
+        # 2) We found incompatibility issues with Debian10 and "in-place" substitutions
+        local -r del=$'\001' # Use a non-printable character as a 'sed' delimiter to avoid issues
+        if [[ $posix_regex = true ]]; then
+            result="$(sed -E "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+        else
+            result="$(sed "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+        fi
+        echo "$result" > "$filename"
+    }
+
+    kafka_conf_set() {
+        local file="${1:?missing file}"
+        local key="${2:?missing key}"
+        local value="${3:?missing value}"
+
+        # Check if the value was set before
+        if grep -q "^[#\\s]*$key\s*=.*" "$file"; then
+            # Update the existing key
+            replace_in_file "$file" "^[#\\s]*${key}\s*=.*" "${key}=${value}" false
+        else
+            # Add a new key
+            printf '\n%s=%s' "$key" "$value" >>"$file"
+        fi
+    }
+
+    replace_placeholder() {
+      local placeholder="${1:?missing placeholder value}"
+      local password="${2:?missing password value}"
+      sed -i "s/$placeholder/$password/g" "$KAFKA_CONFIG_FILE"
+    }
+
+    append_file_to_kafka_conf() {
+        local file="${1:?missing source file}"
+        local conf="${2:?missing kafka conf file}"
+
+        cat "$1" >> "$2"
+    }
+
+    configure_external_access() {
+      # Configure external hostname
+      if [[ -f "/shared/external-host.txt" ]]; then
+        host=$(cat "/shared/external-host.txt")
+      elif [[ -n "${EXTERNAL_ACCESS_HOST:-}" ]]; then
+        host="$EXTERNAL_ACCESS_HOST"
+      elif [[ -n "${EXTERNAL_ACCESS_HOSTS_LIST:-}" ]]; then
+        read -r -a hosts <<<"$(tr ',' ' ' <<<"${EXTERNAL_ACCESS_HOSTS_LIST}")"
+        host="${hosts[$POD_ID]}"
+      elif [[ "$EXTERNAL_ACCESS_HOST_USE_PUBLIC_IP" =~ ^(yes|true)$ ]]; then
+        host=$(curl -s https://ipinfo.io/ip)
+      else
+        error "External access hostname not provided"
+      fi
+
+      # Configure external port
+      if [[ -f "/shared/external-port.txt" ]]; then
+        port=$(cat "/shared/external-port.txt")
+      elif [[ -n "${EXTERNAL_ACCESS_PORT:-}" ]]; then
+        if [[ "${EXTERNAL_ACCESS_PORT_AUTOINCREMENT:-}" =~ ^(yes|true)$ ]]; then
+          port="$((EXTERNAL_ACCESS_PORT + POD_ID))"
+        else
+          port="$EXTERNAL_ACCESS_PORT"
+        fi
+      elif [[ -n "${EXTERNAL_ACCESS_PORTS_LIST:-}" ]]; then
+        read -r -a ports <<<"$(tr ',' ' ' <<<"${EXTERNAL_ACCESS_PORTS_LIST}")"
+        port="${ports[$POD_ID]}"
+      else
+        error "External access port not provided"
+      fi
+      # Configure Kafka advertised listeners
+      sed -i -E "s|^(advertised\.listeners=\S+)$|\1,EXTERNAL://${host}:${port}|" "$KAFKA_CONFIG_FILE"
+    }
+    configure_kafka_sasl() {
+
+      # Replace placeholders with passwords
+      replace_placeholder "interbroker-password-placeholder" "$KAFKA_INTER_BROKER_PASSWORD"
+      replace_placeholder "controller-password-placeholder" "$KAFKA_CONTROLLER_PASSWORD"
+      read -r -a passwords <<<"$(tr ',;' ' ' <<<"${KAFKA_CLIENT_PASSWORDS:-}")"
+      for ((i = 0; i < ${#passwords[@]}; i++)); do
+          replace_placeholder "password-placeholder-${i}" "${passwords[i]}"
+      done
+    }
+
+    export KAFKA_CONFIG_FILE=/config/server.properties
+    cp /configmaps/server.properties $KAFKA_CONFIG_FILE
+
+    # Get pod ID and role, last and second last fields in the pod name respectively
+    POD_ID=$(echo "$MY_POD_NAME" | rev | cut -d'-' -f 1 | rev)
+    POD_ROLE=$(echo "$MY_POD_NAME" | rev | cut -d'-' -f 2 | rev)
+
+    # Configure node.id and/or broker.id
+    if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
+        if grep -q "broker.id" /bitnami/kafka/data/meta.properties; then
+          ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+          kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
+        else
+          ID="$(grep "node.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+          kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
+        fi
+    else
+        ID=$((POD_ID + KAFKA_MIN_ID))
+        kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
+    fi
+    replace_placeholder "advertised-address-placeholder" "${MY_POD_NAME}.kafka-${POD_ROLE}-headless.default.svc.cluster.local"
+    if [[ "${EXTERNAL_ACCESS_ENABLED:-false}" =~ ^(yes|true)$ ]]; then
+      configure_external_access
+    fi
+    configure_kafka_sasl
+    if [ -f /secret-config/server-secret.properties ]; then
+      append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
+    fi
+---
+# Source: kafka/templates/controller-eligible/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-controller-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: controller-eligible
+    app.kubernetes.io/part-of: kafka
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-interbroker
+      port: 9094
+      protocol: TCP
+      targetPort: interbroker
+    - name: tcp-client
+      port: 9092
+      protocol: TCP
+      targetPort: client
+    - name: tcp-controller
+      protocol: TCP
+      port: 9093
+      targetPort: controller
+  selector:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/component: controller-eligible
+    app.kubernetes.io/part-of: kafka
+---
+# Source: kafka/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: kafka
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-client
+      port: 9092
+      protocol: TCP
+      targetPort: client
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/part-of: kafka
+---
+# Source: kafka/templates/controller-eligible/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka-controller
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: controller-eligible
+    app.kubernetes.io/part-of: kafka
+spec:
+  podManagementPolicy: Parallel
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kafka
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/component: controller-eligible
+      app.kubernetes.io/part-of: kafka
+  serviceName: kafka-controller-headless
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kafka
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/version: 3.6.1
+        helm.sh/chart: kafka-26.6.2
+        app.kubernetes.io/component: controller-eligible
+        app.kubernetes.io/part-of: kafka
+      annotations:
+        checksum/configuration: 2275c07bc55a9a1e883ccd818657e17ebd9cd0b2d2546240b3cf8ef68627fe7a
+        checksum/passwords-secret: a8a2cbfd5958ebf0e95a430218e1e1c1298b25c4ba375716579beee36314c4ef
+    spec:
+      
+      imagePullSecrets:
+        - name: regcred
+      hostNetwork: false
+      hostIPC: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: kafka
+                    app.kubernetes.io/name: kafka
+                    app.kubernetes.io/component: controller-eligible
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: kafka
+      enableServiceLinks: true
+      initContainers:
+        - name: kafka-init
+          image: docker.io/bitnamilegacy/bitnami/kafka:3.6.1-debian-11-r0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          resources:
+            limits: {}
+            requests: {} 
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              /scripts/kafka-init.sh
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                    fieldPath: metadata.name
+            - name: KAFKA_VOLUME_DIR
+              value: "/bitnami/kafka"
+            - name: KAFKA_MIN_ID
+              value: "0"
+            - name: KAFKA_CLIENT_USERS
+              value: "resonance-system"
+            - name: KAFKA_CLIENT_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: client-passwords
+            - name: KAFKA_INTER_BROKER_USER
+              value: "inter_broker_user"
+            - name: KAFKA_INTER_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: inter-broker-password
+            - name: KAFKA_CONTROLLER_USER
+              value: "controller_user"
+            - name: KAFKA_CONTROLLER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: controller-password
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/kafka
+            - name: kafka-config
+              mountPath: /config
+            - name: kafka-configmaps
+              mountPath: /configmaps
+            - name: kafka-secret-config
+              mountPath: /secret-config
+            - name: scripts
+              mountPath: /scripts
+            - name: tmp
+              mountPath: /tmp
+      containers:
+        - name: kafka
+          image: docker.io/bitnamilegacy/bitnami/kafka:3.6.1-debian-11-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: KAFKA_HEAP_OPTS
+              value: "-Xmx1024m -Xms1024m"
+            - name: KAFKA_KRAFT_CLUSTER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-kraft-cluster-id
+                  key: kraft-cluster-id
+            - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
+              value: "true"
+            - name: KAFKA_CLIENT_USERS
+              value: "resonance-system"
+            - name: KAFKA_CLIENT_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: client-passwords
+            - name: KAFKA_INTER_BROKER_USER
+              value: "inter_broker_user"
+            - name: KAFKA_INTER_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: inter-broker-password
+            - name: KAFKA_CONTROLLER_USER
+              value: "controller_user"
+            - name: KAFKA_CONTROLLER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: controller-password
+          ports:
+            - name: controller
+              containerPort: 9093
+            - name: client
+              containerPort: 9092
+            - name: interbroker
+              containerPort: 9094
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: "controller"
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: "controller"
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/kafka
+            - name: logs
+              mountPath: /opt/bitnami/kafka/logs
+            - name: kafka-config
+              mountPath: /opt/bitnami/kafka/config/server.properties
+              subPath: server.properties
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: kafka-configmaps
+          configMap:
+            name: kafka-controller-configuration
+        - name: kafka-secret-config
+          emptyDir: {}
+        - name: kafka-config
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: scripts
+          configMap:
+            name: kafka-scripts
+            defaultMode: 493
+        - name: logs
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: kafka/templates/provisioning/job.yaml
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: kafka-provisioning
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/version: 3.6.1
+    helm.sh/chart: kafka-26.6.2
+    app.kubernetes.io/component: kafka-provisioning
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kafka
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/version: 3.6.1
+        helm.sh/chart: kafka-26.6.2
+        app.kubernetes.io/component: kafka-provisioning
+    spec:
+      serviceAccountName: default
+      enableServiceLinks: true
+      
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: wait-for-available-kafka
+          image: docker.io/bitnamilegacy/bitnami/kafka:3.6.1-debian-11-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              wait-for-port \
+                --host=kafka \
+                --state=inuse \
+                --timeout=120 \
+                9092;
+              echo "Kafka is available";
+          resources:
+            limits: {}
+            requests: {}
+      containers:
+        - name: kafka-provisioning
+          image: docker.io/bitnamilegacy/bitnami/kafka:3.6.1-debian-11-r0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              echo "Configuring environment"
+              . /opt/bitnami/scripts/libkafka.sh
+              export CLIENT_CONF="${CLIENT_CONF:-/tmp/client.properties}"
+              if [ ! -f "$CLIENT_CONF" ]; then
+                touch $CLIENT_CONF
+
+                kafka_common_conf_set "$CLIENT_CONF" security.protocol "SASL_PLAINTEXT"
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism PLAIN
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+              fi
+
+              echo "Running pre-provisioning script if any given"
+              
+              
+
+              kafka_provisioning_commands=(
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-command-reply"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-telemetry"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-metadata"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-app-unicast"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-app-broadcast"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-ping"
+                "/opt/bitnami/kafka/bin/kafka-topics.sh \
+                    --create \
+                    --if-not-exists \
+                    --bootstrap-server ${KAFKA_SERVICE} \
+                    --replication-factor 3 \
+                    --partitions 3 \
+                    --command-config ${CLIENT_CONF} \
+                    --topic esthesis-command-request"
+              )
+
+              echo "Starting provisioning"
+              for ((index=0; index < ${#kafka_provisioning_commands[@]}; index+=1))
+              do
+                for j in $(seq ${index} $((${index}+1-1)))
+                do
+                    ${kafka_provisioning_commands[j]} & # Async command
+                done
+                wait  # Wait the end of the jobs
+              done
+
+              echo "Running post-provisioning script if any given"
+              
+              
+
+              echo "Provisioning succeeded"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: KAFKA_SERVICE
+              value: kafka:9092
+            - name: SASL_USERNAME
+              value: "resonance-system"
+            - name: SASL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-user-passwords
+                  key: system-user-password
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
+Templating release=camunda, chart=camunda/camunda-platform
+---
+# Source: camunda-platform/charts/elasticsearch/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "elasticsearch-master-pdb"
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: "elasticsearch-master"
+---
+# Source: camunda-platform/charts/zeebe-gateway/templates/gateway-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: camunda-zeebe-gateway-gateway
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe-gateway
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-gateway-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-gateway
+---
+# Source: camunda-platform/charts/zeebe/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: camunda-zeebe
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-broker
+---
+# Source: camunda-platform/charts/zeebe-gateway/templates/configmap.yaml
+kind: ConfigMap
+metadata:
+  name: camunda-zeebe-gateway-gateway
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe-gateway
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-gateway-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-gateway
+apiVersion: v1
+data:
+  gateway-log4j2.xml: |
+---
+# Source: camunda-platform/charts/zeebe/templates/configmap.yaml
+kind: ConfigMap
+metadata:
+  name: camunda-zeebe
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-broker
+apiVersion: v1
+data:
+  startup.sh: |
+    #!/usr/bin/env bash
+    set -eux -o pipefail
+
+    export ZEEBE_BROKER_CLUSTER_NODEID=${ZEEBE_BROKER_CLUSTER_NODEID:-${K8S_NAME##*-}}
+
+    if [ "$(ls -A /exporters/)" ]; then
+      mkdir /usr/local/zeebe/exporters/
+      cp -a /exporters/*.jar /usr/local/zeebe/exporters/
+    else
+      echo "No exporters available."
+    fi
+
+    env
+    exec /usr/local/zeebe/bin/broker
+
+  broker-log4j2.xml: |
+---
+# Source: camunda-platform/charts/elasticsearch/templates/service.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch-master
+  labels:
+    heritage: "Helm"
+    release: "camunda"
+    chart: "elasticsearch"
+    app: "elasticsearch-master"
+  annotations:
+    {}
+spec:
+  type: ClusterIP
+  selector:
+    release: "camunda"
+    chart: "elasticsearch"
+    app: "elasticsearch-master"
+  publishNotReadyAddresses: false
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9200
+  - name: transport
+    protocol: TCP
+    port: 9300
+---
+# Source: camunda-platform/charts/elasticsearch/templates/service.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch-master-headless
+  labels:
+    heritage: "Helm"
+    release: "camunda"
+    chart: "elasticsearch"
+    app: "elasticsearch-master"
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None # This is needed for statefulset hostnames like elasticsearch-0 to resolve
+  # Create endpoints also if the related pod isn't ready
+  publishNotReadyAddresses: true
+  selector:
+    app: "elasticsearch-master"
+  ports:
+  - name: http
+    port: 9200
+  - name: transport
+    port: 9300
+---
+# Source: camunda-platform/charts/zeebe-gateway/templates/gateway-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: "camunda-zeebe-gateway"
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe-gateway
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-gateway-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-gateway
+  annotations:
+spec:
+  type: ClusterIP
+  selector:
+      app: camunda-platform
+      app.kubernetes.io/name: zeebe-gateway
+      app.kubernetes.io/instance: camunda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/component: zeebe-gateway
+  ports:
+    - port: 9600
+      protocol: TCP
+      name: http
+    - port: 26500
+      protocol: TCP
+      name: gateway
+---
+# Source: camunda-platform/charts/zeebe/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: "camunda-zeebe"
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-broker
+  annotations:
+    {}
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  ports:
+    - port: 9600
+      protocol: TCP
+      name: http
+    - port: 26502
+      protocol: TCP
+      name: internal
+    - port: 26501
+      protocol: TCP
+      name: command
+  selector:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    app.kubernetes.io/component: zeebe-broker
+---
+# Source: camunda-platform/charts/zeebe-gateway/templates/gateway-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "camunda-zeebe-gateway"
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe-gateway
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-gateway-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-gateway
+  annotations:
+    {}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: camunda-platform
+      app.kubernetes.io/name: zeebe-gateway
+      app.kubernetes.io/instance: camunda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/component: zeebe-gateway
+  template:
+    metadata:
+      labels:
+        app: camunda-platform
+        app.kubernetes.io/name: zeebe-gateway
+        app.kubernetes.io/instance: camunda
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: camunda-platform
+        helm.sh/chart: zeebe-gateway-8.1.5
+        app.kubernetes.io/version: "8.1.6"
+        app.kubernetes.io/component: zeebe-gateway
+      annotations:
+        {}
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: zeebe-gateway
+          image: "camunda/zeebe:8.1.6"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9600
+              name: http
+            - containerPort: 26500
+              name: gateway
+            - containerPort: 26502
+              name: internal
+          env:
+            - name: ZEEBE_STANDALONE_GATEWAY
+              value: "true"
+            - name: ZEEBE_GATEWAY_CLUSTER_CLUSTERNAME
+              value: camunda-zeebe
+            - name: ZEEBE_GATEWAY_CLUSTER_MEMBERID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: ZEEBE_LOG_LEVEL
+              value: "info"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:+ExitOnOutOfMemoryError"
+            - name: ZEEBE_GATEWAY_CLUSTER_CONTACTPOINT
+              value: camunda-zeebe:26502
+            - name: ZEEBE_GATEWAY_NETWORK_HOST
+              value: 0.0.0.0
+            - name: ZEEBE_GATEWAY_NETWORK_PORT
+              value: "26500"
+            - name: ZEEBE_GATEWAY_CLUSTER_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ZEEBE_GATEWAY_CLUSTER_PORT
+              value: "26502"
+            - name: ZEEBE_GATEWAY_MONITORING_HOST
+              value: 0.0.0.0
+            - name: ZEEBE_GATEWAY_MONITORING_PORT
+              value: "9600"
+          volumeMounts:
+          resources:
+            limits:
+              cpu: 400m
+              memory: 450Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      volumes:
+        - name: config
+          configMap:
+            name: camunda-zeebe-gateway-gateway
+            defaultMode: 484
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - zeebe-gateway
+            topologyKey: kubernetes.io/hostname
+---
+# Source: camunda-platform/charts/elasticsearch/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-master
+  labels:
+    heritage: "Helm"
+    release: "camunda"
+    chart: "elasticsearch"
+    app: "elasticsearch-master"
+  annotations:
+    esMajorVersion: "7"
+spec:
+  serviceName: elasticsearch-master-headless
+  selector:
+    matchLabels:
+      app: "elasticsearch-master"
+  replicas: 2
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-master
+      labels:
+        release: "camunda"
+        chart: "elasticsearch"
+        app: "elasticsearch-master"
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 64Gi
+  template:
+    metadata:
+      name: "elasticsearch-master"
+      labels:
+        release: "camunda"
+        chart: "elasticsearch"
+        app: "elasticsearch-master"
+      annotations:
+        
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      automountServiceAccountToken: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - "elasticsearch-master"
+            topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 120
+      volumes:
+      enableServiceLinks: true
+      initContainers:
+      - name: configure-sysctl
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.1"
+        imagePullPolicy: "IfNotPresent"
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        resources:
+          {}
+
+      containers:
+      - name: "elasticsearch"
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+        image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.1"
+        imagePullPolicy: "IfNotPresent"
+        readinessProbe:
+          exec:
+            command:
+              - bash
+              - -c
+              - |
+                set -e
+                # If the node is starting up wait for the cluster to be ready (request params: "wait_for_status=green&timeout=1s" )
+                # Once it has started only check that the node itself is responding
+                START_FILE=/tmp/.es_start_file
+
+                # Disable nss cache to avoid filling dentry cache when calling curl
+                # This is required with Elasticsearch Docker using nss < 3.52
+                export NSS_SDB_USE_CACHE=no
+
+                http () {
+                  local path="${1}"
+                  local args="${2}"
+                  set -- -XGET -s
+
+                  if [ "$args" != "" ]; then
+                    set -- "$@" $args
+                  fi
+
+                  if [ -n "${ELASTIC_PASSWORD}" ]; then
+                    set -- "$@" -u "elastic:${ELASTIC_PASSWORD}"
+                  fi
+
+                  curl --output /dev/null -k "$@" "http://127.0.0.1:9200${path}"
+                }
+
+                if [ -f "${START_FILE}" ]; then
+                  echo 'Elasticsearch is already running, lets check the node is healthy'
+                  HTTP_CODE=$(http "/" "-w %{http_code}")
+                  RC=$?
+                  if [[ ${RC} -ne 0 ]]; then
+                    echo "curl --output /dev/null -k -XGET -s -w '%{http_code}' \${BASIC_AUTH} http://127.0.0.1:9200/ failed with RC ${RC}"
+                    exit ${RC}
+                  fi
+                  # ready if HTTP code 200, 503 is tolerable if ES version is 6.x
+                  if [[ ${HTTP_CODE} == "200" ]]; then
+                    exit 0
+                  elif [[ ${HTTP_CODE} == "503" && "7" == "6" ]]; then
+                    exit 0
+                  else
+                    echo "curl --output /dev/null -k -XGET -s -w '%{http_code}' \${BASIC_AUTH} http://127.0.0.1:9200/ failed with HTTP code ${HTTP_CODE}"
+                    exit 1
+                  fi
+
+                else
+                  echo 'Waiting for elasticsearch cluster to become ready (request params: "wait_for_status=green&timeout=1s" )'
+                  if http "/_cluster/health?wait_for_status=green&timeout=1s" "--fail" ; then
+                    touch ${START_FILE}
+                    exit 0
+                  else
+                    echo 'Cluster is not yet ready (request params: "wait_for_status=green&timeout=1s" )'
+                    exit 1
+                  fi
+                fi
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 5
+        ports:
+        - name: http
+          containerPort: 9200
+        - name: transport
+          containerPort: 9300
+        resources:
+          limits:
+            cpu: 2
+            memory: 2Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        env:
+          - name: node.name
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: cluster.initial_master_nodes
+            value: "elasticsearch-master-0,elasticsearch-master-1,"
+          - name: discovery.seed_hosts
+            value: "elasticsearch-master-headless"
+          - name: cluster.name
+            value: "elasticsearch"
+          - name: network.host
+            value: "0.0.0.0"
+          - name: cluster.deprecation_indexing.enabled
+            value: "false"
+          - name: ES_JAVA_OPTS
+            value: "-Xmx1g -Xms1g"
+          - name: node.data
+            value: "true"
+          - name: node.ingest
+            value: "true"
+          - name: node.master
+            value: "true"
+          - name: node.ml
+            value: "true"
+          - name: node.remote_cluster_client
+            value: "true"
+          - name: xpack.security.enabled
+            value: "false"
+        volumeMounts:
+          - name: "elasticsearch-master"
+            mountPath: /usr/share/elasticsearch/data
+---
+# Source: camunda-platform/charts/zeebe/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "camunda-zeebe"
+  labels:
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-broker
+  annotations:
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: camunda-platform
+      app.kubernetes.io/name: zeebe
+      app.kubernetes.io/instance: camunda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/part-of: camunda-platform
+      app.kubernetes.io/component: zeebe-broker
+  serviceName: "camunda-zeebe"
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: camunda-platform
+        app.kubernetes.io/name: zeebe
+        app.kubernetes.io/instance: camunda
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/part-of: camunda-platform
+        helm.sh/chart: zeebe-8.1.5
+        app.kubernetes.io/version: "8.1.6"
+        app.kubernetes.io/component: zeebe-broker
+      annotations:
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      initContainers:
+      containers:
+      - name: zeebe
+        image: "camunda/zeebe:8.1.6"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LC_ALL
+          value: C.UTF-8
+        - name: K8S_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: K8S_SERVICE_NAME
+          value: "camunda-zeebe"
+        - name: K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: ZEEBE_BROKER_NETWORK_ADVERTISEDHOST
+          value: "$(K8S_NAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc"
+        - name: ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS
+          value:
+            $(K8S_SERVICE_NAME)-0.$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc:26502,
+            $(K8S_SERVICE_NAME)-1.$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc:26502,
+            $(K8S_SERVICE_NAME)-2.$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc:26502,
+        - name: ZEEBE_BROKER_CLUSTER_CLUSTERNAME
+          value: camunda-zeebe
+        - name: ZEEBE_LOG_LEVEL
+          value: "info"
+        - name: ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT
+          value: "3"
+        - name: ZEEBE_BROKER_CLUSTER_CLUSTERSIZE
+          value: "3"
+        - name: ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR
+          value: "3"
+        - name: ZEEBE_BROKER_THREADS_CPUTHREADCOUNT
+          value: "3"
+        - name: ZEEBE_BROKER_THREADS_IOTHREADCOUNT
+          value: "3"
+        - name: ZEEBE_BROKER_GATEWAY_ENABLE
+          value: "false"
+        - name: ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME
+          value: "io.camunda.zeebe.exporter.ElasticsearchExporter"
+        - name: ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL
+          value: "http://elasticsearch-master:9200"
+        - name: ZEEBE_BROKER_NETWORK_COMMANDAPI_PORT
+          value: "26501"
+        - name: ZEEBE_BROKER_NETWORK_INTERNALAPI_PORT
+          value: "26502"
+        - name: ZEEBE_BROKER_NETWORK_MONITORINGAPI_PORT
+          value: "9600"
+        - name: K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/usr/local/zeebe/data -XX:ErrorFile=/usr/local/zeebe/data/zeebe_error%p.log -XX:+ExitOnOutOfMemoryError"
+        - name: ZEEBE_BROKER_DATA_SNAPSHOTPERIOD
+          value: 5m
+        - name: ZEEBE_BROKER_DATA_DISKUSAGECOMMANDWATERMARK
+          value: "0.85"
+        - name: ZEEBE_BROKER_DATA_DISKUSAGEREPLICATIONWATERMARK
+          value: "0.87"
+        ports:
+        - containerPort: 9600
+          name: http
+        - containerPort: 26501
+          name: command
+        - containerPort: 26502
+          name: internal
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 9600
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          failureThreshold: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 960m
+            memory: 1920Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        volumeMounts:
+        - name: config
+          mountPath: /usr/local/bin/startup.sh
+          subPath: startup.sh
+        - name: data
+          mountPath: /usr/local/zeebe/data
+        - name: exporters
+          mountPath: /exporters
+      volumes:
+        - name: config
+          configMap:
+            name: camunda-zeebe
+            defaultMode: 492
+        - name: exporters
+          emptyDir: {}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - zeebe-broker
+            topologyKey: kubernetes.io/hostname
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ReadWriteOnce]
+      storageClassName: 
+      resources:
+        requests:
+          storage: "32Gi"
+---
+# Source: camunda-platform/charts/elasticsearch/templates/test/test-elasticsearch-health.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "camunda-fgoav-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+  containers:
+  - name: "camunda-tqmmz-test"
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.1"
+    imagePullPolicy: "IfNotPresent"
+    command:
+      - "sh"
+      - "-c"
+      - |
+        #!/usr/bin/env bash -e
+        curl -XGET --fail 'elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s'
+  restartPolicy: Never
+---
+# Source: camunda-platform/charts/zeebe/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "camunda-zeebe-test-connection"
+  labels: 
+    app: camunda-platform
+    app.kubernetes.io/name: zeebe
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: camunda-platform
+    helm.sh/chart: zeebe-8.1.5
+    app.kubernetes.io/version: "8.1.6"
+    app.kubernetes.io/component: zeebe-broker
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['camunda-zeebe:9600']
+  restartPolicy: Never
+
+Templating release=keycloak, chart=/home/thanos98/.cache/helmfile/bitnami/keycloak/22.0.0/keycloak
+---
+# Source: keycloak/charts/postgresql/templates/primary/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+    app.kubernetes.io/component: primary
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 5432
+---
+# Source: keycloak/templates/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/component: keycloak
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 7800
+        - port: 8080
+---
+# Source: keycloak/charts/postgresql/templates/primary/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+    app.kubernetes.io/component: primary
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+---
+# Source: keycloak/templates/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/component: keycloak
+---
+# Source: keycloak/charts/postgresql/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+automountServiceAccountToken: false
+---
+# Source: keycloak/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+automountServiceAccountToken: false
+---
+# Source: keycloak/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+type: Opaque
+data:
+  postgres-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  # We don't auto-generate LDAP password when it's not provided as we do for other passwords
+---
+# Source: keycloak/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+type: Opaque
+data:
+  admin-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+---
+# Source: keycloak/templates/configmap-env-vars.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-env-vars
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+data:
+  KEYCLOAK_ADMIN: "resonance-system"
+  KEYCLOAK_HTTP_PORT: "8080"
+  KEYCLOAK_PROXY_HEADERS: "xforwarded"
+  KEYCLOAK_ENABLE_STATISTICS: "false"
+  KEYCLOAK_DATABASE_HOST: "keycloak-postgresql"
+  KEYCLOAK_DATABASE_PORT: "5432"
+  KEYCLOAK_DATABASE_NAME: "bitnami_keycloak"
+  KEYCLOAK_DATABASE_USER: "bn_keycloak"
+  KEYCLOAK_PRODUCTION:  "true"
+  KEYCLOAK_ENABLE_HTTPS: "false"
+  KEYCLOAK_CACHE_TYPE: "ispn"
+  KEYCLOAK_CACHE_STACK: "kubernetes"
+  JAVA_OPTS_APPEND: "-Djgroups.dns.query=keycloak-headless.default.svc.cluster.local"
+  KEYCLOAK_LOG_OUTPUT: "default"
+  KEYCLOAK_LOG_LEVEL: "INFO"
+---
+# Source: keycloak/charts/postgresql/templates/primary/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-postgresql-hl
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: keycloak/charts/postgresql/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+    app.kubernetes.io/component: primary
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: primary
+---
+# Source: keycloak/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: keycloak
+---
+# Source: keycloak/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: null
+  selector:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: keycloak
+---
+# Source: keycloak/charts/postgresql/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: keycloak-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.3.0
+    helm.sh/chart: postgresql-15.5.20
+    app.kubernetes.io/component: primary
+spec:
+  replicas: 1
+  serviceName: keycloak-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: keycloak-postgresql
+      labels:
+        app.kubernetes.io/instance: keycloak
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.3.0
+        helm.sh/chart: postgresql-15.5.20
+        app.kubernetes.io/component: primary
+    spec:
+      serviceAccountName: keycloak-postgresql
+      imagePullSecrets:
+        - name: regcred
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: keycloak
+                    app.kubernetes.io/name: postgresql
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      hostNetwork: false
+      hostIPC: false
+      containers:
+        - name: postgresql
+          image: docker.io/bitnamilegacy/bitnami/postgresql:16.3.0-debian-12-r23
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_USER
+              value: "bn_keycloak"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-postgresql
+                  key: password
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-postgresql
+                  key: postgres-password
+            - name: POSTGRES_DATABASE
+              value: "bitnami_keycloak"
+            # LDAP
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            # TLS
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            # Audit
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            # Others
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "bn_keycloak" -d "dbname=bitnami_keycloak" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "bn_keycloak" -d "dbname=bitnami_keycloak" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits:
+              cpu: 150m
+              ephemeral-storage: 2Gi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+              subPath: app-tmp-dir
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: bitnami-sc
+---
+# Source: keycloak/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  podManagementPolicy: Parallel
+  serviceName: keycloak-headless
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: keycloak
+      app.kubernetes.io/name: keycloak
+      app.kubernetes.io/component: keycloak
+  template:
+    metadata:
+      annotations:
+        checksum/configmap-env-vars: 13d2544d11a7989ded9b76da7485c5de5ad53f36a162498abd2db27d4bb3e193
+        checksum/secrets: d65ab639eb1064726d8ef99f3c3428472d6fc974b28f51d3c0ed7c84f47e3089
+      labels:
+        app.kubernetes.io/instance: keycloak
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: keycloak
+        app.kubernetes.io/version: 25.0.2
+        helm.sh/chart: keycloak-22.0.0
+        app.kubernetes.io/component: keycloak
+    spec:
+      serviceAccountName: keycloak
+      imagePullSecrets:
+        - name: regcred
+      automountServiceAccountToken: true
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: keycloak
+                    app.kubernetes.io/name: keycloak
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      enableServiceLinks: true
+      initContainers:
+        - name: init-quarkus-directory
+          image: docker.io/bitnamilegacy/bitnami/keycloak:25.0.2-debian-12-r0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              cp -r /opt/bitnami/keycloak/lib/quarkus/* /quarkus
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            limits:
+              cpu: 750m
+              ephemeral-storage: 2Gi
+              memory: 768Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 50Mi
+              memory: 512Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /quarkus
+              subPath: app-quarkus-dir
+      containers:
+        - name: keycloak
+          image: docker.io/bitnamilegacy/bitnami/keycloak:25.0.2-debian-12-r0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak
+                  key: admin-password
+            - name: KEYCLOAK_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-postgresql
+                  key: password
+            - name: KEYCLOAK_HTTP_RELATIVE_PATH
+              value: "/"
+            - name: KC_HOSTNAME_URL
+              value: |-
+                https://keycloak.resonance.edrnd.cloud/
+            - name: KC_SPI_ADMIN_REALM
+              value: "master"
+            - name: KC_HOSTNAME
+              value: https://keycloak.resonance.edrnd.cloud/
+            - name: KC_HOSTNAME_ADMIN
+              value: https://keycloak.resonance.edrnd.cloud/
+          envFrom:
+            - configMapRef:
+                name: keycloak-env-vars
+          resources:
+            limits:
+              cpu: 750m
+              ephemeral-storage: 2Gi
+              memory: 768Mi
+            requests:
+              cpu: 500m
+              ephemeral-storage: 50Mi
+              memory: 512Mi
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: discovery
+              containerPort: 7800
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 300
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: http
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 60
+            httpGet:
+              path: /realms/master
+              port: http
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/lib/quarkus
+              subPath: app-quarkus-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/data
+              subPath: app-data-dir
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+---
+# Source: keycloak/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak
+  namespace: "default"
+  labels:
+    app.kubernetes.io/instance: keycloak
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/version: 25.0.2
+    helm.sh/chart: keycloak-22.0.0
+    app.kubernetes.io/component: keycloak
+  annotations:
+    external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
+spec:
+  ingressClassName: "nginx-resonance"
+  rules:
+    - host: "keycloak.resonance.edrnd.cloud"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: keycloak
+                port:
+                  name: http
+
+Templating release=influxdb, chart=/home/thanos98/.cache/helmfile/bitnami/influxdb/5.6.1/influxdb
+---
+# Source: influxdb/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: influxdb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: influxdb
+    helm.sh/chart: influxdb-5.6.1
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: influxdb
+  annotations:
+automountServiceAccountToken: true
+---
+# Source: influxdb/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: influxdb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: influxdb
+    helm.sh/chart: influxdb-5.6.1
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  admin-user-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+  admin-user-token: "UDNqcG52RlFLNjRTT3RNNQ=="
+  user-password: "UDNqcG52RlFLNjRTT3RNNQ=="
+---
+# Source: influxdb/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: influxdb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: influxdb
+    helm.sh/chart: influxdb-5.6.1
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: influxdb
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "64Gi"
+---
+# Source: influxdb/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: influxdb
+    helm.sh/chart: influxdb-5.6.1
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: influxdb
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - port: 8086
+      targetPort: http
+      protocol: TCP
+      name: http
+      nodePort: null
+    - port: 8088
+      targetPort: rpc
+      protocol: TCP
+      name: rpc
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/component: influxdb
+---
+# Source: influxdb/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: influxdb
+    helm.sh/chart: influxdb-5.6.1
+    app.kubernetes.io/instance: influxdb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: influxdb
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: influxdb
+      app.kubernetes.io/instance: influxdb
+      app.kubernetes.io/component: influxdb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: influxdb
+        helm.sh/chart: influxdb-5.6.1
+        app.kubernetes.io/instance: influxdb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: influxdb
+    spec:
+      
+      imagePullSecrets:
+        - name: regcred
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: influxdb
+                    app.kubernetes.io/instance: influxdb
+                    app.kubernetes.io/component: influxdb
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      priorityClassName: ""
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: influxdb
+      initContainers:
+      containers:
+        - name: influxdb
+          image: docker.io/bitnamilegacy/bitnami/influxdb:2.7.1-debian-11-r8
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: INFLUXDB_HTTP_AUTH_ENABLED
+              value: "true"
+            - name: INFLUXDB_CREATE_USER_TOKEN
+              value: "yes"
+            - name: INFLUXDB_ADMIN_USER
+              value: "resonance-system"
+            - name: INFLUXDB_ADMIN_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: influxdb
+                  key: admin-user-password
+            - name: INFLUXDB_ADMIN_USER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: influxdb
+                  key: admin-user-token
+            - name: INFLUXDB_ADMIN_BUCKET
+              value: "primary"
+            - name: INFLUXDB_ADMIN_ORG
+              value: "primary"
+            - name: INFLUXDB_USER
+              value: "resonance-system"
+            - name: INFLUXDB_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: influxdb
+                  key: user-password
+            - name: INFLUXDB_USER_BUCKET
+              value: "esthesis"
+            - name: INFLUXDB_USER_ORG
+              value: "esthesis"
+            - name: INFLUXDB_DB
+              value: "esthesis"
+          envFrom:
+          ports:
+            - name: http
+              containerPort: 8086
+              protocol: TCP
+            - name: rpc
+              containerPort: 8088
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 180
+            periodSeconds: 45
+            successThreshold: 1
+            timeoutSeconds: 30
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  . /opt/bitnami/scripts/libinfluxdb.sh
+
+                  influxdb_env
+                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
+                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
+
+                  timeout 29s influx ping --host http://$POD_IP:8086
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            periodSeconds: 45
+            successThreshold: 1
+            timeoutSeconds: 30
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  . /opt/bitnami/scripts/libinfluxdb.sh
+
+                  influxdb_env
+                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
+                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
+
+                  timeout 29s influx ping --host http://$POD_IP:8086
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/influxdb
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: influxdb
+
+Templating release=ingress-nginx, chart=ingress-nginx/ingress-nginx
+---
+# Source: ingress-nginx/templates/controller-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx
+  namespace: default
+automountServiceAccountToken: true
+---
+# Source: ingress-nginx/templates/controller-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: default
+data:
+  allow-snippet-annotations: "false"
+---
+# Source: ingress-nginx/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+  name: ingress-nginx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - nodes
+      - pods
+      - secrets
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - list
+      - watch
+      - get
+---
+# Source: ingress-nginx/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+  name: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ingress-nginx
+subjects:
+  - kind: ServiceAccount
+    name: ingress-nginx
+    namespace: default
+---
+# Source: ingress-nginx/templates/controller-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx
+  namespace: default
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - pods
+      - secrets
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  # Omit Ingress status permissions if `--update-status` is disabled.
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+      - ingress-nginx-leader
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - list
+      - watch
+      - get
+---
+# Source: ingress-nginx/templates/controller-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ingress-nginx
+subjects:
+  - kind: ServiceAccount
+    name: ingress-nginx
+    namespace: default
+---
+# Source: ingress-nginx/templates/controller-service-webhook.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller-admission
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - name: https-webhook
+      port: 443
+      targetPort: webhook
+      appProtocol: https
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/component: controller
+---
+# Source: ingress-nginx/templates/controller-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "*.resonance.edrnd.cloud"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-central-1:975050178874:certificate/92da2733-cbd0-463e-bf0d-0aee73338052"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: default
+spec:
+  type: LoadBalancer
+  ipFamilyPolicy: SingleStack
+  ipFamilies: 
+    - IPv4
+  ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: http
+      appProtocol: https
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/component: controller
+---
+# Source: ingress-nginx/templates/controller-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/instance: ingress-nginx
+      app.kubernetes.io/component: controller
+  replicas: 1
+  revisionHistoryLimit: 10
+  minReadySeconds: 0
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: ingress-nginx-4.9.1
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/instance: ingress-nginx
+        app.kubernetes.io/version: "1.9.6"
+        app.kubernetes.io/part-of: ingress-nginx
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: controller
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: controller
+          image: registry.k8s.io/ingress-nginx/controller:v1.9.6@sha256:1405cc613bd95b2c6edd8b2a152510ae91c7e62aea4698500d23b2145960ab9c
+          imagePullPolicy: IfNotPresent
+          lifecycle: 
+            preStop:
+              exec:
+                command:
+                - /wait-shutdown
+          args: 
+            - /nginx-ingress-controller
+            - --publish-service=$(POD_NAMESPACE)/ingress-nginx-controller
+            - --election-id=ingress-nginx-leader
+            - --controller-class=k8s.io/ingress-nginx
+            - --ingress-class=nginx
+            - --configmap=$(POD_NAMESPACE)/ingress-nginx-controller
+            - --watch-namespace=$(POD_NAMESPACE)
+            - --validating-webhook=:8443
+            - --validating-webhook-certificate=/usr/local/certificates/cert
+            - --validating-webhook-key=/usr/local/certificates/key
+          securityContext: 
+            runAsNonRoot: true
+            runAsUser: 101
+            allowPrivilegeEscalation: false
+            seccompProfile: 
+              type: RuntimeDefault
+            capabilities:
+              drop:
+              - ALL
+              add:
+              - NET_BIND_SERVICE
+            readOnlyRootFilesystem: false
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: LD_PRELOAD
+              value: /usr/local/lib/libmimalloc.so
+          livenessProbe: 
+            failureThreshold: 5
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe: 
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: webhook
+              containerPort: 8443
+              protocol: TCP
+          volumeMounts:
+            - name: webhook-cert
+              mountPath: /usr/local/certificates/
+              readOnly: true
+          resources: 
+            requests:
+              cpu: 100m
+              memory: 90Mi
+      nodeSelector: 
+        kubernetes.io/os: linux
+      serviceAccountName: ingress-nginx
+      terminationGracePeriodSeconds: 300
+      volumes:
+        - name: webhook-cert
+          secret:
+            secretName: ingress-nginx-admission
+---
+# Source: ingress-nginx/templates/controller-ingressclass.yaml
+# We don't support namespaced ingressClass yet
+# So a ClusterRole and a ClusterRoleBinding is required
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: nginx-
+spec:
+  controller: k8s.io/ingress-nginx
+---
+# Source: ingress-nginx/templates/admission-webhooks/validating-webhook.yaml
+# before changing this value, check the required kubernetes version
+# https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#prerequisites
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+  name: ingress-nginx-admission
+webhooks:
+  - name: validate.nginx.ingress.kubernetes.io
+    matchPolicy: Equivalent
+    rules:
+      - apiGroups:
+          - networking.k8s.io
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - ingresses
+    failurePolicy: Fail
+    sideEffects: None
+    admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: ingress-nginx-controller-admission
+        namespace: default
+        path: /networking/v1/ingresses
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ingress-nginx-admission
+  namespace: default
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ingress-nginx-admission
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+rules:
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - validatingwebhookconfigurations
+    verbs:
+      - get
+      - update
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ingress-nginx-admission
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ingress-nginx-admission
+subjects:
+  - kind: ServiceAccount
+    name: ingress-nginx-admission
+    namespace: default
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ingress-nginx-admission
+  namespace: default
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ingress-nginx-admission
+  namespace: default
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ingress-nginx-admission
+subjects:
+  - kind: ServiceAccount
+    name: ingress-nginx-admission
+    namespace: default
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/job-createSecret.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingress-nginx-admission-create
+  namespace: default
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+spec:
+  template:
+    metadata:
+      name: ingress-nginx-admission-create
+      labels:
+        helm.sh/chart: ingress-nginx-4.9.1
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/instance: ingress-nginx
+        app.kubernetes.io/version: "1.9.6"
+        app.kubernetes.io/part-of: ingress-nginx
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      containers:
+        - name: create
+          image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20231226-1a7112e06@sha256:25d6a5f11211cc5c3f9f2bf552b585374af287b4debf693cacbe2da47daa5084
+          imagePullPolicy: IfNotPresent
+          args:
+            - create
+            - --host=ingress-nginx-controller-admission,ingress-nginx-controller-admission.$(POD_NAMESPACE).svc
+            - --namespace=$(POD_NAMESPACE)
+            - --secret-name=ingress-nginx-admission
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          securityContext: 
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532
+            seccompProfile:
+              type: RuntimeDefault
+      restartPolicy: OnFailure
+      serviceAccountName: ingress-nginx-admission
+      nodeSelector: 
+        kubernetes.io/os: linux
+---
+# Source: ingress-nginx/templates/admission-webhooks/job-patch/job-patchWebhook.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingress-nginx-admission-patch
+  namespace: default
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: ingress-nginx-4.9.1
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: "1.9.6"
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+spec:
+  template:
+    metadata:
+      name: ingress-nginx-admission-patch
+      labels:
+        helm.sh/chart: ingress-nginx-4.9.1
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/instance: ingress-nginx
+        app.kubernetes.io/version: "1.9.6"
+        app.kubernetes.io/part-of: ingress-nginx
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      containers:
+        - name: patch
+          image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20231226-1a7112e06@sha256:25d6a5f11211cc5c3f9f2bf552b585374af287b4debf693cacbe2da47daa5084
+          imagePullPolicy: IfNotPresent
+          args:
+            - patch
+            - --webhook-name=ingress-nginx-admission
+            - --namespace=$(POD_NAMESPACE)
+            - --patch-mutating=false
+            - --secret-name=ingress-nginx-admission
+            - --patch-failure-policy=Fail
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          securityContext: 
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532
+            seccompProfile:
+              type: RuntimeDefault
+      restartPolicy: OnFailure
+      serviceAccountName: ingress-nginx-admission
+      nodeSelector: 
+        kubernetes.io/os: linux
+

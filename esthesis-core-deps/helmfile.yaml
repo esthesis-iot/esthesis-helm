@@ -59,6 +59,7 @@ values:
   - imagePullSecret: {{ env "IMAGE_PULL_SECRET" }}
   - registryNodePort: {{ env "REGISTRY_NODE_PORT" }}
   - ingressClassName: {{ env "INGRESS_CLASS_NAME" }}
+  - bitnamiImageRegistry: {{ env "BITNAMI_IMAGE_REGISTRY" | default "docker.io/bitnamilegacy" }}
 
   ##################################################################################################
   # Accounts to be used throughout charts.
@@ -154,11 +155,13 @@ releases:
     version: "17.3.7"
     installed: {{ .StateValues.redisEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
@@ -168,7 +171,6 @@ releases:
     version: "14.5.1"
     installed: {{ .StateValues.mongoDbEnabled }}
     values:
-      {{- if or .StateValues.imagePullSecret .StateValues.mongoDbStorageClass }}
       - global:
           {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
@@ -177,7 +179,8 @@ releases:
           {{- if .StateValues.mongoDbStorageClass }}
           storageClass: {{ .StateValues.mongoDbStorageClass | quote }}
           {{- end }}
-      {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - architecture: replicaset
       - auth:
           rootPassword: {{ .StateValues.esthesisSystemPassword }}
@@ -201,11 +204,13 @@ releases:
     version: "26.6.2"
     installed: {{ .StateValues.kafkaEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       {{- if .StateValues.devMode }}
       - controller:
           replicaCount: 1
@@ -326,7 +331,6 @@ releases:
     version: "22.0.0"
     installed: {{ .StateValues.keycloakEnabled }}
     values:
-      {{- if or .StateValues.imagePullSecret .StateValues.keycloakStorageClass }}
       - global:
           {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
@@ -335,7 +339,8 @@ releases:
           {{- if .StateValues.keycloakStorageClass }}
           defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
           {{- end }}
-      {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - proxyHeaders: xforwarded
       - production: true
       - auth:
@@ -380,11 +385,13 @@ releases:
     version: "2.11.16"
     installed: {{ .StateValues.grafanaLokiEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - promtail:
           enabled: true
           existingSecret: "grafana-loki-config"
@@ -394,11 +401,13 @@ releases:
     version: "9.6.3"
     installed: {{ .StateValues.grafanaEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
           password: {{ .StateValues.esthesisSystemPassword | quote }}
@@ -410,11 +419,13 @@ releases:
     version: "2.5.7"
     installed: {{ .StateValues.grafanaTempoEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - tempo:
           traces:
             jaeger:
@@ -428,11 +439,13 @@ releases:
     version: "5.6.1"
     installed: {{ .StateValues.influxDbEnabled }}
     values:
-      {{- if .StateValues.imagePullSecret }}
       - global:
+          {{- if .StateValues.imagePullSecret }}
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
-      {{- end }}
+          {{- end }}
+          image:
+            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
       - auth:
           createUserToken: true
           admin:
@@ -481,7 +494,7 @@ releases:
             namespace: {{ .Namespace }}
           service:
             {{- if .StateValues.ingressNginxLoadBalancerIP }}
-            externalIPs: 
+            externalIPs:
               - {{ .StateValues.ingressNginxLoadBalancerIP }}
             {{- end }}
             annotations:

@@ -160,8 +160,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - architecture: standalone
       - auth:
           password: {{ .StateValues.esthesisSystemPassword }}
@@ -179,8 +178,7 @@ releases:
           {{- if .StateValues.mongoDbStorageClass }}
           storageClass: {{ .StateValues.mongoDbStorageClass | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - architecture: replicaset
       - auth:
           rootPassword: {{ .StateValues.esthesisSystemPassword }}
@@ -209,8 +207,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       {{- if .StateValues.devMode }}
       - controller:
           replicaCount: 1
@@ -339,8 +336,7 @@ releases:
           {{- if .StateValues.keycloakStorageClass }}
           defaultStorageClass: {{ .StateValues.keycloakStorageClass | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - proxyHeaders: xforwarded
       - production: true
       - auth:
@@ -390,8 +386,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - promtail:
           enabled: true
           existingSecret: "grafana-loki-config"
@@ -406,8 +401,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - admin:
           user: {{ .StateValues.esthesisSystemUsername | quote }}
           password: {{ .StateValues.esthesisSystemPassword | quote }}
@@ -424,8 +418,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - tempo:
           traces:
             jaeger:
@@ -444,8 +437,7 @@ releases:
           imagePullSecrets:
             - {{ .StateValues.imagePullSecret | quote }}
           {{- end }}
-          image:
-            repository: {{ .StateValues.bitnamiImageRegistry | quote }}
+          imageRegistry: {{ .StateValues.bitnamiImageRegistry | quote }}
       - auth:
           createUserToken: true
           admin:

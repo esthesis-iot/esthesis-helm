@@ -101,7 +101,7 @@ keycloakx:
     - "--http-enabled=true"
     - "--hostname-strict=false"
     - "--hostname-strict-https=false"
-  extraEnv:
+  extraEnv: |
     - name: KEYCLOAK_ADMIN
       value: "esthesis-system"
     - name: KEYCLOAK_ADMIN_PASSWORD

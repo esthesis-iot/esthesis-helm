@@ -32,6 +32,7 @@ esthesisSystemUsername: esthesis-system
 esthesisSystemPassword: esthesis-system
 
 ##################################################################################################
+##################################################################################################
 # Mosquitto Values
 ##################################################################################################
 mosquittoEnabled: true
@@ -42,101 +43,94 @@ mosquittoCaCert: ""
 mosquittoServerCert: ""
 mosquittoServerKey: ""
 
-# Redis configuration
+# Redis configuration (Cloudpirates)
 redis:
   fullnameOverride: "redis"
   image:
     pullSecrets: []
-  architecture: standalone
-  auth:
-    password: esthesis-system
+  # Cloudpirates specific
+  usePassword: true
+  password: "esthesis-system"
+  persistence:
+    enabled: false # Default for dev
 
-# MongoDB configuration
-mongodb:
+# MongoDB configuration (Percona Server for MongoDB)
+psmdb-db:
   fullnameOverride: "mongodb"
-  image:
-    pullSecrets: []
-    debug: true
-  architecture: replicaset
-  replicaCount: 1
-  auth:
-    rootPassword: esthesis-system
-    replicaSetKey: "ZXN0aGVzaXMtc3lzdGVt" # Base64 encoded string "esthesis-system"
-    usernames:
-      - "esthesis-system"
-    passwords:
-      - "esthesis-system"
-    databases:
-      - "esthesiscore"
-  initdbScripts:
-    init-db.js: |
-      use esthesiscore
-      db.grantRolesToUser("esthesis-system", ["dbAdmin"])
+  replsets:
+    - name: rs0
+      size: 1
+      volumeSpec:
+        pvc:
+          resources:
+            requests:
+              storage: 10Gi
+  secrets:
+    users: esthesis-core-deps-psmdb-db-users
+  # We need to create the secret manually or via a template if the chart doesn't support inline passwords easily.
+  # For dev simplicity, we assume the operator/chart handles some defaults or we rely on the user to create secrets.
+  # However, to match previous behavior, we might need a template to create the secret.
 
-# Kafka configuration
+# Kafka configuration (Strimzi)
+# This is handled by templates/kafka/strimzi-kafka.yaml which uses .Values.kafka
 kafka:
-  fullnameOverride: "kafka"
-  image:
-    pullSecrets: []
-  provisioning:
-    enabled: true
-    topics:
-      - name: esthesis-command-reply
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-telemetry
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-metadata
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-app-unicast
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-app-broadcast
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-ping
-        partitions: 1
-        replicationFactor: 1
-      - name: esthesis-command-request
-        partitions: 1
-        replicationFactor: 1
-  kraft:
-    clusterId: "M3Q1ZTNlMWFhMTgyNDhiZj"
-  sasl:
-    interbroker:
-      password: "esthesis-system"
-    controller:
-      password: "esthesis-system"
-    client:
-      users:
-        - "esthesis-system"
-      passwords:
-        - "esthesis-system"
-  controller:
-    replicaCount: 1
-  extraConfig: |
-    offsets.topic.replication.factor=1
-    transaction.state.log.replication.factor=1
-
-# Keycloak configuration
-keycloak:
-  fullnameOverride: "keycloak"
-  global:
-    imagePullSecrets: []
-  proxyHeaders: xforwarded
-  production: true
+  name: "kafka"
+  replicas: 1
+  version: "3.9.0"
+  metadataVersion: "3.9-IV0"
+  storage:
+    type: "persistent-claim"
+    size: "10Gi"
   auth:
-    adminUser: esthesis-system
-    adminPassword: esthesis-system
-  postgresql:
-    fullnameOverride: "postgresql"
-    auth:
-      postgresPassword: "esthesis-system"
-      password: "esthesis-system"
-  readinessProbe:
-    timeoutSeconds: 60
+    type: "scram-sha-512"
+  config:
+    offsets.topic.replication.factor: "1"
+    transaction.state.log.replication.factor: "1"
+    transaction.state.log.min.isr: "1"
+    default.replication.factor: "1"
+    min.insync.replicas: "1"
+
+# Keycloak configuration (Codecentric KeycloakX)
+keycloakx:
+  fullnameOverride: "keycloak"
+  image:
+    tag: "24.0.5"
+  command:
+    - "/opt/keycloak/bin/kc.sh"
+    - "start"
+    - "--http-enabled=true"
+    - "--hostname-strict=false"
+    - "--hostname-strict-https=false"
+  extraEnv:
+    - name: KEYCLOAK_ADMIN
+      value: "esthesis-system"
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: "esthesis-system"
+    # Database connection
+    - name: KC_DB
+      value: "postgres"
+    - name: KC_DB_URL
+      value: "jdbc:postgresql://postgres-pg-db:5432/keycloak"
+    - name: KC_DB_USERNAME
+      value: "keycloak"
+    - name: KC_DB_PASSWORD
+      value: "esthesis-system"
+  http:
+    relativePath: "/"
+
+# Postgres configuration (Percona for PostgreSQL)
+pg-db:
+  fullnameOverride: "postgres"
+  # Percona PG config is complex, usually requires a CR.
+  # Assuming the dependency 'pg-db' is the Percona Postgres Operator's DB chart.
+  # We might need to check if it creates a cluster.
+  cluster:
+    size: 1
+    users:
+      - name: keycloak
+        databases:
+          - keycloak
+        password: esthesis-system
 
 # Camunda configuration
 camunda-platform:
@@ -225,10 +219,10 @@ kafka-ui:
     kafka:
       clusters:
         - name: kafka
-          bootstrapServers: "kafka:9092"
+          bootstrapServers: "kafka-kafka-bootstrap:9092" # Strimzi service name
           properties:
             security.protocol: SASL_PLAINTEXT
-            sasl.mechanism: PLAIN
+            sasl.mechanism: SCRAM-SHA-512
             sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username=esthesis-system password=esthesis-system;"
 
 # Grafana Loki configuration

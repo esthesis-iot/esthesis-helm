@@ -22,7 +22,7 @@ spec:
             - -c
             - |
               echo Logging in to Keycloak.
-              until kcadm.sh config credentials --server http://keycloak-http:8080/auth --realm master --user {{ .Values.esthesisSystemUsername | quote }} --password {{ .Values.esthesisSystemPassword | quote }} --client admin-cli --config /tmp/keycloak.conf;
+              until kcadm.sh config credentials --server http://keycloak-http:80/ --realm master --user {{ .Values.esthesisSystemUsername | quote }} --password {{ .Values.esthesisSystemPassword | quote }} --client admin-cli --config /tmp/keycloak.conf;
               do
                 echo "Waiting for Keycloak to be ready...";
                 sleep 5;

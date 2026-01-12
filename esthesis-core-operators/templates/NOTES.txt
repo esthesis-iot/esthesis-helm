@@ -1,0 +1,16 @@
+Thank you for installing {{ .Chart.Name }}.
+
+The following operators have been deployed:
+
+1. Strimzi Kafka Operator
+   - CRDs: Kafka, KafkaTopic, KafkaUser, KafkaNodePool
+
+2. Percona Server for MongoDB Operator
+   - CRDs: PerconaServerMongoDB
+
+3. Percona PostgreSQL Operator
+   - CRDs: PerconaPGCluster
+
+Next Steps:
+  - Deploy esthesis-core-deps chart to create database and messaging infrastructure
+  - Deploy esthesis-core chart to create the application

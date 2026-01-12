@@ -185,7 +185,7 @@ camunda-platform:
     minimumMasterNodes: 1
 
 # InfluxDB configuration
-influxdb:
+influxdb2:
   fullnameOverride: "influxdb"
   global:
     imagePullSecrets: []

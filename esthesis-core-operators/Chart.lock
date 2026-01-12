@@ -1,0 +1,12 @@
+dependencies:
+- name: strimzi-kafka-operator
+  repository: https://strimzi.io/charts/
+  version: 0.47.0
+- name: psmdb-operator
+  repository: https://percona.github.io/percona-helm-charts
+  version: 1.20.1
+- name: pg-operator
+  repository: https://percona.github.io/percona-helm-charts/
+  version: 2.7.0
+digest: sha256:0238cce92dbc76b6e6e3540ddffea89a6e62a0585025c550ebde3bd5caf04339
+generated: "2025-12-23T11:44:52.346743634+02:00"

@@ -18,19 +18,10 @@ dependencies:
   - name: psmdb-db
     version: "1.20.1"
     repository: https://percona.github.io/percona-helm-charts
-  - name: psmdb-operator
-    version: "1.20.1"
-    repository: https://percona.github.io/percona-helm-charts
-  - name: strimzi-kafka-operator
-    version: "0.47.0"
-    repository: https://strimzi.io/charts/
   - name: kafka-ui
     version: "0.7.6"
     repository: https://provectus.github.io/kafka-ui-charts
     condition: charts_enabled.kafka-ui
-  - name: pg-operator
-    version: "2.7.0"
-    repository: https://percona.github.io/percona-helm-charts/
   - name: pg-db
     version: "2.7.0"
     repository: https://percona.github.io/percona-helm-charts/

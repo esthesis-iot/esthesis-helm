@@ -133,6 +133,7 @@ kafka:
   users:
     - name: esthesis-system
       auth: scram-sha-512
+      password: "esthesis-system"
 
 ##################################################################################################
 # Keycloak configuration (Codecentric KeycloakX)

@@ -9,6 +9,11 @@ metadata:
 spec:
   authentication:
     type: {{ .auth | default "scram-sha-512" }}
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: {{ .name }}
+          key: password
   {{- with .authorization }}
   authorization:
     type: simple

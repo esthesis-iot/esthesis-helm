@@ -94,6 +94,8 @@ psmdb-db:
       roles:
         - name: dbAdmin
           db: esthesiscore
+        - name: readWrite
+          db: esthesiscore
   backup:
     enabled: false
   # We need to create the secret manually or via a template if the chart doesn't support inline passwords easily.
@@ -113,13 +115,24 @@ kafka:
     type: "persistent-claim"
     size: "10Gi"
   auth:
-    type: "scram-sha-512"
+    type: scram-sha-512
   config:
-    offsets.topic.replication.factor: "1"
-    transaction.state.log.replication.factor: "1"
-    transaction.state.log.min.isr: "1"
-    default.replication.factor: "1"
-    min.insync.replicas: "1"
+    offsets.topic.replication.factor: 1
+    transaction.state.log.replication.factor: 1
+    default.replication.factor: 1
+    min.insync.replicas: 1
+    auto.create.topics.enable: "false"
+  topics:
+    - { name: esthesis-command-reply, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-telemetry, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-metadata, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-app-unicast, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-app-broadcast, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-ping, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-command-request, partitions: 1, replicationFactor: 1 }
+  users:
+    - name: esthesis-system
+      auth: scram-sha-512
 
 ##################################################################################################
 # Keycloak configuration (Codecentric KeycloakX)
@@ -137,19 +150,17 @@ keycloakx:
     - "--http-port=8080"
     - "--hostname-strict=false"
   extraEnv: |
-    - name: KC_HEALTH_ENABLED
-      value: "true"
-    - name: KC_METRICS_ENABLED
-      value: "true"
     - name: KEYCLOAK_ADMIN
       value: "esthesis-system"
     - name: KEYCLOAK_ADMIN_PASSWORD
       value: "esthesis-system"
+    - name: KC_HOSTNAME_STRICT_HTTPS
+      value: "false"
     - name: JAVA_OPTS_APPEND
       value: >-
         -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
-  # http:
-  #   relativePath: "/"
+  http:
+    relativePath: "/"
   database:
     vendor: postgres
     hostname: postgres-rw
@@ -157,6 +168,29 @@ keycloakx:
     database: keycloak
     username: keycloak
     password: esthesis-system
+  livenessProbe: |
+    httpGet:
+      path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/live'
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+  readinessProbe: |
+    httpGet:
+      path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/ready'
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+  startupProbe: |
+    httpGet:
+      path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health'
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 60
+    periodSeconds: 5
 
 ##################################################################################################
 # Postgres configuration (Percona for PostgreSQL)

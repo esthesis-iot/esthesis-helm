@@ -2,17 +2,23 @@
 # Strimzi Kafka Operator configuration
 ##################################################################################################
 strimzi-kafka-operator:
-  watchNamespaces: []  # Empty = watch all namespaces
+  watchNamespaces: [] # Empty = watch all namespaces
   watchAnyNamespace: true
+  image:
+    imagePullSecrets:
+      - name: regcred
 
 ##################################################################################################
 # Percona MongoDB Operator configuration
 ##################################################################################################
 psmdb-operator:
-  watchNamespace: "*"  # Watch all namespaces
+  watchAllNamespaces: true # Watch all namespaces
+  imagePullSecrets:
+    - name: regcred
 
 ##################################################################################################
-# Percona PostgreSQL Operator configuration
+# Cloudnative PostgreSQL Operator configuration
 ##################################################################################################
-pg-operator:
-  watchNamespace: "*"  # Watch all namespaces
+cloudnative-pg:
+  imagePullSecrets:
+    - name: regcred

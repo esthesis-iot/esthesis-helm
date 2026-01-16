@@ -46,19 +46,15 @@ redis:
   fullnameOverride: "redis"
   global:
     imagePullSecrets:
-        - name: "regcred"
+      - name: "regcred"
   auth:
     password: esthesis-system
 
 ##################################################################################################
-# MongoDB (Percona Operator + DB)
+# MongoDB
 ##################################################################################################
-psmdb-operator:
-  imagePullSecrets:
-    - name: "regcred"
-
 psmdb-db:
-  name: "mongodb"
+  nameOverride: "mongodb"
   imagePullSecrets:
     - name: "regcred"
   clusterServiceDNSSuffix: cluster.local
@@ -75,37 +71,36 @@ psmdb-db:
         - name: dbAdmin
           db: esthesiscore
 
-pg-operator:
-  imagePullSecrets:
-    - name: "regcred"
+##################################################################################################
+# Cloudnative PostgreSQL
+##################################################################################################
 
-pg-db:
-  databaseInitSQL:
-    key: init.sql
-    name: postgres-init
-  imagePullSecrets:
-    - name: "regcred"
-  instances:
-    - name: instance1
-      replicas: 1
-      resources:
-        requests:
-          cpu: 500m
-          memory: 256Mi
-        limits:
-          cpu: 1.0
-          memory: 1Gi
-      dataVolumeClaimSpec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 5Gi
-  proxy:
-    pgBouncer:
-      replicas: 1
-  backups:
+pg_db:
+  fullnameOverride: "postgres"
+  type: postgresql
+  cluster:
+    instances: 1
+    imagePullSecrets:
+      - name: regcred
+    storage:
+      size: 10Gi
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+  imageCatalog:
     enabled: false
+  poolers:
+    - name: rw
+      type: rw
+      poolMode: transaction
+      instances: 1
+      parameters:
+        max_client_conn: "1000"
+        default_pool_size: "100"
 
 ##################################################################################################
 # Kafka (Strimzi)
@@ -120,7 +115,7 @@ kafka:
   storage:
     type: persistent-claim
     size: 20Gi
-    class: ""             # use your StorageClass name or leave empty
+    class: "" # use your StorageClass name or leave empty
   auth:
     type: scram-sha-512
   config:
@@ -131,11 +126,11 @@ kafka:
     auto.create.topics.enable: "false"
   topics:
     - { name: esthesis-command-reply, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-telemetry,     partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-metadata,      partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-app-unicast,   partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-telemetry, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-metadata, partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-app-unicast, partitions: 1, replicationFactor: 1 }
     - { name: esthesis-app-broadcast, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-ping,          partitions: 1, replicationFactor: 1 }
+    - { name: esthesis-ping, partitions: 1, replicationFactor: 1 }
     - { name: esthesis-command-request, partitions: 1, replicationFactor: 1 }
   users:
     - name: esthesis-system
@@ -168,7 +163,8 @@ kafka-ui:
 keycloakx:
   fullnameOverride: "keycloak"
   image:
-    pullSecrets: []
+    tag: "24.0.5"
+  imagePullSecrets: []
   replicas: 1
   service:
     httpPort: 8080
@@ -176,21 +172,24 @@ keycloakx:
     - start
   extraEnv: |
     - name: KC_HOSTNAME
-      value: https://keycloakpats.esthesis-dev.eurodyn.com/auth
+      value: https://keycloak.esthesis-dev.eurodyn.com/auth
     - name: KC_HOSTNAME_ADMIN
-      value: https://keycloakpats.esthesis-dev.eurodyn.com/auth
+      value: https://keycloak.esthesis-dev.eurodyn.com/auth
     - name: KEYCLOAK_ADMIN
       value: esthesis-system
     - name: KEYCLOAK_ADMIN_PASSWORD
       value: esthesis-system
     - name: KC_PROXY
       value: "passthrough"
+    - name: JAVA_OPTS_APPEND
+      value: >-
+        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
   database:
     vendor: postgres
-    hostname: esthesis-core-deps-pg-pgbouncer
+    hostname: postgres-pooler-rw
     port: 5432
     database: keycloak
-    username: postgres
+    username: keycloak
     password: esthesis-system
   ingress:
     enabled: true
@@ -199,14 +198,13 @@ keycloakx:
       cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
     servicePort: "http"
     rules:
-      - host: 'keycloakpats.esthesis-dev.eurodyn.com'
+      - host: "keycloak.esthesis-dev.eurodyn.com"
         paths:
-          - path: '/auth/'
+          - path: "/auth/"
             pathType: Prefix
     tls:
       - hosts:
-        - keycloakpats.esthesis-dev.eurodyn.com
-
+          - keycloak.esthesis-dev.eurodyn.com
 
 ##################################################################################################
 # Camunda
@@ -253,10 +251,28 @@ camunda-platform:
         memory: "256Mi"
   elasticsearch:
     enabled: true
+    global:
+      imagePullSecrets:
+        - regcred
+    image:
+      repository: bitnamilegacy/elasticsearch
+    sysctlImage:
+      repository: bitnamilegacy/os-shell
+    metrics:
+      image:
+        repository: bitnamilegacy/elasticsearch-exporter
+    volumePermissions:
+      image:
+        repository: bitnamilegacy/os-shell
+    copyTlsCerts:
+      image:
+        repository: bitnamilegacy/os-shell
     resources:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    replicas: 1
+    minimumMasterNodes: 1
 
 ##################################################################################################
 # InfluxDB2 (InfluxData)
@@ -305,8 +321,8 @@ loki:
   singleBinary:
     replicas: 1
     persistence:
-     enabled: true
-     size: 10Gi
+      enabled: true
+      size: 10Gi
   write:
     replicas: 0
   read:
@@ -322,7 +338,7 @@ loki:
       type: filesystem
     schemaConfig:
       configs:
-        - from: "2025-09-01"          # use today's date or slightly earlier for a fresh cluster
+        - from: "2025-09-01" # use today's date or slightly earlier for a fresh cluster
           store: boltdb-shipper
           object_store: filesystem
           schema: v11

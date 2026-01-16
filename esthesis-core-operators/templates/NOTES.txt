@@ -8,8 +8,8 @@ The following operators have been deployed:
 2. Percona Server for MongoDB Operator
    - CRDs: PerconaServerMongoDB
 
-3. Percona PostgreSQL Operator
-   - CRDs: PerconaPGCluster
+3. Cloudnative PostgreSQL Operator
+   - CRDs: CnpgPGCluster
 
 Next Steps:
   - Deploy esthesis-core-deps chart to create database and messaging infrastructure

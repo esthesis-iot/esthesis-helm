@@ -19,6 +19,6 @@ dependencies:
   - name: psmdb-operator
     version: "1.20.1"
     repository: https://percona.github.io/percona-helm-charts
-  - name: pg-operator
-    version: "2.7.0"
-    repository: https://percona.github.io/percona-helm-charts/
+  - name: cloudnative-pg
+    version: "0.26.0"
+    repository: "https://cloudnative-pg.io/charts/"

@@ -8,9 +8,9 @@ dependencies:
 - name: kafka-ui
   repository: https://provectus.github.io/kafka-ui-charts
   version: 0.7.6
-- name: pg-db
-  repository: https://percona.github.io/percona-helm-charts/
-  version: 2.7.0
+- name: cluster
+  repository: https://cloudnative-pg.io/charts/
+  version: 0.3.1
 - name: keycloakx
   repository: https://codecentric.github.io/helm-charts
   version: 7.1.2
@@ -41,5 +41,5 @@ dependencies:
 - name: ollama
   repository: https://otwld.github.io/ollama-helm
   version: 1.16.0
-digest: sha256:58f68d7c3e4b9e457130f43b4cc6f136f87622c0b0cfd5df5f2f9610315b0e89
-generated: "2025-12-23T11:45:00.180204867+02:00"
+digest: sha256:3bf9bbb616b23651767cab772ee9394a88be1c60ec9366e29b05fe75eeac1b9b
+generated: "2026-01-16T11:47:13.3853456+02:00"

@@ -10,7 +10,7 @@ esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
 ingressClassName:
-imagePullSecret: ""
+imagePullSecret: "regcred"
 
 # Enable/disable charts
 charts_enabled:
@@ -32,7 +32,6 @@ esthesisSystemUsername: esthesis-system
 esthesisSystemPassword: esthesis-system
 
 ##################################################################################################
-##################################################################################################
 # Mosquitto Values
 ##################################################################################################
 mosquittoEnabled: true
@@ -43,36 +42,68 @@ mosquittoCaCert: ""
 mosquittoServerCert: ""
 mosquittoServerKey: ""
 
+##################################################################################################
 # Redis configuration (Cloudpirates)
+##################################################################################################
 redis:
   fullnameOverride: "redis"
-  image:
-    pullSecrets: []
+  global:
+    imagePullSecrets:
+      - name: "regcred"
   # Cloudpirates specific
-  usePassword: true
-  password: "esthesis-system"
+  auth:
+    password: "esthesis-system"
   persistence:
     enabled: false # Default for dev
 
+##################################################################################################
 # MongoDB configuration (Percona Server for MongoDB)
+##################################################################################################
 psmdb-db:
   fullnameOverride: "mongodb"
+  imagePullSecrets:
+    - name: "regcred"
+  tls:
+    mode: disabled
   replsets:
-    - name: rs0
+    rs0:
+      name: rs0
       size: 1
       volumeSpec:
         pvc:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: vsphere-csi-sc
           resources:
             requests:
               storage: 10Gi
-  secrets:
-    users: esthesis-core-deps-psmdb-db-users
+      arbiter:
+        enabled: false
+      nonvoting:
+        enabled: false
+  unsafeFlags:
+    replsetSize: true
+    tls: true
+  sharding:
+    enabled: false
+  users:
+    - name: esthesis-system
+      db: esthesiscore
+      passwordSecretRef:
+        name: esthesis-core-deps-psmdb-db-users
+        key: password
+      roles:
+        - name: dbAdmin
+          db: esthesiscore
+  backup:
+    enabled: false
   # We need to create the secret manually or via a template if the chart doesn't support inline passwords easily.
   # For dev simplicity, we assume the operator/chart handles some defaults or we rely on the user to create secrets.
   # However, to match previous behavior, we might need a template to create the secret.
 
+##################################################################################################
 # Kafka configuration (Strimzi)
 # This is handled by templates/kafka/strimzi-kafka.yaml which uses .Values.kafka
+##################################################################################################
 kafka:
   name: "kafka"
   replicas: 1
@@ -90,54 +121,67 @@ kafka:
     default.replication.factor: "1"
     min.insync.replicas: "1"
 
+##################################################################################################
 # Keycloak configuration (Codecentric KeycloakX)
+##################################################################################################
 keycloakx:
   fullnameOverride: "keycloak"
   image:
     tag: "24.0.5"
+  imagePullSecrets:
+    - name: regcred
   command:
     - "/opt/keycloak/bin/kc.sh"
     - "start"
     - "--http-enabled=true"
+    - "--http-port=8080"
     - "--hostname-strict=false"
-    - "--hostname-strict-https=false"
   extraEnv: |
+    - name: KC_HEALTH_ENABLED
+      value: "true"
+    - name: KC_METRICS_ENABLED
+      value: "true"
     - name: KEYCLOAK_ADMIN
       value: "esthesis-system"
     - name: KEYCLOAK_ADMIN_PASSWORD
       value: "esthesis-system"
-    # Database connection
-    - name: KC_DB
-      value: "postgres"
-    - name: KC_DB_URL
-      value: "jdbc:postgresql://postgres-pg-db:5432/keycloak"
-    - name: KC_DB_USERNAME
-      value: "keycloak"
-    - name: KC_DB_PASSWORD
-      value: "esthesis-system"
-  http:
-    relativePath: "/"
+    - name: JAVA_OPTS_APPEND
+      value: >-
+        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+  # http:
+  #   relativePath: "/"
+  database:
+    vendor: postgres
+    hostname: postgres-rw
+    port: 5432
+    database: keycloak
+    username: keycloak
+    password: esthesis-system
 
+##################################################################################################
 # Postgres configuration (Percona for PostgreSQL)
-pg-db:
+##################################################################################################
+pg_db:
   fullnameOverride: "postgres"
-  # Percona PG config is complex, usually requires a CR.
-  # Assuming the dependency 'pg-db' is the Percona Postgres Operator's DB chart.
-  # We might need to check if it creates a cluster.
+  type: postgresql
   cluster:
-    size: 1
-    users:
-      - name: keycloak
-        databases:
-          - keycloak
-        password: esthesis-system
+    instances: 1
+    imagePullSecrets:
+      - name: regcred
+    storage:
+      size: 10Gi
+  imageCatalog:
+    enabled: false
 
+##################################################################################################
 # Camunda configuration
+##################################################################################################
 camunda-platform:
   global:
     zeebeClusterName: "zeebe"
     image:
-      pullSecrets: []
+      pullSecrets:
+        - name: "regcred"
     identity:
       keycloak:
         url:
@@ -177,6 +221,22 @@ camunda-platform:
     replicas: 1
   elasticsearch:
     enabled: true
+    global:
+      imagePullSecrets:
+        - regcred
+    image:
+      repository: bitnamilegacy/elasticsearch
+    sysctlImage:
+      repository: bitnamilegacy/os-shell
+    metrics:
+      image:
+        repository: bitnamilegacy/elasticsearch-exporter
+    volumePermissions:
+      image:
+        repository: bitnamilegacy/os-shell
+    copyTlsCerts:
+      image:
+        repository: bitnamilegacy/os-shell
     resources:
       requests:
         cpu: "100m"
@@ -184,25 +244,27 @@ camunda-platform:
     replicas: 1
     minimumMasterNodes: 1
 
+##################################################################################################
 # InfluxDB configuration
+##################################################################################################
 influxdb2:
   fullnameOverride: "influxdb"
-  global:
-    imagePullSecrets: []
-  auth:
-    admin:
-      username: esthesis-system
-      password: esthesis-system
-      token: "918UdZNzKNEf7YeL7efV"
-    user:
-      org: esthesis
-      bucket: esthesis
-      username: esthesis-system
-      password: esthesis-system
+  image:
+    pullSecrets:
+      - regcred
+  adminUser:
+    organization: "esthesis"
+    bucket: "esthesis"
+    user: "esthesis-system"
+    retention_policy: "0s"
+    password: "esthesis-system"
+    token: "918UdZNzKNEf7YeL7efV"
   persistence:
     size: "32Gi"
 
+##################################################################################################
 # Grafana configuration
+##################################################################################################
 grafana:
   fullnameOverride: "grafana"
   global:
@@ -211,7 +273,9 @@ grafana:
     user: esthesis-system
     password: esthesis-system
 
+##################################################################################################
 # Kafka UI configuration
+##################################################################################################
 kafka-ui:
   fullnameOverride: "kafka-ui"
   imagePullSecrets: []
@@ -225,7 +289,9 @@ kafka-ui:
             sasl.mechanism: SCRAM-SHA-512
             sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username=esthesis-system password=esthesis-system;"
 
+##################################################################################################
 # Grafana Loki configuration
+##################################################################################################
 grafana-loki:
   fullnameOverride: "grafana-loki"
   global:
@@ -233,7 +299,9 @@ grafana-loki:
   promtail:
     enabled: true
 
+##################################################################################################
 # Ingress nginx configuration
+##################################################################################################
 ingress-nginx:
   fullnameOverride: "ingress-nginx"
   controller:
@@ -251,7 +319,9 @@ ingress-nginx:
     ingressClassResource:
       name: "nginx-default"
 
+##################################################################################################
 # Docker Registry UI configuration
+##################################################################################################
 docker-registry-ui:
   fullnameOverride: "docker-registry-ui"
   global:
@@ -266,7 +336,9 @@ docker-registry-ui:
       type: NodePort
       nodePort: ""
 
+##################################################################################################
 # Grafana Tempo configuration
+##################################################################################################
 grafana-tempo:
   fullnameOverride: "grafana-tempo"
   global:
@@ -279,7 +351,9 @@ grafana-tempo:
       otlp:
         grpc: true # Needed by Quarkus (port 4317)
 
+##################################################################################################
 # Ollama
+##################################################################################################
 ollama:
   fullnameOverride: "ollama"
   ollama:

@@ -4,6 +4,19 @@ metadata:
   name: postgres-init
 data:
   init.sql: |
-    CREATE DATABASE keycloak OWNER postgres;
-    GRANT ALL PRIVILEGES ON DATABASE keycloak TO postgres;
-    ALTER USER postgres WITH PASSWORD '{{ .Values.esthesisSystemPassword }}';
+    DO $$ BEGIN
+      CREATE ROLE {{ .Values.keycloakx.database.username }} LOGIN PASSWORD '{{ .Values.keycloakx.database.password }}';
+    EXCEPTION WHEN duplicate_object THEN
+      ALTER ROLE {{ .Values.keycloakx.database.username }} WITH LOGIN PASSWORD '{{ .Values.keycloakx.database.password }}';
+    END $$;
+
+    \set keycloak_db {{ .Values.keycloakx.database.database }}
+    SELECT CASE WHEN EXISTS (SELECT 1 FROM pg_database WHERE datname = :'keycloak_db')
+                THEN 1 ELSE 0 END AS keycloak_exists;
+    \gset
+    \if :keycloak_exists
+    \echo 'keycloak DB already exists'
+    \else
+    CREATE DATABASE :keycloak_db OWNER {{ .Values.keycloakx.database.username }};
+    \endif
+    GRANT ALL PRIVILEGES ON DATABASE {{ .Values.keycloakx.database.database }} TO {{ .Values.keycloakx.database.username }};

@@ -5,7 +5,7 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Values.kafka.name | default "kafka" }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.kafka.replicas }}
   roles: ["controller"]
   storage:
     type: persistent-claim
@@ -18,7 +18,7 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Values.kafka.name | default "kafka" }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.kafka.replicas }}
   roles: ["broker"]
   storage:
     type: persistent-claim

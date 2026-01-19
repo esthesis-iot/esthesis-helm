@@ -49,22 +49,21 @@ oidcTlsVerification: false
 oidcClientId: "esthesis"
 
 # REDIS configuration
-redisHosts: "redis://redis-headless:6379"
+redisHosts: "redis://redis:6379"
 
 # RabbitMQ configuration
 rabbitmqErlangCookie: "esthesis-system"
 
 # Camunda configuration
-camundaGatewayUrlCluster: "camunda-zeebe-gateway:26500"
+camundaGatewayUrlCluster: "zeebe-gateway:26500"
 
 # Kafka configuration
 kafkaEnabled: true
-kafkaBootstrapServers: "kafka:9092"
+kafkaBootstrapServers: "kafka-kafka-bootstrap:9092"
 
 # Cert Manager configuration
 esthesisUiCertManagerClusterIssuer: ""
 esthesisUiCertManagerIssuer: ""
-
 
 # Chatbot configuration
 chatbot:

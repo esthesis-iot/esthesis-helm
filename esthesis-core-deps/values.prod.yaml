@@ -49,32 +49,54 @@ redis:
       - name: "regcred"
   auth:
     password: esthesis-system
+  persistence:
+    enabled: true
 
 ##################################################################################################
 # MongoDB
 ##################################################################################################
 psmdb-db:
-  nameOverride: "mongodb"
+  fullnameOverride: "mongodb"
   imagePullSecrets:
     - name: "regcred"
-  clusterServiceDNSSuffix: cluster.local
+  tls:
+    mode: disabled
   replsets:
     rs0:
+      name: rs0
       size: 1
+      volumeSpec:
+        pvc:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: vsphere-csi-sc
+          resources:
+            requests:
+              storage: 10Gi
+      arbiter:
+        enabled: false
+      nonvoting:
+        enabled: false
+  unsafeFlags:
+    replsetSize: true
+    tls: true
+  sharding:
+    enabled: false
   users:
     - name: esthesis-system
-      db: admin
+      db: esthesiscore
       passwordSecretRef:
-        name: esthesis-system
+        name: esthesis-core-deps-psmdb-db-users
         key: password
       roles:
         - name: dbAdmin
           db: esthesiscore
-
+        - name: readWrite
+          db: esthesiscore
+  backup:
+    enabled: false
 ##################################################################################################
 # Cloudnative PostgreSQL
 ##################################################################################################
-
 pg_db:
   fullnameOverride: "postgres"
   type: postgresql
@@ -105,8 +127,6 @@ pg_db:
 ##################################################################################################
 # Kafka (Strimzi)
 ##################################################################################################
-strimzi-kafka-operator: {}
-
 kafka:
   name: kafka
   replicas: 1
@@ -283,14 +303,14 @@ influxdb2:
     pullSecrets:
       - regcred
   adminUser:
-    organization: esthesis
-    bucket: esthesis
-    user: esthesis-system
-    password: esthesis-system
+    organization: "esthesis"
+    bucket: "esthesis"
+    user: "esthesis-system"
+    retention_policy: "0s"
+    password: "esthesis-system"
     token: "918UdZNzKNEf7YeL7efV"
   persistence:
-    enabled: true
-    size: 32Gi
+    size: "32Gi"
 
 ##################################################################################################
 # Grafana (official)

@@ -27,7 +27,7 @@ dependencies:
     version: "0.3.1"
     repository: "https://cloudnative-pg.io/charts/"
   - name: keycloakx
-    version: "7.1.2"
+    version: "7.0.0"
     repository: https://codecentric.github.io/helm-charts
   - name: grafana
     version: "9.3.4"

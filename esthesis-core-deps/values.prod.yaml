@@ -4,10 +4,11 @@
 devMode: false
 domain: ""
 esthesisVersion: "3.0.59-SNAPSHOT"
-oidcRedirectUri: ""
+esthesisReportedOidcPostLogoutUrl: "https://esthesis-core.esthesis/logged-out"
+oidcRedirectUri: "https://esthesis-core.esthesis/callback"
 timezone: "Europe/Athens"
-imagePullSecret: "regcred"
 ingressClassName: ""
+imagePullSecret: ""
 
 # Enable/disable charts
 charts_enabled:
@@ -51,20 +52,20 @@ redis:
     password: esthesis-system
   persistence:
     enabled: true
+    size: 10Gi
 
 ##################################################################################################
 # MongoDB
 ##################################################################################################
 psmdb-db:
   fullnameOverride: "mongodb"
-  imagePullSecrets:
-    - name: "regcred"
+  imagePullSecrets: []
   tls:
     mode: disabled
   replsets:
     rs0:
       name: rs0
-      size: 1
+      size: 2
       volumeSpec:
         pvc:
           accessModes: ["ReadWriteOnce"]
@@ -85,7 +86,7 @@ psmdb-db:
     - name: esthesis-system
       db: esthesiscore
       passwordSecretRef:
-        name: esthesis-core-deps-psmdb-db-users
+        name: esthesis-core-deps-mongo-users
         key: password
       roles:
         - name: dbAdmin
@@ -94,6 +95,98 @@ psmdb-db:
           db: esthesiscore
   backup:
     enabled: false
+
+##################################################################################################
+# Kafka (Strimzi)
+##################################################################################################
+kafka:
+  name: kafka
+  replicas: 3
+  version: "3.9.0"
+  metadataVersion: "3.9-IV0"
+  storage:
+    type: persistent-claim
+    size: 20Gi
+    class: "" # use your StorageClass name or leave empty
+  auth:
+    type: scram-sha-512
+  config:
+    offsets.topic.replication.factor: 3
+    transaction.state.log.replication.factor: 3
+    default.replication.factor: 3
+    min.insync.replicas: 3
+    auto.create.topics.enable: "true"
+  topics:
+    - { name: esthesis-command-reply, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-telemetry, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-metadata, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-app-unicast, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-app-broadcast, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-ping, partitions: 3, replicationFactor: 3 }
+    - { name: esthesis-command-request, partitions: 3, replicationFactor: 3 }
+  users:
+    - name: esthesis-system
+      auth: scram-sha-512
+      password: "esthesis-system"
+      # authorization:
+      #   acls:
+      #     - operation: All
+      #       resource:
+      #         type: cluster
+
+##################################################################################################
+# Keycloak (codecentric/keycloakx)
+##################################################################################################
+keycloakx:
+  fullnameOverride: "keycloak"
+  image:
+    tag: "24.0.5"
+  imagePullSecrets: []
+  command:
+    - "/opt/keycloak/bin/kc.sh"
+  replicas: 1
+  args:
+    - start
+  extraEnv: |
+    - name: KC_HOSTNAME
+      value: keycloak.esthesis
+    - name: KC_HOSTNAME_ADMIN
+      value: keycloak.esthesis
+    - name: KEYCLOAK_ADMIN
+      value: esthesis-system
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: esthesis-system
+    - name: JAVA_OPTS_APPEND
+      value: >-
+        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+  proxy:
+    enabled: true
+    mode: xforwarded
+    http:
+      enabled: true
+  http:
+    relativePath: "/"
+  database:
+    vendor: postgres
+    hostname: postgres-pooler-rw
+    port: 5432
+    database: keycloak
+    username: keycloak
+    password: esthesis-system
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    servicePort: "http"
+    annotations: {}
+    rules:
+      - host: "keycloak.esthesis"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - keycloak.esthesis
+
 ##################################################################################################
 # Cloudnative PostgreSQL
 ##################################################################################################
@@ -102,8 +195,7 @@ pg_db:
   type: postgresql
   cluster:
     instances: 1
-    imagePullSecrets:
-      - name: regcred
+    imagePullSecrets: []
     storage:
       size: 10Gi
     resources:
@@ -125,122 +217,19 @@ pg_db:
         default_pool_size: "100"
 
 ##################################################################################################
-# Kafka (Strimzi)
-##################################################################################################
-kafka:
-  name: kafka
-  replicas: 1
-  version: "3.9.0"
-  metadataVersion: "3.9-IV0"
-  storage:
-    type: persistent-claim
-    size: 20Gi
-    class: "" # use your StorageClass name or leave empty
-  auth:
-    type: scram-sha-512
-  config:
-    offsets.topic.replication.factor: 1
-    transaction.state.log.replication.factor: 1
-    default.replication.factor: 1
-    min.insync.replicas: 1
-    auto.create.topics.enable: "false"
-  topics:
-    - { name: esthesis-command-reply, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-telemetry, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-metadata, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-app-unicast, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-app-broadcast, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-ping, partitions: 1, replicationFactor: 1 }
-    - { name: esthesis-command-request, partitions: 1, replicationFactor: 1 }
-  users:
-    - name: esthesis-system
-      auth: scram-sha-512
-      # authorization:
-      #   acls:
-      #     - operation: All
-      #       resource:
-      #         type: cluster
-
-##################################################################################################
-# Kafka UI (Provectus)
-##################################################################################################
-kafka-ui:
-  yamlApplicationConfig:
-    kafka:
-      clusters:
-        - name: kafka
-          bootstrapServers: "kafka-kafka-bootstrap:9092"
-          properties:
-            security.protocol: SASL_PLAINTEXT
-            sasl.mechanism: SCRAM-SHA-512
-            sasl.jaas.config: >
-              org.apache.kafka.common.security.scram.ScramLoginModule required
-              username="esthesis-system" password="esthesis-system";
-
-##################################################################################################
-# Keycloak (codecentric/keycloakx)
-##################################################################################################
-keycloakx:
-  fullnameOverride: "keycloak"
-  image:
-    tag: "24.0.5"
-  imagePullSecrets: []
-  replicas: 1
-  service:
-    httpPort: 8080
-  args:
-    - start
-  extraEnv: |
-    - name: KC_HOSTNAME
-      value: https://keycloak.esthesis-dev.eurodyn.com/auth
-    - name: KC_HOSTNAME_ADMIN
-      value: https://keycloak.esthesis-dev.eurodyn.com/auth
-    - name: KEYCLOAK_ADMIN
-      value: esthesis-system
-    - name: KEYCLOAK_ADMIN_PASSWORD
-      value: esthesis-system
-    - name: KC_PROXY
-      value: "passthrough"
-    - name: JAVA_OPTS_APPEND
-      value: >-
-        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
-  database:
-    vendor: postgres
-    hostname: postgres-pooler-rw
-    port: 5432
-    database: keycloak
-    username: keycloak
-    password: esthesis-system
-  ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    annotations:
-      cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
-    servicePort: "http"
-    rules:
-      - host: "keycloak.esthesis-dev.eurodyn.com"
-        paths:
-          - path: "/auth/"
-            pathType: Prefix
-    tls:
-      - hosts:
-          - keycloak.esthesis-dev.eurodyn.com
-
-##################################################################################################
 # Camunda
 ##################################################################################################
 camunda-platform:
   global:
     zeebeClusterName: "zeebe"
     image:
-      pullSecrets:
-        - name: "regcred"
+      pullSecrets: []
     identity:
       keycloak:
         url:
           protocol: "http"
           host: "keycloak-headless"
-          port: "8080"
+          port: "80"
       auth:
         enabled: false
   operate:
@@ -272,8 +261,7 @@ camunda-platform:
   elasticsearch:
     enabled: true
     global:
-      imagePullSecrets:
-        - regcred
+      imagePullSecrets: []
     image:
       repository: bitnamilegacy/elasticsearch
     sysctlImage:
@@ -291,8 +279,8 @@ camunda-platform:
       requests:
         cpu: "100m"
         memory: "256Mi"
-    replicas: 1
-    minimumMasterNodes: 1
+    master:
+      replicaCount: 2
 
 ##################################################################################################
 # InfluxDB2 (InfluxData)
@@ -300,8 +288,7 @@ camunda-platform:
 influxdb2:
   fullnameOverride: "influxdb"
   image:
-    pullSecrets:
-      - regcred
+    pullSecrets: []
   adminUser:
     organization: "esthesis"
     bucket: "esthesis"
@@ -311,6 +298,32 @@ influxdb2:
     token: "918UdZNzKNEf7YeL7efV"
   persistence:
     size: "32Gi"
+
+##################################################################################################
+# Kafka UI (Provectus)
+##################################################################################################
+kafka-ui:
+  fullnameOverride: "kafka-ui"
+  imagePullSecrets: []
+  yamlApplicationConfig:
+    kafka:
+      clusters:
+        - name: kafka
+          bootstrapServers: "kafka-kafka-bootstrap:9092"
+          properties:
+            security.protocol: SASL_PLAINTEXT
+            sasl.mechanism: SCRAM-SHA-512
+            sasl.jaas.config: >
+              org.apache.kafka.common.security.scram.ScramLoginModule required
+              username="esthesis-system" password="esthesis-system";
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    path: "/"
+    pathType: "Prefix"
+    host: "kafka-ui.esthesis"
+    tls:
+      enabled: true
 
 ##################################################################################################
 # Grafana (official)

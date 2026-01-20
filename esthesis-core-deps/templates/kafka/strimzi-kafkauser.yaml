@@ -12,7 +12,7 @@ spec:
     password:
       valueFrom:
         secretKeyRef:
-          name: {{ .name }}
+          name: kafka-user-password
           key: password
   {{- with .authorization }}
   authorization:

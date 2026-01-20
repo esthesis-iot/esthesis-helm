@@ -2,15 +2,13 @@
 # Global values
 ##################################################################################################
 devMode: true
-
 domain: esthesis
 esthesisVersion: "3.0.59-SNAPSHOT"
-#esthesisLocalCharts: true
 esthesisReportedOidcPostLogoutUrl: http://localhost:4200/logged-out
 oidcRedirectUri: http://localhost:4200/callback
 timezone: "Europe/Athens"
-ingressClassName:
-imagePullSecret: "regcred"
+ingressClassName: ""
+imagePullSecret: ""
 
 # Enable/disable charts
 charts_enabled:
@@ -50,7 +48,6 @@ redis:
   global:
     imagePullSecrets:
       - name: "regcred"
-  # Cloudpirates specific
   auth:
     password: "esthesis-system"
   persistence:
@@ -89,7 +86,7 @@ psmdb-db:
     - name: esthesis-system
       db: esthesiscore
       passwordSecretRef:
-        name: esthesis-core-deps-psmdb-db-users
+        name: esthesis-core-deps-mongo-users
         key: password
       roles:
         - name: dbAdmin
@@ -276,8 +273,8 @@ camunda-platform:
       requests:
         cpu: "100m"
         memory: "256Mi"
-    replicas: 1
-    minimumMasterNodes: 1
+    master:
+      replicaCount: 1
 
 ##################################################################################################
 # InfluxDB configuration
@@ -298,17 +295,6 @@ influxdb2:
     size: "32Gi"
 
 ##################################################################################################
-# Grafana configuration
-##################################################################################################
-grafana:
-  fullnameOverride: "grafana"
-  global:
-    imagePullSecrets: []
-  admin:
-    user: esthesis-system
-    password: esthesis-system
-
-##################################################################################################
 # Kafka UI configuration
 ##################################################################################################
 kafka-ui:
@@ -323,6 +309,17 @@ kafka-ui:
             security.protocol: SASL_PLAINTEXT
             sasl.mechanism: SCRAM-SHA-512
             sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username=esthesis-system password=esthesis-system;"
+
+##################################################################################################
+# Grafana configuration
+##################################################################################################
+grafana:
+  fullnameOverride: "grafana"
+  global:
+    imagePullSecrets: []
+  admin:
+    user: esthesis-system
+    password: esthesis-system
 
 ##################################################################################################
 # Grafana Loki configuration

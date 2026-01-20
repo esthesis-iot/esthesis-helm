@@ -13,7 +13,7 @@ dependencies:
   version: 0.3.1
 - name: keycloakx
   repository: https://codecentric.github.io/helm-charts
-  version: 7.1.2
+  version: 7.0.0
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 9.3.4
@@ -41,5 +41,5 @@ dependencies:
 - name: ollama
   repository: https://otwld.github.io/ollama-helm
   version: 1.16.0
-digest: sha256:3bf9bbb616b23651767cab772ee9394a88be1c60ec9366e29b05fe75eeac1b9b
-generated: "2026-01-16T11:47:13.3853456+02:00"
+digest: sha256:e9092e0b1b67d49f868a21663498e3e17af107c6c712b0b432ab1c5738a01c72
+generated: "2026-01-20T15:04:55.398062+02:00"

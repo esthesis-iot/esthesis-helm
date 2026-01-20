@@ -33,7 +33,7 @@ quarkus:
 
 # MongoDB configuration
 mongoDbEnabled: true
-mongoDbUrlCluster: "mongodb://mongodb-headless:27017"
+mongoDbUrlCluster: "mongodb://mongodb-rs0:27017"
 mongoDbDatabase: "esthesiscore"
 mongoDbUsername: "esthesis-system"
 mongoDbPassword: "esthesis-system"

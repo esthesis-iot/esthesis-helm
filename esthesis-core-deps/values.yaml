@@ -219,7 +219,7 @@ camunda-platform:
         url:
           protocol: "http"
           host: "keycloak-headless"
-          port: "8080"
+          port: "80"
       auth:
         enabled: false
   operate:

@@ -11,26 +11,25 @@ helm -n "$1" uninstall esthesis-core-deps
 
 # PVCs to delete.
 pvcs=(
-  data-kafka-controller-0
-  data-postgresql-0
-  data-esthesis-core-deps-postgresql-0
+  postgres-1
   data-zeebe-0
-  datadir-mongodb-0
-  redis-data-redis-master-0
-  redis-data-esthesis-core-deps-redis-master-0
+  data-zeebe-1
+  data-zeebe-2
+  mongod-data-mongodb-rs0-0
+  mongod-data-mongodb-rs0-1
   data-esthesis-core-deps-grafana-loki-ingester-0
   data-esthesis-core-deps-grafana-loki-querier-0
   data-esthesis-core-deps-grafana-tempo-ingester-0
-  data-esthesis-core-deps-kafka-controller-0
-  data-esthesis-core-deps-kafka-controller-1
-  data-esthesis-core-deps-kafka-controller-2
-  data-esthesis-core-deps-zeebe-0
-  data-esthesis-core-deps-zeebe-1
-  data-esthesis-core-deps-zeebe-2
-  redis-data-esthesis-core-deps-redis-replicas-0
-  redis-data-esthesis-core-deps-redis-replicas-1
+  data-kafka-brokers-0
+  data-kafka-brokers-1
+  data-kafka-brokers-2
+  data-kafka-controllers-3
+  data-kafka-controllers-4
+  data-kafka-controllers-5
+  data-redis-0
   data-esthesis-core-deps-elasticsearch-master-0
   data-esthesis-core-deps-elasticsearch-master-1
+  influxdb
 )
 for pvc in "${pvcs[@]}"; do
   kubectl -n "$1" delete pvc "$pvc" --ignore-not-found

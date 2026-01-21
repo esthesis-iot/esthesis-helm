@@ -252,12 +252,15 @@ camunda-platform:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    clusterSize: 3
+    replicationFactor: 3
   zeebeGateway:
     enabled: true
     resources:
       requests:
         cpu: "100m"
         memory: "256Mi"
+    replicas: 2
   elasticsearch:
     enabled: true
     global:

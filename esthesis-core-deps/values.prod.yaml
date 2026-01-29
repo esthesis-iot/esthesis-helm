@@ -18,7 +18,7 @@ charts_enabled:
   grafana-tempo: true
   grafana-loki: true
   grafana: true
-  ingress-nginx: false
+  nginx-ingress: false
   ollama: true
 
 ##################################################################################################
@@ -396,24 +396,22 @@ tempo:
         grpc: true
 
 ##################################################################################################
-# Ingress-NGINX (official)
+# F5 NGINX Ingress Controller configuration
 ##################################################################################################
-ingress-nginx:
-  fullnameOverride: "ingress-nginx"
+nginx-ingress:
+  fullnameOverride: "nginx-ingress"
   controller:
-    scope:
-      enabled: false
-      namespace: default
+    kind: deployment
+    enableCustomResources: true
     service:
       externalIPs:
         - "192.168.1.1"
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "*.esthesis"
-        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
-    ingressClassResource:
-      name: "nginx-default"
+    ingressClass:
+      name: "nginx"
+      create: true
+      setAsDefaultIngressClass: false
 
 ##################################################################################################
 # Docker Registry UI

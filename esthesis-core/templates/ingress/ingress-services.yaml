@@ -4,9 +4,8 @@ kind: Ingress
 metadata:
   name: esthesis-services-ingress
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
-    nginx.ingress.kubernetes.io/rewrite-target: "/api/$1"
+    nginx.org/rewrites: "serviceName rewrite=/api/"
+    nginx.org/client-max-body-size: "256m"
     # Do not create a DNS record (if external-dns is used), unless the resource is annotated.
     external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
     {{- if .Values.esthesisUiCertManagerClusterIssuer }}

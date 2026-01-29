@@ -20,9 +20,9 @@ dependencies:
 - name: loki
   repository: https://grafana.github.io/helm-charts
   version: 6.33.0
-- name: ingress-nginx
-  repository: https://kubernetes.github.io/ingress-nginx
-  version: 4.9.1
+- name: nginx-ingress
+  repository: https://helm.nginx.com/stable
+  version: 2.0.1
 - name: camunda-platform
   repository: https://helm.camunda.io
   version: 10.0.2
@@ -41,5 +41,5 @@ dependencies:
 - name: ollama
   repository: https://otwld.github.io/ollama-helm
   version: 1.16.0
-digest: sha256:e9092e0b1b67d49f868a21663498e3e17af107c6c712b0b432ab1c5738a01c72
-generated: "2026-01-20T15:04:55.398062+02:00"
+digest: sha256:42384511d74070245af7629559415e4c2da1838c01310e6cceba0b4075451b0a
+generated: "2026-01-29T10:02:03.492696462+02:00"

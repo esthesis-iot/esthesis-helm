@@ -37,7 +37,7 @@ done
 
 # Delete secrets.
 secrets=(
-  esthesis-core-deps-ingress-nginx-admission
+  esthesis-core-deps-nginx-ingress-admission
   mosquitto-acl
 )
 for secret in "${secrets[@]}"; do

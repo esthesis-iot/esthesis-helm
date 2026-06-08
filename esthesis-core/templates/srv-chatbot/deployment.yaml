@@ -3,6 +3,8 @@
   "podOidc" true
   "podOidcClient" true
   "podLogging" true
+  "podReqCpu" "0.1"
+  "podReqMemory" "128M"
   "podMaxCpu" "1"
   "podMaxMemory" "1G"
   "podName" (include "chatbotImage" .)

@@ -2,6 +2,8 @@
 {{ $redirectUrl := print "https://" .Values.esthesisHostname "/callback" }}
 {{ template "deployment.api.template" (merge (dict
   "podLogging" true
+  "podReqCpu" "0.1"
+  "podReqMemory" "128M"
   "podMaxCpu" "1"
   "podMaxMemory" "256M"
   "podName" "esthesis-core-srv-public-access"

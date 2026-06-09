@@ -6,8 +6,10 @@
   "podKafka" true
   "podLogging" true
   "podRedis" true
+  "podReqCpu" "250m"
+  "podReqMemory" "256M"
   "podMaxCpu" "1"
-  "podMaxMemory" "256M"
+  "podMaxMemory" "512M"
   "podName" "esthesis-core-srv-dashboard"
   "podProbes" true
   "registry" .Values.esthesisRegistry
